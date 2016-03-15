@@ -1,3 +1,4 @@
+package as.project;
 
 public class Main {
 	
