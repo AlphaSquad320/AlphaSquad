@@ -117,7 +117,7 @@ public class ItemTable extends TableBase
   {
     for( int i = 0 ; i < itemList.size() ; i++ )
     {
-      addUser( conn, itemList.get( i ) ) ;
+      addItem( conn, itemList.get( i ) ) ;
     }
   }
 

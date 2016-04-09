@@ -1,4 +1,4 @@
-package as.projects.objects ;
+package as.project.objects ;
 
 public class Item
 {
