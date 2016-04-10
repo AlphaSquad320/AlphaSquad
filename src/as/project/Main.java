@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import as.project.objects.User;
+import as.project.objects.Ability;
+import as.project.tables.AbilityTable;
 import as.project.tables.UserTable;
 
 public class Main {
@@ -79,18 +81,25 @@ public class Main {
 			 */
 			UserTable.createUserTable(db.getConnection());
 			//PersonTable.populatePersonTableFromCSV(demo.getConnection(), "C:/Users/scj/h2demoData/people.csv");
+			AbilityTable.createAbilityTable(db.getConnection());
 			
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
+			Ability a = new Ability(1, 8, 10, 150, 10.0f, 5.0f, 7.0f,
+					"Fire", "Fireball: Deals damage to a group of enemies.",
+					"Burn: 30%.");
+			
 			UserTable.addUser(db.getConnection(), lh);
 			UserTable.addUser(db.getConnection(), sj);
+			AbilityTable.addAbility(db.getConnection(), a);
 			
 			
 			/**
 			 * Just displays the table
 			 */
 			UserTable.printUserTable(db.getConnection());
+			AbilityTable.printAbilityTable(db.getConnection());
 			
 			/**
 			 * Runs a basic query on the table
