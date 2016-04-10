@@ -6,12 +6,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * @author Martin
  * Class made to create and update the ability table.
  */
 public class AbilityTable extends TableBase{
+	
+	public static String tableName = "ability";
+	public static String abilityID = "abilityID";
+	public static String reqLevel = "reqLevel";
+	public static String cost = "cost";
+	public static String baseDamage = "baseDamage";
+	public static String range = "range";
+	public static String radius = "radius";
+	public static String duration = "duration";
+	public static String type = "type";
+	public static String description = "description";
+	public static String additionalEffects = "additionalEffects";
 	
 	/**
 	 * Create a new ability table with Ability class attributes.
@@ -21,17 +34,17 @@ public class AbilityTable extends TableBase{
 	public static void createAbilityTable( Connection conn ) {
 		try {
 			String query = 
-			"CREATE TABLE IF NOT EXISTS ability ("
-			+ "abilityID INT PRIMARY KEY," 
-			+ "reqLevel INT,"
-			+ "cost INT,"
-			+ "damage INT,"
-			+ "range NUMERIC(8,2)"
-			+ "radius NUMERIC(8,2),"
-			+ "duration NUMERIC(8,2),"
-			+ "type varchar(20),"
-			+ "description varchar(40),"
-			+ "additionalEffects varchar(200),"
+			"CREATE TABLE IF NOT EXISTS " + tableName + " ("
+			+ abilityID + " INT PRIMARY KEY," 
+			+ reqLevel + " INT,"
+			+ cost + " INT,"
+			+ baseDamage + " INT,"
+			+ range + " NUMERIC(8,2)"
+			+ radius + " NUMERIC(8,2),"
+			+ duration + " NUMERIC(8,2),"
+			+ type + " varchar(20),"
+			+ description + " varchar(40),"
+			+ additionalEffects + " varchar(200),"
 			+ ");";
 			
 			// Create query and execute it.
@@ -106,5 +119,41 @@ public class AbilityTable extends TableBase{
 				a.getType(),
 				a.getDescription(),
 				a.getAdditionalEffects());
+	}
+	
+	public static void printAbilityTable(Connection conn) {
+		String query = "SELECT * FROM " + tableName + ";";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			
+			while(result.next()) {
+				System.out.printf(
+						"Ability %d: \n"
+						+ reqLevel + ": %d \n"
+						+ cost + ": %d \n"
+						+ baseDamage + ": %d \n"
+						+ range + ": %f \n" 
+						+ radius + ": %f \n" 
+						+ duration + ": %f \n" 
+						+ type + ": %s \n" 
+						+ description + ": %s \n" 
+						+ type + ": %s \n" 
+						, 
+						result.getInt(1),
+						result.getInt(2),
+						result.getInt(3),
+						result.getInt(4),
+						result.getFloat(5),
+						result.getFloat(6),
+						result.getFloat(7),
+						result.getString(8),
+						result.getString(9),
+						result.getString(10)
+						);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
 	}
 }
