@@ -10,6 +10,7 @@ all: gui
 
 #use command 'make gui' to compile only the GUI package code
 gui:
+	mkdir -p bin
 	javac -d bin/ src/as/project/gui/*.java
 
 #use command 'make run' to execute
@@ -19,4 +20,4 @@ run: all
 
 #use command 'make clean' to remove precompiled code
 clean:
-	rm bin/*.class
+	rm bin/as/project/gui/*.class
