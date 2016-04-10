@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #################
 ## Eclipse
 #################
@@ -214,3 +215,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+=======
+/bin/
+.DS_Store
+/h2
+>>>>>>> origin/master

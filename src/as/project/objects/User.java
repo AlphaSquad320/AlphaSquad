@@ -10,7 +10,6 @@ public class User {
 	private String password;
 	
 	public User(int userId, String firstName, String lastName, String displayName, String email, String password) {
-		super();
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
