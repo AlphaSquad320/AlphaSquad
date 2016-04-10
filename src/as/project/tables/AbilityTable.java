@@ -34,17 +34,17 @@ public class AbilityTable extends TableBase{
 	public static void createAbilityTable( Connection conn ) {
 		try {
 			String query = 
-			"CREATE TABLE IF NOT EXISTS " + tableName + " ("
+			"CREATE TABLE IF NOT EXISTS " + tableName + "("
 			+ abilityID + " INT PRIMARY KEY," 
 			+ reqLevel + " INT,"
 			+ cost + " INT,"
 			+ baseDamage + " INT,"
-			+ range + " NUMERIC(8,2)"
+			+ range + " NUMERIC(8,2),"
 			+ radius + " NUMERIC(8,2),"
 			+ duration + " NUMERIC(8,2),"
-			+ type + " varchar(20),"
-			+ description + " varchar(40),"
-			+ additionalEffects + " varchar(200),"
+			+ type + " VARCHAR(40),"
+			+ description + " VARCHAR(120),"
+			+ additionalEffects + " VARCHAR(255),"
 			+ ");";
 			
 			// Create query and execute it.
