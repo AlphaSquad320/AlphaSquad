@@ -12,12 +12,16 @@ import as.project.objects.User;
 import as.project.objects.Ability;
 import as.project.objects.ChatHistory;
 import as.project.objects.Friends;
+import as.project.objects.Item ;
 import as.project.tables.AbilityTable;
 import as.project.tables.CharacterTable;
 import as.project.tables.CharacterAbilityTable;
 import as.project.tables.ChatHistoryTable;
 import as.project.tables.FriendsTable;
 import as.project.tables.UserTable;
+import as.project.tables.ItemTable ;
+import as.project.table.CharacterItemTable ;
+
 
 public class Main {
 	//The connection to the database
@@ -93,6 +97,8 @@ public class Main {
 			AbilityTable.createAbilityTable(db.getConnection());
 			CharacterTable.createCharacterTable(db.getConnection());
 			CharacterAbilityTable.createCharacterAbilityTable(db.getConnection());
+			ItemTable.createItemTable( db.getConnection() ) ;
+      			CharacterItemTable.createCharacterItemTable( db.getConnection() ) ;
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
@@ -108,6 +114,7 @@ public class Main {
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
+			Item i = new Item( 1, "Null", "Broadsword", 1, false, "weapon", 1, "Fighter" ) ;
 			
 			UserTable.addUser(db.getConnection(), lh);
 			UserTable.addUser(db.getConnection(), sj);
@@ -122,6 +129,7 @@ public class Main {
 			CharacterAbilityTable.addCharacterAbility(db.getConnection(), batman, a1);
 			CharacterAbilityTable.addCharacterAbility(db.getConnection(), batman, a2);
 			CharacterAbilityTable.addCharacterAbility(db.getConnection(), robin, a2);
+			ItemTable.addItem( db.getConnection(), i ) ;
 			
 			/**
 			 * Just displays the table
