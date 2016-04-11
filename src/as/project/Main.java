@@ -20,7 +20,7 @@ import as.project.tables.ChatHistoryTable;
 import as.project.tables.FriendsTable;
 import as.project.tables.UserTable;
 import as.project.tables.ItemTable ;
-import as.project.table.CharacterItemTable ;
+import as.project.tables.CharacterItemTable ;
 
 
 public class Main {
@@ -98,7 +98,7 @@ public class Main {
 			CharacterTable.createCharacterTable(db.getConnection());
 			CharacterAbilityTable.createCharacterAbilityTable(db.getConnection());
 			ItemTable.createItemTable( db.getConnection() ) ;
-      			CharacterItemTable.createCharacterItemTable( db.getConnection() ) ;
+  			CharacterItemTable.createCharacterItemTable( db.getConnection() ) ;
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");

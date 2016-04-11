@@ -10,7 +10,7 @@ import java.sql.Statement ;
 import java.util.List ;
 
 //project imports
-import as.project.objects.Character ;
+import as.project.objects.GameCharacter ;
 import as.project.objects.Item ;
 
 public class CharacterItemTable extends TableBase
