@@ -14,19 +14,29 @@ import as.project.objects.NPC;
  */
 public class NPCTable extends TableBase {
 	
+	public static final String NPC_ID_COLUMN = "NPC_ID";
+	public static final String CHAR_ID_COLUMN = "CHARACTER_ID";
+	public static final String NAME_COLUMN = "NAME";
+	public static final String ISHOSTILE_COLUMN = "IS_HOSTILE";
+	public static final String QUEST_COLUMN = "ASSOCIATED_QUEST";
+	public static final String DESCRIPTION_COLUMN = "DESCRIPTION";
+	
+	public static final String TABLE_NAME = "npc";
+	
 	/**
 	 * SQL statemtent to create a table named npc if one does not already exist
 	 * @param conn - the connection to the database
 	 */
 	public static void createNPCTable(Connection conn){
 		try{
-			String query = "CREATE TABLE IF NOT EXISTS npc("
-						 + "NPC_ID INT PRIMARY KEY,"
-						 + "CHARACTER_ID INT,"
-						 + "NAME VARCHAR(30),"
-						 + "IS_HOSTILE BOOLEAN,"
-						 + "ASSOCIATED_QUEST VARCHAR(30),"
-						 + "DESCRIPTION VARCHAR(255),"
+			String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +"("
+						 + NPC_ID_COLUMN + " INT PRIMARY KEY,"
+						 + CHAR_ID_COLUMN + " INT,"
+						 + NAME_COLUMN +" VARCHAR(30),"
+						 + ISHOSTILE_COLUMN + " BOOLEAN,"
+						 + QUEST_COLUMN + " VARCHAR(30),"
+						 + DESCRIPTION_COLUMN + " VARCHAR(255),"
+						 + "FOREIGN KEY(" + CHAR_ID_COLUMN + ") REFERENCES " + CharacterTable.TABLE_NAME + "(" + CharacterTable.CHARACTER_ID_COLUMN + "),"
 						 +");";
 			
 			Statement stmt = conn.createStatement();
@@ -48,8 +58,8 @@ public class NPCTable extends TableBase {
 	 */
 	public static void addNPC(Connection conn, int npcID, int charID, String name,
 							  boolean isHostile, String quest, String desc){
-		String query = String.format("INSERT INTO npc "
-								   + "VALUES (%d,%d,\'%s\',%b,\'%s\',\'%s\')",
+		String query = String.format("INSERT INTO " + TABLE_NAME + " "
+								   + "VALUES (%d,%d,\'%s\',%b,\'%s\',\'%s\');",
 								   npcID, charID, name, isHostile, quest, desc);
 		try{
 			Statement stmt = conn.createStatement();
@@ -68,8 +78,9 @@ public class NPCTable extends TableBase {
 	public static String createNPCInsertSQL(Connection conn, ArrayList<NPC> npcs){
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("INSERT INTO npc (NPC_ID, CHARACTER_ID, NAME, IS_HOSTILE, "
-				+ "ASSOCIATED_QUEST, DESCRIPTION) VALUES ");
+		sb.append("INSERT INTO " + TABLE_NAME +" (" + NPC_ID_COLUMN + "," 
+				+ CHAR_ID_COLUMN + "," + NAME_COLUMN + "," + ISHOSTILE_COLUMN + ","
+				+ QUEST_COLUMN + "," + DESCRIPTION_COLUMN + ") VALUES ");
 		for(int i = 0; i < npcs.size(); i++){
 			NPC n = npcs.get(i);
 			sb.append(String.format("(%d,%d,\'%s\',%b,\'%s\',\'%s\')",
