@@ -129,16 +129,16 @@ public class AbilityTable extends TableBase{
 			
 			while(result.next()) {
 				System.out.printf(
-						"Ability %d: \n"
-						+ reqLevel + ": %d \n"
-						+ cost + ": %d \n"
-						+ baseDamage + ": %d \n"
-						+ range + ": %f \n" 
-						+ radius + ": %f \n" 
-						+ duration + ": %f \n" 
-						+ type + ": %s \n" 
-						+ description + ": %s \n" 
-						+ type + ": %s \n" 
+						"Ability %d: \n  "
+						+ reqLevel + ": %d \n  "
+						+ cost + ": %d \n  "
+						+ baseDamage + ": %d \n  "
+						+ range + ": %f \n  " 
+						+ radius + ": %f \n  " 
+						+ duration + ": %f \n  " 
+						+ type + ": %s \n  " 
+						+ description + ": %s \n  " 
+						+ type + ": %s \n  " 
 						, 
 						result.getInt(1),
 						result.getInt(2),
