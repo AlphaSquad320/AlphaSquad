@@ -12,12 +12,12 @@ import as.project.objects.ChatHistory;
 
 public class ChatHistoryTable extends TableBase {
 	
-	public static String SENDER_COLUMN = "SENDER";
-	public static String RECEIVER_COLUMN = "RECEIVER";
-	public static String TIMESTAMP_COLUMN = "TIMESTAMP";
-	public static String MESSAGE_COLUMN = "MESSAGE";
+	public static final String SENDER_COLUMN = "SENDER";
+	public static final String RECEIVER_COLUMN = "RECEIVER";
+	public static final String TIMESTAMP_COLUMN = "TIMESTAMP";
+	public static final String MESSAGE_COLUMN = "MESSAGE";
 	
-	public static String TABLE_NAME = "chat_history";
+	public static final String TABLE_NAME = "chat_history";
 	
 	
 	/**
@@ -59,7 +59,7 @@ public class ChatHistoryTable extends TableBase {
 		/**
 		 * SQL insert statement
 		 */
-		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,%s,%s);",senderId, receiverId, timestamp.toString(), message);
+		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,\'%s\',\'%s\');",senderId, receiverId, timestamp.toString(), message);
 		try {
 			/**
 			 * create and execute the query

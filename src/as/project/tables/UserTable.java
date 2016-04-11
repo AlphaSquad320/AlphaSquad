@@ -11,14 +11,14 @@ import as.project.objects.User;
 
 public class UserTable extends TableBase {
 	
-	public static String FIRST_NAME_COLUMN = "FIRST_NAME";
-	public static String USER_ID_COLUMN = "USER_ID";
-	public static String LAST_NAME_COLUMN = "LAST_NAME";
-	public static String DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
-	public static String EMAIL_ADDRESS_COLUMN = "EMAIL_ADDRESS";
-	public static String PASSWORD_COLUMN = "PASSWORD";
+	public static final String FIRST_NAME_COLUMN = "FIRST_NAME";
+	public static final String USER_ID_COLUMN = "USER_ID";
+	public static final String LAST_NAME_COLUMN = "LAST_NAME";
+	public static final String DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
+	public static final String EMAIL_ADDRESS_COLUMN = "EMAIL_ADDRESS";
+	public static final String PASSWORD_COLUMN = "PASSWORD";
 	
-	public static String TABLE_NAME = "user";
+	public static final String TABLE_NAME = "user";
 	
 	
 	/**

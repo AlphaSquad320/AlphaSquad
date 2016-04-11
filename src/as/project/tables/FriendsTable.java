@@ -12,10 +12,10 @@ import as.project.objects.User;
 
 public class FriendsTable extends TableBase {
 	
-	public static String SENDER_COLUMN = "SENDER";
-	public static String RECEIVER_COLUMN = "RECEIVER";
+	public static final String SENDER_COLUMN = "SENDER";
+	public static final String RECEIVER_COLUMN = "RECEIVER";
 	
-	public static String TABLE_NAME = "friends";
+	public static final String TABLE_NAME = "friends";
 	
 	
 	/**

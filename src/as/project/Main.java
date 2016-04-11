@@ -4,13 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import as.project.objects.GameCharacter;
 import as.project.objects.User;
 import as.project.objects.Ability;
+import as.project.objects.ChatHistory;
+import as.project.objects.Friends;
 import as.project.tables.AbilityTable;
 import as.project.tables.CharacterTable;
+import as.project.tables.ChatHistoryTable;
+import as.project.tables.FriendsTable;
 import as.project.tables.UserTable;
 
 public class Main {
@@ -82,12 +87,17 @@ public class Main {
 			 * and populates it from a csv file
 			 */
 			UserTable.createUserTable(db.getConnection());
-			//PersonTable.populatePersonTableFromCSV(demo.getConnection(), "C:/Users/scj/h2demoData/people.csv");
+			FriendsTable.createFriendsTable(db.getConnection());
+			ChatHistoryTable.createChatHistoryTable(db.getConnection());
 			AbilityTable.createAbilityTable(db.getConnection());
 			CharacterTable.createCharacterTable(db.getConnection());
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
+			Friends f = new Friends(1, 2);
+			Friends f2 = new Friends(2, 1);
+			ChatHistory ch = new ChatHistory(1,2, new Timestamp(123456789), "Hello professor");
+			ChatHistory ch2 = new ChatHistory(2,1, new Timestamp(123459789), "Hello Lukas");
 			Ability a = new Ability(1, 8, 10, 150, 10.0f, 5.0f, 7.0f,
 					"Fire", "Fireball: Deals damage to a group of enemies.",
 					"Burn: 30%.");
@@ -96,6 +106,10 @@ public class Main {
 			
 			UserTable.addUser(db.getConnection(), lh);
 			UserTable.addUser(db.getConnection(), sj);
+			FriendsTable.addFriends(db.getConnection(), f);
+			FriendsTable.addFriends(db.getConnection(), f2);
+			ChatHistoryTable.addChatHistory(db.getConnection(), ch);
+			ChatHistoryTable.addChatHistory(db.getConnection(), ch2);
 			AbilityTable.addAbility(db.getConnection(), a);
 			CharacterTable.addCharacter(db.getConnection(), batman);
 			CharacterTable.addCharacter(db.getConnection(), robin);
@@ -105,6 +119,8 @@ public class Main {
 			 * Just displays the table
 			 */
 			UserTable.printUserTable(db.getConnection());
+			FriendsTable.printFriendsTable(db.getConnection());
+			ChatHistoryTable.printChatHistoryTable(db.getConnection());
 			AbilityTable.printAbilityTable(db.getConnection());
 			CharacterTable.printCharacterTable(db.getConnection());
 			
