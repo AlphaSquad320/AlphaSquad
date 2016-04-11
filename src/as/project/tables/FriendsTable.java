@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import as.project.objects.Friends;
-import as.project.objects.User;
 
 public class FriendsTable extends TableBase {
 	
