@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import as.project.objects.GameCharacter;
 import as.project.objects.User;
 import as.project.objects.Ability;
 import as.project.tables.AbilityTable;
+import as.project.tables.CharacterTable;
 import as.project.tables.UserTable;
 
 public class Main {
@@ -82,17 +84,21 @@ public class Main {
 			UserTable.createUserTable(db.getConnection());
 			//PersonTable.populatePersonTableFromCSV(demo.getConnection(), "C:/Users/scj/h2demoData/people.csv");
 			AbilityTable.createAbilityTable(db.getConnection());
-			
+			CharacterTable.createCharacterTable(db.getConnection());
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
 			Ability a = new Ability(1, 8, 10, 150, 10.0f, 5.0f, 7.0f,
 					"Fire", "Fireball: Deals damage to a group of enemies.",
 					"Burn: 30%.");
+			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
+			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
 			
 			UserTable.addUser(db.getConnection(), lh);
 			UserTable.addUser(db.getConnection(), sj);
 			AbilityTable.addAbility(db.getConnection(), a);
+			CharacterTable.addCharacter(db.getConnection(), batman);
+			CharacterTable.addCharacter(db.getConnection(), robin);
 			
 			
 			/**
@@ -100,6 +106,7 @@ public class Main {
 			 */
 			UserTable.printUserTable(db.getConnection());
 			AbilityTable.printAbilityTable(db.getConnection());
+			CharacterTable.printCharacterTable(db.getConnection());
 			
 			/**
 			 * Runs a basic query on the table
