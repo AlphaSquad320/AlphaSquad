@@ -36,6 +36,7 @@ public class NPCTable extends TableBase {
 						 + ISHOSTILE_COLUMN + " BOOLEAN,"
 						 + QUEST_COLUMN + " VARCHAR(30),"
 						 + DESCRIPTION_COLUMN + " VARCHAR(255),"
+						 + "FOREIGN KEY(" + CHAR_ID_COLUMN + ") REFERENCES " + CharacterTable.TABLE_NAME + "(" + CharacterTable.CHARACTER_ID_COLUMN + "),"
 						 +");";
 			
 			Statement stmt = conn.createStatement();

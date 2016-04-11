@@ -39,7 +39,7 @@ public class AbilityTable extends TableBase{
 			+ reqLevel + " INT,"
 			+ cost + " INT,"
 			+ baseDamage + " INT,"
-			+ range + " NUMERIC(8,2)"
+			+ range + " NUMERIC(8,2),"
 			+ radius + " NUMERIC(8,2),"
 			+ duration + " NUMERIC(8,2),"
 			+ type + " varchar(20),"
