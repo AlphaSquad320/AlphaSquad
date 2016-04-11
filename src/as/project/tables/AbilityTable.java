@@ -1,10 +1,10 @@
 package as.project.tables;
 import as.project.objects.Ability;
 
+import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -35,7 +35,7 @@ public class AbilityTable extends TableBase{
 		try {
 			String query = 
 			"CREATE TABLE IF NOT EXISTS " + tableName + "("
-			+ abilityID + " INT PRIMARY KEY," 
+			+ abilityID + " INT," 
 			+ reqLevel + " INT,"
 			+ cost + " INT,"
 			+ baseDamage + " INT,"
@@ -45,6 +45,7 @@ public class AbilityTable extends TableBase{
 			+ type + " VARCHAR(40),"
 			+ description + " VARCHAR(120),"
 			+ additionalEffects + " VARCHAR(255),"
+			+ "PRIMARY KEY( " + abilityID + " )," 
 			+ ");";
 			
 			// Create query and execute it.
@@ -85,7 +86,7 @@ public class AbilityTable extends TableBase{
 		
 		try {
 			PreparedStatement pStmt = conn.prepareStatement(
-					"INSERT INTO ability VALUES(?,?,?,?,?,?,?,?,?,?);");
+					"INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?,?,?,?);");
 			pStmt.setInt(1, abilityID);
 			pStmt.setInt(2, reqLevel);
 			pStmt.setInt(3, cost);
@@ -102,6 +103,17 @@ public class AbilityTable extends TableBase{
 		}
 	}
 
+	/**
+	 * Adds multiple abilities to the table.
+	 * @param conn
+	 * @param abilities
+	 */
+	public static void addAbilities( Connection conn, List<Ability> abilities ) {
+		for (Ability a : abilities) {
+			addAbility( conn, a );
+		}
+	}
+	
 	/**
 	 * Adds a single ability to the table.
 	 * @param conn
