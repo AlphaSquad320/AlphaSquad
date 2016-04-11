@@ -150,8 +150,8 @@ public class AbilityTable extends TableBase{
 						+ duration + ": %f \n  " 
 						+ type + ": %s \n  " 
 						+ description + ": %s \n  " 
-						+ type + ": %s \n  " 
-						, 
+						+ additionalEffects + ": %s \n  "
+						+ "\n", 
 						result.getInt(1),
 						result.getInt(2),
 						result.getInt(3),

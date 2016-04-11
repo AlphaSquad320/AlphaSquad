@@ -1,7 +1,6 @@
 package as.project.tables;
 
 import java.util.List;
-import java.util.
 
 import as.project.objects.Ability;
 import as.project.objects.GameCharacter;
@@ -19,6 +18,8 @@ import java.sql.ResultSet;
 public class CharacterAbilityTable extends TableBase {
 	
 	public static String tableName = "characterAbility";
+	public static String characterForeignTableName = "character";
+	public static String abilityForeignTableName = "ability";
 	public static String characterID = "characterID";
 	public static String abilityID = "abilityID";
 	
@@ -30,10 +31,11 @@ public class CharacterAbilityTable extends TableBase {
 		try {
 			String query = 
 			"CREATE TABLE IF NOT EXISTS " + tableName + "("
-			+ characterID + " INT PRIMARY KEY," 
-			+ abilityID + " INT PRIMARY KEY," 
+			+ characterID + " INT," 
+			+ abilityID + " INT," 
 			+ "PRIMARY KEY( " + characterID + ", " + abilityID + " )," 
-			+ "FOREIGN KEY( " + characterID + ", " + abilityID + " )," 
+			+ "FOREIGN KEY( " + characterID + ") REFERENCES " + characterForeignTableName + ","
+			+ "FOREIGN KEY( " + abilityID + ") REFERENCES " + abilityForeignTableName + ","
 			+ ");";
 			
 			// Create query and execute it.
@@ -50,7 +52,7 @@ public class CharacterAbilityTable extends TableBase {
 	 * @param abID - PK of ability
 	 * @param chID - PK of character
 	 */
-	public static void addCharacterAbility( Connection conn, int abID, int chID ) {
+	public static void addCharacterAbility( Connection conn, int chID, int abID ) {
 		try {
 			PreparedStatement pStmt = conn.prepareStatement(
 					"INSERT INTO " + tableName + " VALUES(?,?);");
@@ -65,11 +67,36 @@ public class CharacterAbilityTable extends TableBase {
 	/**
 	 * Add a character ability to the table
 	 * @param conn
-	 * @param a  - Ability
 	 * @param gc - Character
+	 * @param a  - Ability
 	 */
-	public static void addCharacterAbility( Connection conn, Ability a, GameCharacter gc) {
-		addCharacterAbility( a.getID(), ch.getID() );
+	public static void addCharacterAbility( Connection conn, GameCharacter gc, Ability a ) {
+		addCharacterAbility( conn, gc.getCharacterId(), a.getID() );
 	}
 	
+	/**
+	 * Prints the table. Just prints the PK.
+	 * @param conn
+	 */
+	public static void printCharacterAbilityTable(Connection conn) {
+		String query = "SELECT * FROM " + tableName + ";";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			
+			while(result.next()) {
+				System.out.printf(
+						"CharacterAbility: \n  "
+						+ characterID + ": %d \n  "
+						+ abilityID + ": %d \n  "
+						+ "\n",
+						result.getInt(1),
+						result.getInt(2)
+						);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
+	}
 }
+
