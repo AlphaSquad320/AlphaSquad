@@ -1,6 +1,6 @@
 /* File: UserWindow.java
  * 
- * TODO: Add JMenuBar (delayed functionality)
+ * TODO: Create a welcome background for delayed login
  */ 
 
 package as.project.gui;
@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import as.project.objects.*;
 
 /**
  * This class represents the main window of the GUI.
@@ -23,6 +25,8 @@ public class UserWindow extends JFrame implements ActionListener
 	private JMenuItem userLogIn = new JMenuItem("Log in");
 	private JMenuItem userLogOut = new JMenuItem("Log out");
 
+	private User user;
+	//unnecessary once User class is fully integrated
 	private boolean userLoggedIn = false;
 	
 	public UserWindow()
@@ -31,7 +35,9 @@ public class UserWindow extends JFrame implements ActionListener
 		super("Welcome");
 
 		//layout stuff
+		//TODO: this doesn't set a content pane. should it? (probably)
 		layOutWindow();
+
 
 		//set up action listeners
 		fileExit.addActionListener(this);
@@ -43,10 +49,9 @@ public class UserWindow extends JFrame implements ActionListener
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
-
-		//display login window
-		LoginWindow login = new LoginWindow(this);
-		login.setVisible(true);
+		
+		//display login window by default
+		displayLoginWindow();
 
 	}
 
@@ -59,17 +64,27 @@ public class UserWindow extends JFrame implements ActionListener
 		menuFile.add(fileExit);
 		menuUser.add(userLogIn);
 		menuUser.add(userLogOut);
+
+		userLogIn.setEnabled(true);
+		userLogOut.setEnabled(false);
+	}
+
+	private void displayLoginWindow()
+	{
+		LoginWindow login = new LoginWindow(this);
+		login.setVisible(true);
 	}
 
 	public boolean authenticateUser(String username, String password)
 	{
-		System.out.println("Authenticating user " + username +
-							" with password "  + password);
 		//TODO: SQL to find user in database
 		if (true) 
 		{
 			loadUser(username);
-			userLoggedIn = true;
+			//unnecessary once User class is fully integrated
+			userLoggedIn = true; 
+			userLogIn.setEnabled(false);
+			userLogOut.setEnabled(true);
 			return true;
 		}
 		//if not found
@@ -78,8 +93,8 @@ public class UserWindow extends JFrame implements ActionListener
 
 	private void loadUser(String username)
 	{
-		//TODO: load all user's data from database
-		UserPane pane = new UserPane();
+		//TODO: create user object, load user data
+		UserPane pane = new UserPane(user);
 		this.setContentPane(pane);
 		validate();
 	}
@@ -95,26 +110,26 @@ public class UserWindow extends JFrame implements ActionListener
 		}
 		else if (e.getSource() == userLogIn)
 		{
-			if (userLoggedIn)
+			if (user != null)
 			{
 				//TODO
 				//log out user? prompt? nothing?
 			}
 			else
 			{
-				//TODO: display login window
+				displayLoginWindow();
 			}
 		}
 		else if (e.getSource() == userLogOut)
 		{
 			if (userLoggedIn)
 			{
-				//TODO: log out user
+				user = null;
+				//TODO: purge all user data
 			}
 			else
 			{
-				//TODO
-				//prompt? nothing?
+				//should be unreachable - option is grayed out
 			}
 		}
 	}
