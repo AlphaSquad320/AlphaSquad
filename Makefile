@@ -5,7 +5,7 @@
 #
 # last update: 041016 3:20 pm
 
-H2JAR     = bin/h2-1.4.191.jar
+H2JAR     = h2-1.4.191.jar
 CLASSPATH = .:bin/:$(H2JAR)
 BUILDDIR  = bin/
 
@@ -13,7 +13,7 @@ JAVA = java -cp $(CLASSPATH)
 JAVAC = javac -d $(BUILDDIR) -cp $(CLASSPATH)
 
 #default target
-all: setup main objects tables gui
+all: setup objects tables main gui
 
 #ensures existence of bin dir - not intented to be called directly
 setup:
@@ -38,9 +38,13 @@ gui:
 #use command 'make run' to execute
 #recompiles all classes to ensure JVM compatibility
 run: all	
-	$(JAVA) as.project.Main
-#	$(JAVA) as.project.gui.MainGUI
+	$(JAVA) as.project.gui.MainGUI
 
 #use command 'make clean' to remove precompiled code
 clean:
 	rm -r -f $(BUILDDIR) 
+
+#use command 'make realclean' to remove any existing database, 
+#as well as precomiled code
+realclean: clean
+	rm -r -f ~/AlphaTeamDatabase/
