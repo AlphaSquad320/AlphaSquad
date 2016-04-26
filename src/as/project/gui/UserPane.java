@@ -8,6 +8,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import as.project.objects.*;
+
 /**
  * This class represents the content pane of the main GUI window. It is intended
  * that this pane(l) be swapped out with others throughout normal usage of the
@@ -24,14 +26,22 @@ public class UserPane extends JPanel
     private JTabbedPane characterPanes = new JTabbedPane();
     private Border border = BorderFactory.createLineBorder(new Color(0,0,0));
 	
-    public UserPane() 
+	private User user;
+
+    public UserPane(User user) 
 	{
 		//build that pane
 		super();
 
+		//load user info from database
+		this.user = user;
+		//TODO: load users info
+
 		//set up all components
         layOutComponents();
-    }
+    
+		
+	}
 
     private void layOutComponents() 
 	{
@@ -47,7 +57,8 @@ public class UserPane extends JPanel
 		//set up friends list
         friendsList.setBorder(border);
         friendsList.setFont(new Font("Tahoma", 0, 14)); 
-        friendsList.setModel(new AbstractListModel<String>() {
+		//TODO: get user's actual friends list from database
+	    friendsList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
@@ -56,7 +67,7 @@ public class UserPane extends JPanel
 
 		//set up character panes
         characterPanes.setBorder(border);
-		//TODO: get character data from database here
+		//TODO: get user's character data from database here
 		characterPanes.addTab("Tab 1", 
 				new JPanel().add(new JLabel("This is tab 1.")));
 		characterPanes.addTab("Tab 2", 
