@@ -124,8 +124,12 @@ public class UserWindow extends JFrame implements ActionListener
 		{
 			if (userLoggedIn)
 			{
-				user = null;
 				//TODO: purge all user data
+				user = null;
+				userLogIn.setEnabled(true);
+				userLogOut.setEnabled(false);
+				this.setContentPane(new JPanel());
+				validate();
 			}
 			else
 			{
