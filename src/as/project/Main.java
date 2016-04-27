@@ -74,7 +74,7 @@ public class Main {
 		}
 	}
 	
-	public static void main(String[] args){
+	public static void createDatabase(){
 		Main db = new Main();
 		
 		//Hard drive location of the database
