@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import as.project.objects.*;
+import as.project.tables.UserTable;
 
 /**
  * This class represents the main window of the GUI.
@@ -33,6 +34,7 @@ public class UserWindow extends JFrame implements ActionListener
 	{
 		//build the frame
 		super("Welcome");
+		user = null;
 
 		//layout stuff
 		//TODO: this doesn't set a content pane. should it? (probably)
@@ -77,10 +79,13 @@ public class UserWindow extends JFrame implements ActionListener
 
 	public boolean authenticateUser(String username, String password)
 	{
-		//TODO: SQL to find user in database
-		if (true) 
+		User loggedIn = UserTable.authenticateUser(MainGUI.getConnection(), username, password);
+		if (loggedIn != null) 
 		{
-			loadUser(username);
+			user = loggedIn;
+			UserPane pane = new UserPane(user);
+			this.setContentPane(pane);
+			validate();
 			//unnecessary once User class is fully integrated
 			userLoggedIn = true; 
 			userLogIn.setEnabled(false);
@@ -89,14 +94,6 @@ public class UserWindow extends JFrame implements ActionListener
 		}
 		//if not found
 		return false;
-	}
-
-	private void loadUser(String username)
-	{
-		//TODO: create user object, load user data
-		UserPane pane = new UserPane(user);
-		this.setContentPane(pane);
-		validate();
 	}
 
 	public void actionPerformed(ActionEvent e)

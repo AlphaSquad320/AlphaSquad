@@ -139,7 +139,36 @@ public class UserTable extends TableBase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Determines if the user login provided is valid
+	 * @param username
+	 * @param password
+	 * @return returns null if invalid, or the user object if valid
+	 */
+	public static User authenticateUser(Connection conn, String username, String password){
+		User result = null;
 		
+		ArrayList<String> col = new ArrayList<String>();
+
+		ArrayList<String> whereClauses = new ArrayList<String>();
+		whereClauses.add(EMAIL_ADDRESS_COLUMN + " = '" + username + "'");
+		whereClauses.add(PASSWORD_COLUMN + " = '" + password + "'");
+
+		ResultSet sqlResults = queryUserTable(conn, col, whereClauses);
+		
+		try{
+			if(sqlResults.next()){
+				result = new User(sqlResults.getInt(1), sqlResults.getString(2), sqlResults.getString(3), sqlResults.getString(4), sqlResults.getString(5), sqlResults.getString(6));
+			}
+			
+		} catch (Exception e){
+			System.out.println("Authenticating the user: " + username + " failed:");
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	
