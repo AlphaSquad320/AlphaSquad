@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import as.project.objects.*;
+import as.project.tables.FriendsTable;
 
 /**
  * This class represents the content pane of the main GUI window. It is intended
@@ -21,7 +22,7 @@ public class UserPane extends JPanel
 {
     private JLabel friendsLabel = new JLabel();
     private JLabel welcomeLabel = new JLabel();
-    private JList<String> friendsList = new JList<>();
+    private JList<User> friendsList = new JList<>();
     private JScrollPane scrollPane = new JScrollPane();
     private JTabbedPane characterPanes = new JTabbedPane();
     private Border border = BorderFactory.createLineBorder(new Color(0,0,0));
@@ -51,17 +52,16 @@ public class UserPane extends JPanel
         friendsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//set up welcome label
-        welcomeLabel.setText("Welcome, USERNAME!");
+        welcomeLabel.setText("Welcome, " + user.getDisplayName() + "!");
         welcomeLabel.setFont(new Font("Tahoma", 0, 24)); 
 
 		//set up friends list
         friendsList.setBorder(border);
         friendsList.setFont(new Font("Tahoma", 0, 14)); 
-		//TODO: get user's actual friends list from database
-	    friendsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+	    friendsList.setModel(new AbstractListModel<User>() {
+            User[] users = FriendsTable.getFriendsOfUser(MainGUI.getConnection(),user.getUserId()).toArray(new User[0]);
+            public int getSize() { return users.length; }
+            public User getElementAt(int i) { return users[i]; }
         });
         scrollPane.setViewportView(friendsList);
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import as.project.objects.Friends;
+import as.project.objects.User;
 
 public class FriendsTable extends TableBase {
 	
@@ -124,7 +125,27 @@ public class FriendsTable extends TableBase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static ArrayList<User> getFriendsOfUser(Connection conn, int uid){
+		ArrayList<String> where = new ArrayList<String>();
+		where.add(SENDER_COLUMN + "=" + uid);
+		ResultSet query = queryFriendsTable(conn, new ArrayList<String>(), where);
 		
+		ArrayList<User> resultList = new ArrayList<User>();
+		try{
+			while(query.next()){
+				User f = UserTable.getUserByUID(conn, query.getInt(RECEIVER_COLUMN));
+				if(f != null){
+					resultList.add(f);
+				}
+			}
+		}
+		catch (Exception e){
+			System.out.println("failed getting friends of user: " + uid);
+			e.printStackTrace();
+		}
+		return resultList;
 	}
 
 }

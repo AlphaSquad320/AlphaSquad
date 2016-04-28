@@ -149,18 +149,16 @@ public class UserTable extends TableBase {
 	 */
 	public static User authenticateUser(Connection conn, String username, String password){
 		User result = null;
-		
-		ArrayList<String> col = new ArrayList<String>();
 
 		ArrayList<String> whereClauses = new ArrayList<String>();
 		whereClauses.add(EMAIL_ADDRESS_COLUMN + " = '" + username + "'");
 		whereClauses.add(PASSWORD_COLUMN + " = '" + password + "'");
 
-		ResultSet sqlResults = queryUserTable(conn, col, whereClauses);
+		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses);
 		
 		try{
 			if(sqlResults.next()){
-				result = new User(sqlResults.getInt(1), sqlResults.getString(2), sqlResults.getString(3), sqlResults.getString(4), sqlResults.getString(5), sqlResults.getString(6));
+				result = getUserFromResultSet(sqlResults);
 			}
 			
 		} catch (Exception e){
@@ -169,6 +167,35 @@ public class UserTable extends TableBase {
 		}
 		
 		return result;
+	}
+	
+	public static User getUserByUID(Connection conn, int uid){
+		User result = null;
+
+		ArrayList<String> whereClauses = new ArrayList<String>();
+		whereClauses.add(USER_ID_COLUMN + "=" + uid + "");
+
+		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses);
+		try{
+			if(sqlResults.next()){
+				result = getUserFromResultSet(sqlResults);
+			}
+			
+		} catch (Exception e){
+			System.out.println("Could not get user:" + uid);
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	private static User getUserFromResultSet(ResultSet r) throws SQLException{
+		return new User(r.getInt(USER_ID_COLUMN),
+					r.getString(FIRST_NAME_COLUMN),
+					r.getString(LAST_NAME_COLUMN),
+					r.getString(DISPLAY_NAME_COLUMN),
+					r.getString(EMAIL_ADDRESS_COLUMN),
+					r.getString(PASSWORD_COLUMN));
 	}
 	
 	
