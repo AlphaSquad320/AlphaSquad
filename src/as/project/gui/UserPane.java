@@ -5,10 +5,13 @@
 package as.project.gui;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
 import as.project.objects.*;
+import as.project.tables.CharacterTable;
 import as.project.tables.FriendsTable;
 
 /**
@@ -67,15 +70,11 @@ public class UserPane extends JPanel
 
 		//set up character panes
         characterPanes.setBorder(border);
-		//TODO: get user's character data from database here
-		characterPanes.addTab("Tab 1", 
-				new JPanel().add(new JLabel("This is tab 1.")));
-		characterPanes.addTab("Tab 2", 
-				new JPanel().add(new JLabel("This is tab 2.")));
-		characterPanes.addTab("Character 3", 
-				new JPanel().add(new JLabel("This is tab 3.")));
-		characterPanes.addTab("Really Long Character Name 4", 
-				new JPanel().add(new JLabel("This is tab 4.")));
+        ArrayList<GameCharacter> characterList = CharacterTable.getUserCharacters(MainGUI.getConnection(), user.getUserId());
+        for(GameCharacter gc: characterList){
+        	characterPanes.addTab(gc.getCharacterName(),
+        			new JGameCharacterPanel(gc));
+        }
 
 		//lay it all out
         GroupLayout layout = new GroupLayout(this);

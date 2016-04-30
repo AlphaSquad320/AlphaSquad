@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import as.project.objects.ChatHistory;
 import as.project.objects.GameCharacter;
 
 public class CharacterTable extends TableBase {
@@ -215,6 +216,49 @@ public class CharacterTable extends TableBase {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static ArrayList<GameCharacter> getUserCharacters(Connection conn, int uid){
+		ArrayList<GameCharacter> result = new ArrayList<GameCharacter>();
+		
+		ArrayList<String> cols = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		where.add(USER_ID_COLUMN + "=" + uid);
+		
+		ResultSet query = queryCharacterTable(conn, cols, where, null);
+		
+
+		try{
+			while(query.next()){
+				GameCharacter ch = new GameCharacter(query.getInt(CHARACTER_ID_COLUMN),
+						query.getInt(USER_ID_COLUMN),
+						query.getInt(STR_COLUMN),
+						query.getInt(DEX_COLUMN),
+						query.getInt(CHR_COLUMN),
+						query.getInt(INT_COLUMN),
+						query.getInt(WIS_COLUMN),
+						query.getInt(CON_COLUMN),
+						query.getInt(MONEY_COLUMN),
+						query.getInt(HP_COLUMN),
+						query.getInt(MP_COLUMN),
+						query.getInt(CUR_HP_COLUMN),
+						query.getInt(CUR_MP_COLUMN),
+						query.getInt(LEVEL_COLUMN),
+						query.getInt(CUR_XP_COLUMN),
+						query.getString(CLASS_COLUMN),
+						query.getString(ALIGNMENT_COLUMN),
+						query.getString(CHARACTER_NAME_COLUMN),
+						query.getString(RACE_COLUMN));
+				result.add(ch);
+			}
+		}
+		catch (Exception e){
+			System.out.print("Could not get characters for user:" + uid);
+			e.printStackTrace();
+		}
+		
+		
+		return result;
 	}
 	
 	
