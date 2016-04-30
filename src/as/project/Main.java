@@ -74,16 +74,12 @@ public class Main {
 		}
 	}
 	
-	public static void createDatabase(){
-		Main db = new Main();
+	public static void createDatabase(Connection conn){
 		
 		//Hard drive location of the database
 		String location = "~/AlphaTeamDatabase/database";
 		String user = "admin";
 		String password = "admin";
-		
-		//Create the database connections, basically makes the database
-		db.createConnection(location, user, password);
 		
 		try {
 			
@@ -91,14 +87,14 @@ public class Main {
 			 * Creates a sample Person table 
 			 * and populates it from a csv file
 			 */
-			UserTable.createUserTable(db.getConnection());
-			FriendsTable.createFriendsTable(db.getConnection());
-			ChatHistoryTable.createChatHistoryTable(db.getConnection());
-			AbilityTable.createAbilityTable(db.getConnection());
-			CharacterTable.createCharacterTable(db.getConnection());
-			CharacterAbilityTable.createCharacterAbilityTable(db.getConnection());
-			ItemTable.createItemTable( db.getConnection() ) ;
-  			CharacterItemTable.createCharacterItemTable( db.getConnection() ) ;
+			UserTable.createUserTable(conn);
+			FriendsTable.createFriendsTable(conn);
+			ChatHistoryTable.createChatHistoryTable(conn);
+			AbilityTable.createAbilityTable(conn);
+			CharacterTable.createCharacterTable(conn);
+			CharacterAbilityTable.createCharacterAbilityTable(conn);
+			ItemTable.createItemTable( conn ) ;
+  			CharacterItemTable.createCharacterItemTable( conn ) ;
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
@@ -116,106 +112,21 @@ public class Main {
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
 			Item i = new Item( 1, "Null", "Broadsword", 1, false, "weapon", 1, "Fighter" ) ;
 			
-			UserTable.addUser(db.getConnection(), lh);
-			UserTable.addUser(db.getConnection(), sj);
-			FriendsTable.addFriends(db.getConnection(), f);
-			FriendsTable.addFriends(db.getConnection(), f2);
-			ChatHistoryTable.addChatHistory(db.getConnection(), ch);
-			ChatHistoryTable.addChatHistory(db.getConnection(), ch2);
-			AbilityTable.addAbility(db.getConnection(), a1);
-			AbilityTable.addAbility(db.getConnection(), a2);
-			CharacterTable.addCharacter(db.getConnection(), batman);
-			CharacterTable.addCharacter(db.getConnection(), robin);
-			CharacterAbilityTable.addCharacterAbility(db.getConnection(), batman, a1);
-			CharacterAbilityTable.addCharacterAbility(db.getConnection(), batman, a2);
-			CharacterAbilityTable.addCharacterAbility(db.getConnection(), robin, a2);
-			ItemTable.addItem( db.getConnection(), i ) ;
+			UserTable.addUser(conn, lh);
+			UserTable.addUser(conn, sj);
+			FriendsTable.addFriends(conn, f);
+			FriendsTable.addFriends(conn, f2);
+			ChatHistoryTable.addChatHistory(conn, ch);
+			ChatHistoryTable.addChatHistory(conn, ch2);
+			AbilityTable.addAbility(conn, a1);
+			AbilityTable.addAbility(conn, a2);
+			CharacterTable.addCharacter(conn, batman);
+			CharacterTable.addCharacter(conn, robin);
+			CharacterAbilityTable.addCharacterAbility(conn, batman, a1);
+			CharacterAbilityTable.addCharacterAbility(conn, batman, a2);
+			CharacterAbilityTable.addCharacterAbility(conn, robin, a2);
+			ItemTable.addItem( conn, i ) ;
 			
-			/**
-			 * Just displays the table
-			 */
-			UserTable.printUserTable(db.getConnection());
-			FriendsTable.printFriendsTable(db.getConnection());
-			ChatHistoryTable.printChatHistoryTable(db.getConnection());
-			AbilityTable.printAbilityTable(db.getConnection());
-			CharacterTable.printCharacterTable(db.getConnection());
-			CharacterAbilityTable.printCharacterAbilityTable(db.getConnection());
-			
-			/**
-			 * Runs a basic query on the table
-			 */
-			System.out.println("\n\nPrint results of SELECT * FROM user");
-			ResultSet results = UserTable.queryUserTable(
-					                     db.getConnection(),
-					                     new ArrayList<String>(),
-					                     new ArrayList<String>());
-			
-			/**
-			 * Iterates the Result set
-			 * 
-			 * Result Set is what a query in H2 returns
-			 * 
-			 * Note the columns are not 0 indexed
-			 * If you give no columns it will return them in the
-			 * order you created them. To gaurantee order list the columns
-			 * you want
-			 */
-			while(results.next()){
-				System.out.printf("\tUser %d: %s %s %s %s\n", 
-						          results.getInt(1),
-						          results.getString(2),
-						          results.getString(3),
-						          results.getString(4),
-						          results.getString(5),
-						          results.getString(6));
-			}
-			
-			/**
-			 * A more complex query with columns selected and 
-			 * addition conditions
-			 */
-			System.out.println("\n\nPrint results of SELECT "
-					+ UserTable.USER_ID_COLUMN + ", " + UserTable.FIRST_NAME_COLUMN + " "
-					+ "FROM " + UserTable.TABLE_NAME + " "
-					+ "WHERE " + UserTable.FIRST_NAME_COLUMN + " = \'Lukas\' "
-					+ "AND " + UserTable.LAST_NAME_COLUMN + " = \'Hillmer\'");
-			
-			/**
-			 * This is one way to do this, but not the only
-			 * 
-			 * Create lists to make the whole thing more generic or
-			 * you can just construct the whole query here 
-			 */
-			ArrayList<String> columns = new ArrayList<String>();
-			columns.add(UserTable.USER_ID_COLUMN);
-			columns.add(UserTable.FIRST_NAME_COLUMN);
-			columns.add(UserTable.LAST_NAME_COLUMN);
-			
-			/**
-			 * Conditionals
-			 */
-			ArrayList<String> whereClauses = new ArrayList<String>();
-			whereClauses.add(UserTable.FIRST_NAME_COLUMN + " = \'Lukas\'");
-			whereClauses.add(UserTable.LAST_NAME_COLUMN + " = \'Hillmer\'");
-			
-			/**
-			 * query and get the result set
-			 * 
-			 * parse the result set and print it
-			 * 
-			 * Notice not all of the columns are here because
-			 * we limited what to show in the query
-			 */
-			ResultSet results2 = UserTable.queryUserTable(
-                    db.getConnection(),
-                    columns,
-                    whereClauses);
-			while(results2.next()){
-			System.out.printf("\tUser %d: %s %s\n", 
-				          results2.getInt(1),
-				          results2.getString(2),
-				          results2.getString(3));
-			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e);
 			e.printStackTrace();

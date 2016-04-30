@@ -27,8 +27,6 @@ public class UserWindow extends JFrame implements ActionListener
 	private JMenuItem userLogOut = new JMenuItem("Log out");
 
 	private User user;
-	//unnecessary once User class is fully integrated
-	private boolean userLoggedIn = false;
 	
 	public UserWindow()
 	{
@@ -76,6 +74,16 @@ public class UserWindow extends JFrame implements ActionListener
 		LoginWindow login = new LoginWindow(this);
 		login.setVisible(true);
 	}
+	
+	private void logOutUser()
+	{
+		user = null;
+		userLogIn.setEnabled(true);
+		userLogOut.setEnabled(false);
+		this.setContentPane(new JPanel());
+		validate();
+		
+	}
 
 	public boolean authenticateUser(String username, String password)
 	{
@@ -86,8 +94,6 @@ public class UserWindow extends JFrame implements ActionListener
 			UserPane pane = new UserPane(user);
 			this.setContentPane(pane);
 			validate();
-			//unnecessary once User class is fully integrated
-			userLoggedIn = true; 
 			userLogIn.setEnabled(false);
 			userLogOut.setEnabled(true);
 			return true;
@@ -101,9 +107,9 @@ public class UserWindow extends JFrame implements ActionListener
 		if (e.getSource() == fileExit)
 		{
 			//TODO: shutdown function
-			//  - log out user
 			//  - save/close database
 			//  - clean program exit
+			logOutUser();
 		}
 		else if (e.getSource() == userLogIn)
 		{
@@ -119,19 +125,7 @@ public class UserWindow extends JFrame implements ActionListener
 		}
 		else if (e.getSource() == userLogOut)
 		{
-			if (userLoggedIn)
-			{
-				//TODO: purge all user data
-				user = null;
-				userLogIn.setEnabled(true);
-				userLogOut.setEnabled(false);
-				this.setContentPane(new JPanel());
-				validate();
-			}
-			else
-			{
-				//should be unreachable - option is grayed out
-			}
+			logOutUser();
 		}
 	}
 }

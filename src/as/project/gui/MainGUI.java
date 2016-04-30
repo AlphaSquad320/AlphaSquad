@@ -76,8 +76,7 @@ public class MainGUI
         //create the connection
         createConnection(DEFAULT_LOCATION, DEFAULT_USER, DEFAULT_PASSWORD, true);
         if(!isDatabaseInitialized){
-            Main main = new Main();
-            main.createDatabase();
+            Main.createDatabase(getConnection());
         }
 
         //TODO: if the connection is null, then we should display an error on the UserWindow, instead of the login view
