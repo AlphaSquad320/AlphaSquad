@@ -101,8 +101,9 @@ public class FriendsTable extends TableBase {
 	 */
 	public static ResultSet queryFriendsTable(Connection conn,
 			                                 ArrayList<String> columns,
-			                                 ArrayList<String> whereClauses){
-		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses);
+			                                 ArrayList<String> whereClauses,
+			                                 String orderBy){
+		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses, orderBy);
 	}
 	
 
@@ -130,7 +131,7 @@ public class FriendsTable extends TableBase {
 	public static ArrayList<User> getFriendsOfUser(Connection conn, int uid){
 		ArrayList<String> where = new ArrayList<String>();
 		where.add(SENDER_COLUMN + "=" + uid);
-		ResultSet query = queryFriendsTable(conn, new ArrayList<String>(), where);
+		ResultSet query = queryFriendsTable(conn, new ArrayList<String>(), where, null);
 		
 		ArrayList<User> resultList = new ArrayList<User>();
 		try{

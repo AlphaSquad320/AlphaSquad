@@ -101,7 +101,9 @@ public class Main {
 			Friends f = new Friends(1, 2);
 			Friends f2 = new Friends(2, 1);
 			ChatHistory ch = new ChatHistory(1,2, new Timestamp(123456789), "Hello professor");
-			ChatHistory ch2 = new ChatHistory(2,1, new Timestamp(123459789), "Hello Lukas");
+			ChatHistory ch2 = new ChatHistory(2,1, new Timestamp(124456789), "Hello Lukas");
+			ChatHistory ch4 = new ChatHistory(2,1, new Timestamp(126456789), "so many messages");
+			ChatHistory ch3 = new ChatHistory(1,2, new Timestamp(125456789), "one more message");
 			Ability a1 = new Ability(1, 8, 10, 150, 10.0f, 5.0f, 7.0f,
 					"Fire", "Fireball: Deals damage to a group of enemies.",
 					"Burn: 30%.");
@@ -110,7 +112,7 @@ public class Main {
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
-			Item i = new Item( 1, "Null", "Broadsword", 1, false, "weapon", 1, "Fighter" ) ;
+			Item i = new Item( 1, "Null", "Broadsword", 1, false, "weapon", 1, "Fighter" );
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
@@ -118,6 +120,8 @@ public class Main {
 			FriendsTable.addFriends(conn, f2);
 			ChatHistoryTable.addChatHistory(conn, ch);
 			ChatHistoryTable.addChatHistory(conn, ch2);
+			ChatHistoryTable.addChatHistory(conn, ch4);
+			ChatHistoryTable.addChatHistory(conn, ch3);
 			AbilityTable.addAbility(conn, a1);
 			AbilityTable.addAbility(conn, a2);
 			CharacterTable.addCharacter(conn, batman);
@@ -125,7 +129,7 @@ public class Main {
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a1);
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a2);
 			CharacterAbilityTable.addCharacterAbility(conn, robin, a2);
-			ItemTable.addItem( conn, i ) ;
+			ItemTable.addItem(conn, i);
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e);

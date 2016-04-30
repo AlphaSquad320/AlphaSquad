@@ -111,8 +111,9 @@ public class UserTable extends TableBase {
 	 */
 	public static ResultSet queryUserTable(Connection conn,
 			                                 ArrayList<String> columns,
-			                                 ArrayList<String> whereClauses){
-		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses);
+			                                 ArrayList<String> whereClauses,
+			                                 String orderBy){
+		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses, orderBy);
 	}
 	
 
@@ -154,7 +155,7 @@ public class UserTable extends TableBase {
 		whereClauses.add(EMAIL_ADDRESS_COLUMN + " = '" + username + "'");
 		whereClauses.add(PASSWORD_COLUMN + " = '" + password + "'");
 
-		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses);
+		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses, null);
 		
 		try{
 			if(sqlResults.next()){
@@ -175,7 +176,7 @@ public class UserTable extends TableBase {
 		ArrayList<String> whereClauses = new ArrayList<String>();
 		whereClauses.add(USER_ID_COLUMN + "=" + uid + "");
 
-		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses);
+		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses, null);
 		try{
 			if(sqlResults.next()){
 				result = getUserFromResultSet(sqlResults);

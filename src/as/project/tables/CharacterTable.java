@@ -153,8 +153,9 @@ public class CharacterTable extends TableBase {
 	 */
 	public static ResultSet queryCharacterTable(Connection conn,
 			                                 ArrayList<String> columns,
-			                                 ArrayList<String> whereClauses){
-		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses);
+			                                 ArrayList<String> whereClauses,
+			                                 String orderBy){
+		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses, orderBy);
 	}
 	
 

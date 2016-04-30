@@ -103,8 +103,9 @@ public class ChatHistoryTable extends TableBase {
 	 */
 	public static ResultSet queryChatHistoryTable(Connection conn,
 			                                 ArrayList<String> columns,
-			                                 ArrayList<String> whereClauses){
-		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses);
+			                                 ArrayList<String> whereClauses,
+			                                 String orderBy){
+		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses, orderBy);
 	}
 	
 
@@ -130,6 +131,37 @@ public class ChatHistoryTable extends TableBase {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static ArrayList<ChatHistory> getConversation(Connection conn, int uid1, int uid2){
+		ArrayList<ChatHistory> result = new ArrayList<ChatHistory>();
+		
+		ArrayList<String> cols = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		StringBuilder sb = new StringBuilder();
+		sb.append("((").append(SENDER_COLUMN).append("=").append(uid1).append(" AND ").append(RECEIVER_COLUMN).append("= ").append(uid2).append(")");
+		sb.append(" OR (").append(RECEIVER_COLUMN).append("=").append(uid1).append(" AND ").append(SENDER_COLUMN).append("= ").append(uid2).append("))");
+		where.add(sb.toString());
+		String order = TIMESTAMP_COLUMN;
+		
+		ResultSet query = queryChatHistoryTable(conn, cols, where, order);
+		
+		try{
+			while(query.next()){
+				ChatHistory ch = new ChatHistory(query.getInt(SENDER_COLUMN),
+						query.getInt(RECEIVER_COLUMN),
+						query.getTimestamp(TIMESTAMP_COLUMN),
+						query.getString(MESSAGE_COLUMN));
+				result.add(ch);
+			}
+		}
+		catch (Exception e){
+			System.out.print("Could not get conversation for users:" + uid1 + ", " + uid2);
+			e.printStackTrace();
+		}
+		
+		
+		return result;
 	}
 
 }

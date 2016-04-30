@@ -21,7 +21,8 @@ public class TableBase {
 	protected static ResultSet queryCurrentTable(Connection conn,
 											 String tableName,
 			                                 ArrayList<String> columns,
-			                                 ArrayList<String> whereClauses){
+			                                 ArrayList<String> whereClauses,
+			                                 String orderBy){
 		StringBuilder sb = new StringBuilder();
 		
 		/**
@@ -33,7 +34,7 @@ public class TableBase {
 		 * If we gave no columns just give them all to us
 		 * 
 		 * other wise add the columns to the query
-		 * adding a comma top seperate
+		 * adding a comma top separate
 		 */
 		if(columns.isEmpty()){
 			sb.append("* ");
@@ -68,6 +69,10 @@ public class TableBase {
 					sb.append(whereClauses.get(i));
 				}
 			}
+		}
+		
+		if(orderBy != null && orderBy.length() != 0){
+			sb.append(" ORDER BY ").append(orderBy);
 		}
 		
 		/**
