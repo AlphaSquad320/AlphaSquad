@@ -4,18 +4,25 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import as.project.objects.Ability;
 import as.project.objects.GameCharacter;
+import as.project.objects.Item;
+import as.project.tables.ItemTable;
 
 public class JGameCharacterPanel extends JPanel {
 	
 	GameCharacter gc;
+	ArrayList<Item> itemList;
+	ArrayList<Ability> abilityList;
 	JLabel info;
 	JLabel items;
 	JLabel abilities;
+	Font font;
 
 	public GameCharacter getCharacter() {
 		return gc;
@@ -23,9 +30,11 @@ public class JGameCharacterPanel extends JPanel {
 
 	public JGameCharacterPanel(GameCharacter gc) {
 		super();
+		font = new Font("Courier New", Font.PLAIN, 12);
 		this.gc = gc;
-
-		//TODO: make a real display for characters
+		this.itemList = ItemTable.getItemsByCharacter(MainGUI.getConnection(), gc.getCharacterId());
+		this.abilityList = null;
+				
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("<html>");
 		sbInfo.append("<p>").append(gc.getCharacterName()).append(", Level: ").append(gc.getLevel()).append("<br />");
@@ -53,7 +62,19 @@ public class JGameCharacterPanel extends JPanel {
 		sbInfo.append("</html>");
 		
 		info = new JLabel(sbInfo.toString());
-		info.setFont(new Font("Courier New", Font.PLAIN, 12));
+		info.setFont(font);
+		
+		StringBuilder sbItems = new StringBuilder();
+		sbItems.append("<html>");
+		sbItems.append("<p>Items(").append(itemList.size()).append("):<br />");
+		for(Item i: itemList){
+			sbItems.append(i.getDescription()).append("<br />");
+		}
+		
+		sbItems.append("</p>").append("</html>");
+		items = new JLabel(sbItems.toString());
+		items.setFont(font);
+		
 		
 		layOutComponents();
 	}
@@ -75,11 +96,12 @@ public class JGameCharacterPanel extends JPanel {
 		/*c.gridy = 1;
 		c.anchor = GridBagConstraints.CENTER;
 		this.add(abilities, c);
+		*/
 		c.gridy = 2;
-		c.anchor = GridBagConstraints.PAGE_END;
+		c.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c.insets = new Insets(0, 0, 0, 0);
 		this.add(items, c);
-		*/
+		
 		
 	}
 	

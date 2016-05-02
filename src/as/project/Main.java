@@ -112,7 +112,11 @@ public class Main {
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
-			Item i = new Item( 1, "Null", "Broadsword", false, "weapon", 1, "Fighter" );
+			Item i = new Item( 1, "Null", "Broadsword", false, "weapon", 10, "Fighter" );
+			Item i2 = new Item( 2, "Null", "Batarang", false, "weapon", 1, "Fighter" );
+			Item i3 = new Item( 3, "Null", "Utility Belt", false, "accessory", 0, "Fighter" );
+			Item i4 = new Item( 4, "Null", "Bat Suit", false, "armor", 8, "Fighter" );
+			Item i5 = new Item( 5, "Null", "Robin Suit", false, "armor", 4, "Fighter" );
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
@@ -130,6 +134,15 @@ public class Main {
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a2);
 			CharacterAbilityTable.addCharacterAbility(conn, robin, a2);
 			ItemTable.addItem(conn, i);
+			ItemTable.addItem(conn, i2);
+			ItemTable.addItem(conn, i3);
+			ItemTable.addItem(conn, i4);
+			ItemTable.addItem(conn, i5);
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i2.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i3.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i4.getID());
+			CharacterItemTable.giveItem(conn, robin.getCharacterId(), i5.getID());
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e);

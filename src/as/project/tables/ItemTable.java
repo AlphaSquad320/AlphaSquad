@@ -147,4 +147,43 @@ public class ItemTable extends TableBase
 
     runStatement( conn, query ) ;
   }
+  
+  public static ArrayList<Item> getItemsByCharacter(Connection conn, int characterId){
+	  ArrayList<Item> result = new ArrayList<Item>();
+
+	  ArrayList<String> cols = new ArrayList<String>();
+	  ArrayList<String> where = new ArrayList<String>();
+	  StringBuilder queryText = new StringBuilder();
+	  queryText.append(ID_COLUMN).append(" IN (SELECT ");
+	  queryText.append(CharacterItemTable.ITEM_ID_COLUMN).append(" FROM ").append(CharacterItemTable.TABLE_NAME).append(" WHERE ");
+	  queryText.append(CharacterItemTable.CHARACTER_ID_COLUMN).append("=").append(characterId).append(")");
+	  where.add(queryText.toString());
+
+	  ResultSet sqlResults = queryCurrentTable(conn, TABLE_NAME, cols, where, null);
+	  
+	  try{
+			while(sqlResults.next()){
+				result.add(getItemFromResultSet(sqlResults));
+			}
+			
+		} catch (Exception e){
+			System.out.println("Could not get items for character:" + characterId);
+			e.printStackTrace();
+		}
+	  
+	  return result;
+	  
+  }
+  
+
+
+	private static Item getItemFromResultSet(ResultSet r) throws SQLException{
+		return new Item(r.getInt(ID_COLUMN),
+					r.getString(EFFECTS_COLUMN),
+					r.getString(DESCRIPTION_COLUMN),
+					r.getBoolean(CONSUMABLE_COLUMN),
+					r.getString(TYPE_COLUMN),
+					r.getInt(BONUS_COLUMN),
+					r.getString(ITEM_CLASS_COLUMN));
+	}
 }
