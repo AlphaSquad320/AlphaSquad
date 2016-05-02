@@ -17,11 +17,9 @@ import java.sql.ResultSet;
  */
 public class CharacterAbilityTable extends TableBase {
 	
-	public static String tableName = "characterAbility";
-	public static String characterForeignTableName = "character";
-	public static String abilityForeignTableName = "ability";
-	public static String characterID = "characterID";
-	public static String abilityID = "abilityID";
+	public static final String TABLE_NAME = "characterAbility";
+	public static final String CHARACTER_ID_COLUMN = "characterID";
+	public static final String ABILITY_ID_COLUMN = "abilityID";
 	
 	/**
 	 * Create the character ability table.
@@ -30,12 +28,12 @@ public class CharacterAbilityTable extends TableBase {
 	public static void createCharacterAbilityTable( Connection conn ) {
 		try {
 			String query = 
-			"CREATE TABLE IF NOT EXISTS " + tableName + "("
-			+ characterID + " INT," 
-			+ abilityID + " INT," 
-			+ "PRIMARY KEY( " + characterID + ", " + abilityID + " )," 
-			+ "FOREIGN KEY( " + characterID + ") REFERENCES " + characterForeignTableName + ","
-			+ "FOREIGN KEY( " + abilityID + ") REFERENCES " + abilityForeignTableName + ","
+			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
+			+ CHARACTER_ID_COLUMN + " INT," 
+			+ ABILITY_ID_COLUMN + " INT," 
+			+ "PRIMARY KEY( " + CHARACTER_ID_COLUMN + ", " + ABILITY_ID_COLUMN + " )," 
+			+ "FOREIGN KEY( " + CHARACTER_ID_COLUMN + ") REFERENCES " + CharacterTable.TABLE_NAME + ","
+			+ "FOREIGN KEY( " + ABILITY_ID_COLUMN + ") REFERENCES " + AbilityTable.TABLE_NAME + ","
 			+ ");";
 			
 			// Create query and execute it.
@@ -55,7 +53,7 @@ public class CharacterAbilityTable extends TableBase {
 	public static void addCharacterAbility( Connection conn, int chID, int abID ) {
 		try {
 			PreparedStatement pStmt = conn.prepareStatement(
-					"INSERT INTO " + tableName + " VALUES(?,?);");
+					"INSERT INTO " + TABLE_NAME + " VALUES(?,?);");
 			pStmt.setInt(1, chID);
 			pStmt.setInt(2, abID);
 			pStmt.executeUpdate();
@@ -79,7 +77,7 @@ public class CharacterAbilityTable extends TableBase {
 	 * @param conn
 	 */
 	public static void printCharacterAbilityTable(Connection conn) {
-		String query = "SELECT * FROM " + tableName + ";";
+		String query = "SELECT * FROM " + TABLE_NAME + ";";
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(query);
@@ -87,8 +85,8 @@ public class CharacterAbilityTable extends TableBase {
 			while(result.next()) {
 				System.out.printf(
 						"CharacterAbility: \n  "
-						+ characterID + ": %d \n  "
-						+ abilityID + ": %d \n  "
+						+ CHARACTER_ID_COLUMN + ": %d \n  "
+						+ ABILITY_ID_COLUMN + ": %d \n  "
 						+ "\n",
 						result.getInt(1),
 						result.getInt(2)

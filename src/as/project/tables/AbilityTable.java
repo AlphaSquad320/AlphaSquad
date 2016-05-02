@@ -14,17 +14,17 @@ import java.sql.ResultSet;
  */
 public class AbilityTable extends TableBase{
 	
-	public static String tableName = "ability";
-	public static String abilityID = "abilityID";
-	public static String reqLevel = "reqLevel";
-	public static String cost = "cost";
-	public static String baseDamage = "baseDamage";
-	public static String range = "range";
-	public static String radius = "radius";
-	public static String duration = "duration";
-	public static String type = "type";
-	public static String description = "description";
-	public static String additionalEffects = "additionalEffects";
+	public static final String TABLE_NAME = "ability";
+	public static final String ABILITY_ID_COLUMN = "abilityID";
+	public static final String REQUIRED_LEVEL_COLUMN = "reqLevel";
+	public static final String COST_COLUMN = "cost";
+	public static final String BASE_DAMAGE_COLUMN = "baseDamage";
+	public static final String RANGE_COLUMN = "range";
+	public static final String RADIUS_COLUMN = "radius";
+	public static final String DURATION_COLUMN = "duration";
+	public static final String TYPE_COLUMN = "type";
+	public static final String DESCRIPTION_COLUMN = "description";
+	public static final String ADDITIONAL_EFFECTS_COLUMN = "additionalEffects";
 	
 	/**
 	 * Create a new ability table with Ability class attributes.
@@ -34,18 +34,18 @@ public class AbilityTable extends TableBase{
 	public static void createAbilityTable( Connection conn ) {
 		try {
 			String query = 
-			"CREATE TABLE IF NOT EXISTS " + tableName + "("
-			+ abilityID + " INT," 
-			+ reqLevel + " INT,"
-			+ cost + " INT,"
-			+ baseDamage + " INT,"
-			+ range + " NUMERIC(8,2),"
-			+ radius + " NUMERIC(8,2),"
-			+ duration + " NUMERIC(8,2),"
-			+ type + " VARCHAR(40),"
-			+ description + " VARCHAR(120),"
-			+ additionalEffects + " VARCHAR(255),"
-			+ "PRIMARY KEY( " + abilityID + " )," 
+			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
+			+ ABILITY_ID_COLUMN + " INT," 
+			+ REQUIRED_LEVEL_COLUMN + " INT,"
+			+ COST_COLUMN + " INT,"
+			+ BASE_DAMAGE_COLUMN + " INT,"
+			+ RANGE_COLUMN + " NUMERIC(8,2),"
+			+ RADIUS_COLUMN + " NUMERIC(8,2),"
+			+ DURATION_COLUMN + " NUMERIC(8,2),"
+			+ TYPE_COLUMN + " VARCHAR(40),"
+			+ DESCRIPTION_COLUMN + " VARCHAR(120),"
+			+ ADDITIONAL_EFFECTS_COLUMN + " VARCHAR(255),"
+			+ "PRIMARY KEY( " + ABILITY_ID_COLUMN + " )," 
 			+ ");";
 			
 			// Create query and execute it.
@@ -86,7 +86,7 @@ public class AbilityTable extends TableBase{
 		
 		try {
 			PreparedStatement pStmt = conn.prepareStatement(
-					"INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?,?,?,?);");
+					"INSERT INTO " + TABLE_NAME + " VALUES(?,?,?,?,?,?,?,?,?,?);");
 			pStmt.setInt(1, abilityID);
 			pStmt.setInt(2, reqLevel);
 			pStmt.setInt(3, cost);
@@ -134,7 +134,7 @@ public class AbilityTable extends TableBase{
 	}
 	
 	public static void printAbilityTable(Connection conn) {
-		String query = "SELECT * FROM " + tableName + ";";
+		String query = "SELECT * FROM " + TABLE_NAME + ";";
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery(query);
@@ -142,15 +142,15 @@ public class AbilityTable extends TableBase{
 			while(result.next()) {
 				System.out.printf(
 						"Ability %d: \n  "
-						+ reqLevel + ": %d \n  "
-						+ cost + ": %d \n  "
-						+ baseDamage + ": %d \n  "
-						+ range + ": %f \n  " 
-						+ radius + ": %f \n  " 
-						+ duration + ": %f \n  " 
-						+ type + ": %s \n  " 
-						+ description + ": %s \n  " 
-						+ additionalEffects + ": %s \n  "
+						+ REQUIRED_LEVEL_COLUMN + ": %d \n  "
+						+ COST_COLUMN + ": %d \n  "
+						+ BASE_DAMAGE_COLUMN + ": %d \n  "
+						+ RANGE_COLUMN + ": %f \n  " 
+						+ RADIUS_COLUMN + ": %f \n  " 
+						+ DURATION_COLUMN + ": %f \n  " 
+						+ TYPE_COLUMN + ": %s \n  " 
+						+ DESCRIPTION_COLUMN + ": %s \n  " 
+						+ ADDITIONAL_EFFECTS_COLUMN + ": %s \n  "
 						+ "\n", 
 						result.getInt(1),
 						result.getInt(2),
