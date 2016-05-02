@@ -15,6 +15,9 @@ import as.project.objects.Item ;
 
 public class CharacterItemTable extends TableBase
 {
+	public static final String TABLE_NAME = "characterItem";
+	public static final String CHARACTER_ID_COLUMN = "CHARACTER_ID";
+	public static final String ITEM_ID_COLUMN = "ITEM_ID";
   /**
    * createCharacterItemTable method
    * creates characterItemTable with given attributes
@@ -25,10 +28,10 @@ public class CharacterItemTable extends TableBase
   throws SQLException
   {
     String query = "CREATE TABLE IF NOT EXISTS characterItem("
-      + "CHARACTER_ID INT,"
-      + "ITEM_ID INT,"
-      + "FOREIGN KEY (CHARACTER_ID) REFERENCES Character (CHARACTER_ID),"
-      + "FOREIGN KEY (ITEM_ID) REFERENCES item (ITEM_ID)"
+      + CHARACTER_ID_COLUMN + " INT,"
+      + ITEM_ID_COLUMN + " INT,"
+      + "FOREIGN KEY (" + CHARACTER_ID_COLUMN +") REFERENCES " + CharacterTable.TABLE_NAME + " (" + CharacterTable.CHARACTER_ID_COLUMN + "),"
+      + "FOREIGN KEY (" + ITEM_ID_COLUMN +") REFERENCES " + ItemTable.TABLE_NAME + " (" + ItemTable.ID_COLUMN + ")"
       + ");" ;
 
     Statement state = conn.createStatement() ;
