@@ -117,6 +117,12 @@ public class Main {
 			Item i3 = new Item( 3, "Null", "Utility Belt", false, "accessory", 0, "Fighter" );
 			Item i4 = new Item( 4, "Null", "Bat Suit", false, "armor", 8, "Fighter" );
 			Item i5 = new Item( 5, "Null", "Robin Suit", false, "armor", 4, "Fighter" );
+			Item i6 = new Item( 6, "Null", "Batarang", false, "weapon", 1, "Fighter" );
+			Item i7 = new Item( 7, "Null", "Utility Belt", false, "accessory", 0, "Fighter" );
+			Item i8 = new Item( 8, "Null", "Bat Suit", false, "armor", 8, "Fighter" );
+			Item i9 = new Item( 9, "Null", "Batarang", false, "weapon", 1, "Fighter" );
+			Item i10 = new Item( 10, "Null", "Utility Belt", false, "accessory", 0, "Fighter" );
+			Item i11 = new Item( 11, "Null", "Bat Suit", false, "armor", 8, "Fighter" );
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
@@ -138,11 +144,23 @@ public class Main {
 			ItemTable.addItem(conn, i3);
 			ItemTable.addItem(conn, i4);
 			ItemTable.addItem(conn, i5);
+			ItemTable.addItem(conn, i6);
+			ItemTable.addItem(conn, i7);
+			ItemTable.addItem(conn, i8);
+			ItemTable.addItem(conn, i9);
+			ItemTable.addItem(conn, i10);
+			ItemTable.addItem(conn, i11);
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i.getID());
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i2.getID());
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i3.getID());
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i4.getID());
 			CharacterItemTable.giveItem(conn, robin.getCharacterId(), i5.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i6.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i7.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i8.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i9.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i10.getID());
+			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i11.getID());
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e);

@@ -1,6 +1,8 @@
 package as.project.tables;
 import as.project.objects.Ability;
+import as.project.objects.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -168,4 +170,48 @@ public class AbilityTable extends TableBase{
 			sqle.printStackTrace();
 		}
 	}
+	
+
+	  
+	  public static ArrayList<Ability> getAbilitiesByCharacter(Connection conn, int characterId){
+		  ArrayList<Ability> result = new ArrayList<Ability>();
+
+		  ArrayList<String> cols = new ArrayList<String>();
+		  ArrayList<String> where = new ArrayList<String>();
+		  StringBuilder queryText = new StringBuilder();
+		  queryText.append(ABILITY_ID_COLUMN).append(" IN (SELECT ");
+		  queryText.append(CharacterAbilityTable.ABILITY_ID_COLUMN).append(" FROM ").append(CharacterAbilityTable.TABLE_NAME).append(" WHERE ");
+		  queryText.append(CharacterAbilityTable.CHARACTER_ID_COLUMN).append("=").append(characterId).append(")");
+		  where.add(queryText.toString());
+
+		  ResultSet sqlResults = queryCurrentTable(conn, TABLE_NAME, cols, where, null);
+		  
+		  try{
+				while(sqlResults.next()){
+					result.add(getAbilityFromResultSet(sqlResults));
+				}
+				
+			} catch (Exception e){
+				System.out.println("Could not get items for character:" + characterId);
+				e.printStackTrace();
+			}
+		  
+		  return result;
+		  
+	  }
+	  
+
+
+		private static Ability getAbilityFromResultSet(ResultSet r) throws SQLException{
+			return new Ability(r.getInt(ABILITY_ID_COLUMN),
+						r.getInt(REQUIRED_LEVEL_COLUMN),
+						r.getInt(COST_COLUMN),
+						r.getInt(BASE_DAMAGE_COLUMN),
+						r.getFloat(RANGE_COLUMN),
+						r.getFloat(RADIUS_COLUMN),
+						r.getFloat(DURATION_COLUMN),
+						r.getString(TYPE_COLUMN),
+						r.getString(DESCRIPTION_COLUMN),
+						r.getString(ADDITIONAL_EFFECTS_COLUMN));
+		}
 }

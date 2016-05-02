@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import as.project.objects.Ability;
 import as.project.objects.GameCharacter;
 import as.project.objects.Item;
+import as.project.tables.AbilityTable;
 import as.project.tables.ItemTable;
 
 public class JGameCharacterPanel extends JPanel {
@@ -33,7 +34,7 @@ public class JGameCharacterPanel extends JPanel {
 		font = new Font("Courier New", Font.PLAIN, 12);
 		this.gc = gc;
 		this.itemList = ItemTable.getItemsByCharacter(MainGUI.getConnection(), gc.getCharacterId());
-		this.abilityList = null;
+		this.abilityList = AbilityTable.getAbilitiesByCharacter(MainGUI.getConnection(), gc.getCharacterId());
 				
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("<html>");
@@ -75,6 +76,17 @@ public class JGameCharacterPanel extends JPanel {
 		items = new JLabel(sbItems.toString());
 		items.setFont(font);
 		
+		StringBuilder sbAbilities = new StringBuilder();
+		sbAbilities.append("<html>");
+		sbAbilities.append("<p>Abilities(").append(abilityList.size()).append("):<br />");
+		for(Ability a: abilityList){
+			sbAbilities.append(a.getDescription()).append("<br />");
+		}
+		
+		sbAbilities.append("</p>").append("</html>");
+		abilities = new JLabel(sbAbilities.toString());
+		abilities.setFont(font);
+		
 		
 		layOutComponents();
 	}
@@ -93,10 +105,9 @@ public class JGameCharacterPanel extends JPanel {
 		c.weightx = 1;
 		c.insets = new Insets(0, 0, 20, 0); //bottom padding
 		this.add(info, c);
-		/*c.gridy = 1;
-		c.anchor = GridBagConstraints.CENTER;
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.WEST;
 		this.add(abilities, c);
-		*/
 		c.gridy = 2;
 		c.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		c.insets = new Insets(0, 0, 0, 0);
