@@ -27,9 +27,10 @@ public class CharacterItemTable extends TableBase
   public static void createCharacterItemTable( Connection conn )
   throws SQLException
   {
-    String query = "CREATE TABLE IF NOT EXISTS characterItem("
+    String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
       + CHARACTER_ID_COLUMN + " INT,"
       + ITEM_ID_COLUMN + " INT,"
+      + "PRIMARY KEY (" + CHARACTER_ID_COLUMN +", " + ITEM_ID_COLUMN + "),"
       + "FOREIGN KEY (" + CHARACTER_ID_COLUMN +") REFERENCES " + CharacterTable.TABLE_NAME + " (" + CharacterTable.CHARACTER_ID_COLUMN + "),"
       + "FOREIGN KEY (" + ITEM_ID_COLUMN +") REFERENCES " + ItemTable.TABLE_NAME + " (" + ItemTable.ID_COLUMN + ")"
       + ");" ;
@@ -48,8 +49,7 @@ public class CharacterItemTable extends TableBase
   **/
   public static void giveItem( Connection conn, int charID, int itemID )
   {
-    String query = String.format("INSERT INTO characterItem VALUES("
-     + "%d, %d);", charID, itemID ) ;
+    String query = String.format("INSERT INTO " + TABLE_NAME + " VALUES(%d, %d);", charID, itemID ) ;
 
     runStatement( conn, query ) ;
   }
