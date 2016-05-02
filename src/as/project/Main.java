@@ -112,7 +112,7 @@ public class Main {
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
-			Item i = new Item( 1, "Null", "Broadsword", 1, false, "weapon", 1, "Fighter" );
+			Item i = new Item( 1, "Null", "Broadsword", false, "weapon", 1, "Fighter" );
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
