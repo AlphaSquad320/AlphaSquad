@@ -40,6 +40,11 @@ gui:
 run: all	
 	$(JAVA) as.project.gui.MainGUI
 
+#TESTING COMMAND FOR EncyclopediaView
+test: 
+	$(JAVAC) src/as/project/gui/EncyclopediaPane.java
+	$(JAVA) as.project.gui.EncyclopediaPane
+
 #use command 'make clean' to remove precompiled code
 clean:
 	rm -r -f $(BUILDDIR) 
