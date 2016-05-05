@@ -21,50 +21,59 @@ public class EncyclopediaPane extends JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Font headerFont = new Font("Tahoma", 1, 16);
     private Font fieldFont = new Font("Tahoma", 0, 14);
-    private JLabel abilityDescription;
-    private JPanel abilityTab;
-    private JLabel abilityTitle;
-    private JLabel addEffHeader;
-    private JLabel addEffHeader1;
-    private JLabel addEffText;
-    private JLabel addEffText1;
-    private JLabel bonusHeader;
-    private JLabel bonusHeader1;
-    private JLabel bonusHeader2;
-    private JLabel bonusHeader3;
-    private JLabel bonusText;
-    private JLabel bonusText1;
-    private JLabel bonusText2;
-    private JLabel bonusText3;
-    private JLabel consumableHeader;
-    private JLabel consumableText;
-    private JLabel damageHeader;
-    private JLabel damageText;
-    private JLabel durationHeader;
-    private JLabel durationText;
-    private JLabel itemDescription;
+
+	//items tab 
+	private JPanel itemTab;
+    private JTextField searchBar;
     private JList<String> itemList;
-    private JPanel itemTab;
-    private JLabel itemTitle;
+    private JLabel itemTitle			= new JLabel("ITEM TITLE");
+    private JLabel itemDescription		= new 
+								JLabel("Description\nDescription\nDescription");
+    private JLabel typeHeader			= new JLabel("Type");
+    private JLabel typeText				= new JLabel("[[type]]");
+    private JLabel bonusHeader			= new JLabel("Bonus");
+    private JLabel bonusText			= new JLabel("[[bonus]]");
+    private JLabel consumableHeader		= new JLabel("Consumable?");
+    private JLabel consumableText		= new JLabel("[[consumable?]]");
+    private JLabel addEffHeader			= new JLabel("Additional Effects");
+    private JLabel addEffText			= new JLabel("[[additional effects]]");
+	
+	//abilities tab
+	private JPanel abilityTab;
+    private JLabel abilityTitle			= new JLabel("ABILITY TITLE");
+	private JLabel abilityDescription	= new
+								JLabel("Description\nDescription\nDescription");
+    private JLabel typeHeader1			= new JLabel("Type");
+    private JLabel typeText1			= new JLabel("[[type1]]");
+    private JLabel bonusHeader1			= new JLabel("Bonus");
+    private JLabel bonusText1			= new JLabel("[[bonus1]]");
+    
+	//TODO: clean this up (UGH)
+    private JLabel addEffHeader1		= new JLabel("Additiona Effects");
+    private JLabel addEffText1			= new JLabel("[[additional effects]]");
+    private JLabel costHeader			= new JLabel("Cost");
+    private JLabel reqLevelHeader		= new JLabel("Req Level");
+    private JLabel costText				= new JLabel("[[cost]]");
+    private JLabel reqLevelText			= new JLabel("[[req level]]");
+    private JLabel damageHeader			= new JLabel("Damage");
+    private JLabel damageText			= new JLabel("[[damage]]");
+    private JLabel durationHeader		= new JLabel("Duration");
+    private JLabel durationText			= new JLabel("[[duration]]");
     private JInternalFrame jInternalFrame1;
     private JList<String> jList3;
     private JScrollPane jScrollPane3;
     private JTextField jTextField3;
     private JPanel npcTab;
-    private JLabel radiusHeader;
-    private JLabel radiusText;
-    private JLabel rangeHeader;
-    private JLabel rangeHeader2;
-    private JLabel rangeText;
+    private JLabel radiusHeader			= new JLabel("Radius");
+    private JLabel radiusText			= new JLabel("[[radius]]");
+    private JLabel rangeHeader			= new JLabel("Range");
+    private JLabel rangeHeader2			= new JLabel("");
+    private JLabel rangeText			= new JLabel("[[range]]");
     private JScrollPane scrollPane;
-    private JTextField searchBar;
     private JTabbedPane tabbedPane;
-    private JLabel typeHeader;
-    private JLabel typeHeader1;
-    private JLabel typeText;
-    private JLabel typeText1;
     // End of variables declaration//GEN-END:variables
-    /**
+    
+	/**
      * Creates new form EncyclopediaPane
      */
     public EncyclopediaPane() {
@@ -80,40 +89,10 @@ public class EncyclopediaPane extends JPanel
         scrollPane = new JScrollPane();
         itemList = new JList<>();
         searchBar = new JTextField();
-        itemTitle = new JLabel();
-        typeHeader = new JLabel();
-        typeText = new JLabel();
-        bonusHeader = new JLabel();
-        consumableHeader = new JLabel();
-        bonusText = new JLabel();
-        consumableText = new JLabel();
-        addEffHeader = new JLabel();
-        addEffText = new JLabel();
-        itemDescription = new JLabel();
         abilityTab = new JPanel();
         jScrollPane3 = new JScrollPane();
         jList3 = new JList<>();
         jTextField3 = new JTextField();
-        abilityTitle = new JLabel();
-        typeHeader1 = new JLabel();
-        typeText1 = new JLabel();
-        bonusHeader1 = new JLabel();
-        bonusText1 = new JLabel();
-        addEffHeader1 = new JLabel();
-        addEffText1 = new JLabel();
-        abilityDescription = new JLabel();
-        rangeHeader = new JLabel();
-        radiusHeader = new JLabel();
-        damageHeader = new JLabel();
-        rangeText = new JLabel();
-        radiusText = new JLabel();
-        durationHeader = new JLabel();
-        damageText = new JLabel();
-        durationText = new JLabel();
-        bonusHeader2 = new JLabel();
-        bonusHeader3 = new JLabel();
-        bonusText2 = new JLabel();
-        bonusText3 = new JLabel();
         npcTab = new JPanel();
 
         jInternalFrame1.setVisible(true);
@@ -149,35 +128,25 @@ public class EncyclopediaPane extends JPanel
         });
 
         itemTitle.setFont(new Font("Tahoma", 1, 18)); // NOI18N
-        itemTitle.setText("[[ ITEM TITLE ]]");
 
         typeHeader.setFont(headerFont); // NOI18N
-        typeHeader.setText("Type");
 
         typeText.setFont(fieldFont); // NOI18N
-        typeText.setText("[[ type ]]");
 
         bonusHeader.setFont(headerFont); // NOI18N
-        bonusHeader.setText("Bonus");
 
         consumableHeader.setFont(headerFont); // NOI18N
-        consumableHeader.setText("Consumable?");
 
         bonusText.setFont(fieldFont); // NOI18N
-        bonusText.setText("[[ bonus ]]");
 
         consumableText.setFont(fieldFont); // NOI18N
-        consumableText.setText("[[ isConsumable ]]");
 
         addEffHeader.setFont(headerFont); // NOI18N
-        addEffHeader.setText("Additional Effects");
 
         addEffText.setFont(fieldFont); // NOI18N
-        addEffText.setText("[[ additional effects ]]");
         addEffText.setVerticalAlignment(SwingConstants.TOP);
 
         itemDescription.setFont(fieldFont); // NOI18N
-        itemDescription.setText("1234567890123456789012345678901234567890");
         itemDescription.setVerticalAlignment(SwingConstants.TOP);
 
         GroupLayout itemTabLayout = new GroupLayout(itemTab);
@@ -262,63 +231,44 @@ public class EncyclopediaPane extends JPanel
         abilityTitle.setText("[[ ABILITY TITLE ]]");
 
         typeHeader1.setFont(headerFont); // NOI18N
-        typeHeader1.setText("Type");
 
         typeText1.setFont(fieldFont); // NOI18N
-        typeText1.setText("[[ type ]]");
 
         bonusHeader1.setFont(headerFont); // NOI18N
-        bonusHeader1.setText("Bonus");
 
         bonusText1.setFont(fieldFont); // NOI18N
-        bonusText1.setText("[[ bonus ]]");
 
         addEffHeader1.setFont(headerFont); // NOI18N
-        addEffHeader1.setText("Additional Effects");
 
         addEffText1.setFont(fieldFont); // NOI18N
-        addEffText1.setText("[[ additional effects ]]");
         addEffText1.setVerticalAlignment(SwingConstants.TOP);
 
         abilityDescription.setFont(fieldFont); // NOI18N
-        abilityDescription.setText("1234567890123456789012345678901234567890");
         abilityDescription.setVerticalAlignment(SwingConstants.TOP);
 
         rangeHeader.setFont(headerFont); // NOI18N
-        rangeHeader.setText("Range");
 
         radiusHeader.setFont(headerFont); // NOI18N
-        radiusHeader.setText("Radius");
 
         damageHeader.setFont(headerFont); // NOI18N
-        damageHeader.setText("Damage");
 
         rangeText.setFont(fieldFont); // NOI18N
-        rangeText.setText("[[ range ]]");
 
         radiusText.setFont(fieldFont); // NOI18N
-        radiusText.setText("[[ radius ]]");
 
         durationHeader.setFont(headerFont); // NOI18N
-        durationHeader.setText("Duration");
 
         damageText.setFont(fieldFont); // NOI18N
-        damageText.setText("[[ damage ]]");
 
         durationText.setFont(fieldFont); // NOI18N
-        durationText.setText("[[ duration ]]");
 
-        bonusHeader2.setFont(headerFont); // NOI18N
-        bonusHeader2.setText("Cost");
+        costHeader.setFont(headerFont); // NOI18N
 
-        bonusHeader3.setFont(headerFont); // NOI18N
-        bonusHeader3.setText("Req Level");
+        reqLevelHeader.setFont(headerFont); // NOI18N
 
-        bonusText2.setFont(fieldFont); // NOI18N
-        bonusText2.setText("[[ cost ]]");
+        costText.setFont(fieldFont); // NOI18N
 
-        bonusText3.setFont(fieldFont); // NOI18N
-        bonusText3.setText("[[ req level ]]");
+        reqLevelText.setFont(fieldFont); // NOI18N
 
         GroupLayout abilityTabLayout = new GroupLayout(abilityTab);
         abilityTab.setLayout(abilityTabLayout);
@@ -356,10 +306,10 @@ public class EncyclopediaPane extends JPanel
                                     .addComponent(bonusHeader1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(bonusHeader2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bonusText3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bonusHeader3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bonusText2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(costHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(reqLevelText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(reqLevelHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(costText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -379,22 +329,22 @@ public class EncyclopediaPane extends JPanel
                         .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(typeHeader1)
                             .addComponent(bonusHeader1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bonusHeader2))
+                            .addComponent(costHeader))
                         .addGap(6, 6, 6)
                         .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(typeText1)
                             .addComponent(bonusText1)
-                            .addComponent(bonusText2))
+                            .addComponent(costText))
                         .addGap(18, 18, 18)
                         .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(rangeHeader)
                             .addComponent(radiusHeader)
-                            .addComponent(bonusHeader3))
+                            .addComponent(reqLevelHeader))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(rangeText)
                             .addComponent(radiusText)
-                            .addComponent(bonusText3))
+                            .addComponent(reqLevelText))
                         .addGap(18, 18, 18)
                         .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(durationHeader)
@@ -457,5 +407,6 @@ public class EncyclopediaPane extends JPanel
         testFrame.setContentPane(ep);
         testFrame.pack();
         testFrame.setVisible(true);
+		testFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 }
