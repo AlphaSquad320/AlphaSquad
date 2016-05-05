@@ -1,203 +1,183 @@
 /* File: EncyclopediaPane.java
- * 
+ * vim: ts=4:sw=4:tw=120
+ *
  * TODO: Clean up this code
- * TODO: Fix tab resizing issue
- * TODO: add appropriate imports
  * TODO: make each pane its own class
  */
 package as.project.gui;
 
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
-
+import javax.swing.GroupLayout.Alignment;	//for constants
 
 /**
  * This class is the content pane for the encyclopedia view.
- * @author Tommy
+ * @author Tommy Bohde
  */
-public class EncyclopediaPane extends JPanel 
+public class EncyclopediaPane extends JPanel implements ActionListener
 {
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Font headerFont = new Font("Tahoma", 1, 16);
-    private Font fieldFont = new Font("Tahoma", 0, 14);
+	//useful things
+	private int DEFAULT_SIZE = GroupLayout.DEFAULT_SIZE;
+	private int PREFERRED_SIZE = GroupLayout.PREFERRED_SIZE;
+
+	//class-wide elements
+    private JTabbedPane tabbedPane		= new JTabbedPane();
+	private Font titleFont				= new Font("Tahoma", 1, 18);
+    private Font headerFont				= new Font("Tahoma", 1, 16);
+    private Font fieldFont				= new Font("Tahoma", 0, 14);
 
 	//items tab 
-	private JPanel itemTab;
-    private JTextField searchBar;
-    private JList<String> itemList;
-    private JLabel itemTitle			= new JLabel("ITEM TITLE");
-    private JLabel itemDescription		= new 
-								JLabel("Description\nDescription\nDescription");
-    private JLabel typeHeader			= new JLabel("Type");
-    private JLabel typeText				= new JLabel("[[type]]");
-    private JLabel bonusHeader			= new JLabel("Bonus");
-    private JLabel bonusText			= new JLabel("[[bonus]]");
-    private JLabel consumableHeader		= new JLabel("Consumable?");
-    private JLabel consumableText		= new JLabel("[[consumable?]]");
-    private JLabel addEffHeader			= new JLabel("Additional Effects");
-    private JLabel addEffText			= new JLabel("[[additional effects]]");
+	private JPanel itemTab				= new JPanel();
+    private JTextField iSearchBar		= new JTextField();
+	private JScrollPane iScrollPane		= new JScrollPane();
+    private JList<String> itemList		= new JList<>();
+    private JLabel itemTitle			= createJLabel("ITEM TITLE",			titleFont);
+    private JLabel itemDescription		= createJLabel("Description",			fieldFont);
+    private JLabel typeHeader			= createJLabel("Type",					headerFont);
+    private JLabel typeText				= createJLabel("[[type]]",				fieldFont);
+    private JLabel bonusHeader			= createJLabel("Bonus",					headerFont);
+    private JLabel bonusText			= createJLabel("[[bonus]]",				fieldFont);
+    private JLabel consumableHeader		= createJLabel("Consumable?",			headerFont);
+    private JLabel consumableText		= createJLabel("[[consumable?]]",		fieldFont);
+    private JLabel addEffHeader			= createJLabel("Additional Effects",	headerFont);
+    private JLabel addEffText			= createJLabel("[[additional effects]]",fieldFont);
 	
 	//abilities tab
-	private JPanel abilityTab;
-    private JLabel abilityTitle			= new JLabel("ABILITY TITLE");
-	private JLabel abilityDescription	= new
-								JLabel("Description\nDescription\nDescription");
-    private JLabel typeHeader1			= new JLabel("Type");
-    private JLabel typeText1			= new JLabel("[[type1]]");
-    private JLabel bonusHeader1			= new JLabel("Bonus");
-    private JLabel bonusText1			= new JLabel("[[bonus1]]");
+	private JPanel abilityTab			= new JPanel();
+    private JTextField aSearchBar		= new JTextField();
+    private JScrollPane aScrollPane		= new JScrollPane();
+    private JList<String> abilityList		= new JList<>();
+    private JLabel abilityTitle			= createJLabel("ABILITY TITLE",			titleFont);
+	private JLabel abilityDescription	= createJLabel("Description",			fieldFont);
+    private JLabel typeHeader1			= createJLabel("Type",					headerFont);
+    private JLabel typeText1			= createJLabel("[[type1]]",				fieldFont);
+    private JLabel bonusHeader1			= createJLabel("Bonus",					headerFont);
+    private JLabel bonusText1			= createJLabel("[[bonus1]]",			fieldFont);
+    private JLabel costHeader			= createJLabel("Cost",					headerFont);
+    private JLabel costText				= createJLabel("[[cost]]",				fieldFont);
+    private JLabel rangeHeader			= createJLabel("Range",					headerFont);
+    private JLabel rangeText			= createJLabel("[[range]]",				fieldFont);
+    private JLabel radiusHeader			= createJLabel("Radius",				headerFont);
+    private JLabel radiusText			= createJLabel("[[radius]]",			fieldFont);
+    private JLabel reqLevelHeader		= createJLabel("Req Level",				headerFont);
+    private JLabel reqLevelText			= createJLabel("[[req level]]",			fieldFont);
+    private JLabel damageHeader			= createJLabel("Damage",				headerFont);
+    private JLabel damageText			= createJLabel("[[damage]]",			fieldFont);
+    private JLabel durationHeader		= createJLabel("Duration",				headerFont);
+    private JLabel durationText			= createJLabel("[[duration]]",			fieldFont);
+    private JLabel addEffHeader1		= createJLabel("Additional Effects",	headerFont);
+    private JLabel addEffText1			= createJLabel("[[additional effects]]",fieldFont);
     
-	//TODO: clean this up (UGH)
-    private JLabel addEffHeader1		= new JLabel("Additiona Effects");
-    private JLabel addEffText1			= new JLabel("[[additional effects]]");
-    private JLabel costHeader			= new JLabel("Cost");
-    private JLabel reqLevelHeader		= new JLabel("Req Level");
-    private JLabel costText				= new JLabel("[[cost]]");
-    private JLabel reqLevelText			= new JLabel("[[req level]]");
-    private JLabel damageHeader			= new JLabel("Damage");
-    private JLabel damageText			= new JLabel("[[damage]]");
-    private JLabel durationHeader		= new JLabel("Duration");
-    private JLabel durationText			= new JLabel("[[duration]]");
-    private JInternalFrame jInternalFrame1;
-    private JList<String> jList3;
-    private JScrollPane jScrollPane3;
-    private JTextField jTextField3;
-    private JPanel npcTab;
-    private JLabel radiusHeader			= new JLabel("Radius");
-    private JLabel radiusText			= new JLabel("[[radius]]");
-    private JLabel rangeHeader			= new JLabel("Range");
-    private JLabel rangeHeader2			= new JLabel("");
-    private JLabel rangeText			= new JLabel("[[range]]");
-    private JScrollPane scrollPane;
-    private JTabbedPane tabbedPane;
-    // End of variables declaration//GEN-END:variables
-    
+    //NPCs tab
+	private JPanel npcTab				= new JPanel();
+
 	/**
      * Creates new form EncyclopediaPane
      */
-    public EncyclopediaPane() {
-        initComponents();
+    public EncyclopediaPane() 
+	{
+        layOutComponents();
     }
 
-    private void initComponents() {
+	/**
+	 * function to create a JLabel with provided text and font
+	 * @param text the desired text
+	 * @param font the desired font
+	 * @return a JLabel object with the text and font provided
+	 */
+	private JLabel createJLabel(String text, Font font)
+	{
+		JLabel label = new JLabel(text);
+		label.setFont(font);
+		return label;
+	}
 
-        jInternalFrame1 = new JInternalFrame();
-        rangeHeader2 = new JLabel();
-        tabbedPane = new JTabbedPane();
-        itemTab = new JPanel();
-        scrollPane = new JScrollPane();
-        itemList = new JList<>();
-        searchBar = new JTextField();
-        abilityTab = new JPanel();
-        jScrollPane3 = new JScrollPane();
-        jList3 = new JList<>();
-        jTextField3 = new JTextField();
-        npcTab = new JPanel();
-
-        jInternalFrame1.setVisible(true);
-
-        GroupLayout jInternalFrame1Layout = new GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        rangeHeader2.setFont(headerFont); // NOI18N
-        rangeHeader2.setText("Radius");
-
+    private void layOutComponents() 
+	{
+		//set up the main layout
         tabbedPane.setMinimumSize(new java.awt.Dimension(550, 450));
+        tabbedPane.addTab("Items", itemTab);
+        tabbedPane.addTab("Abilities", abilityTab);
+        tabbedPane.addTab("NPCs", npcTab);
+        
+		this.setLayout(new GridLayout(1, 1));
+		this.add(tabbedPane);
+			
+		layOutItemTab();
+		layOutAbilityTab();
+		layOutNPCTab();
 
+    }
+
+	private void layOutItemTab()
+	{
+		// #################
+		// ### ITEM PANE ###
+		// #################
+		iSearchBar.setText("Search");
+        iSearchBar.addActionListener(this);
+
+        itemDescription.setVerticalAlignment(SwingConstants.TOP);
+        addEffText.setVerticalAlignment(SwingConstants.TOP);
+
+		//TODO: populate the list with actual items
         itemList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        scrollPane.setViewportView(itemList);
-
-        searchBar.setText("Search");
-        searchBar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBarActionPerformed(evt);
-            }
-        });
-
-        itemTitle.setFont(new Font("Tahoma", 1, 18)); // NOI18N
-
-        typeHeader.setFont(headerFont); // NOI18N
-
-        typeText.setFont(fieldFont); // NOI18N
-
-        bonusHeader.setFont(headerFont); // NOI18N
-
-        consumableHeader.setFont(headerFont); // NOI18N
-
-        bonusText.setFont(fieldFont); // NOI18N
-
-        consumableText.setFont(fieldFont); // NOI18N
-
-        addEffHeader.setFont(headerFont); // NOI18N
-
-        addEffText.setFont(fieldFont); // NOI18N
-        addEffText.setVerticalAlignment(SwingConstants.TOP);
-
-        itemDescription.setFont(fieldFont); // NOI18N
-        itemDescription.setVerticalAlignment(SwingConstants.TOP);
+        iScrollPane.setViewportView(itemList);
 
         GroupLayout itemTabLayout = new GroupLayout(itemTab);
         itemTab.setLayout(itemTabLayout);
         itemTabLayout.setHorizontalGroup(
-            itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            itemTabLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(itemTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(scrollPane)
-                    .addComponent(searchBar, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING, false)
+                    .addComponent(iScrollPane)
+                    .addComponent(iSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(itemDescription, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(itemDescription, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(itemTabLayout.createSequentialGroup()
-                        .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
                             .addComponent(itemTitle)
                             .addGroup(itemTabLayout.createSequentialGroup()
-                                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(typeText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(typeHeader, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
+                                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING, false)
+                                    .addComponent(typeText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(typeHeader, PREFERRED_SIZE, 80, PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
                                     .addComponent(bonusText)
                                     .addComponent(bonusHeader)))
                             .addComponent(consumableHeader)
                             .addComponent(consumableText)
-                            .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(addEffText, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addEffHeader, GroupLayout.Alignment.LEADING)))
+                            .addGroup(itemTabLayout.createParallelGroup(Alignment.TRAILING, false)
+                                .addComponent(addEffText, Alignment.LEADING, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addEffHeader, Alignment.LEADING)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         itemTabLayout.setVerticalGroup(
-            itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            itemTabLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(itemTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(searchBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(iSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                     .addComponent(itemTitle))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPane)
+                .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(iScrollPane)
                     .addGroup(itemTabLayout.createSequentialGroup()
-                        .addComponent(itemDescription, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(itemDescription, PREFERRED_SIZE, 60, PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(itemTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeHeader)
-                            .addComponent(bonusHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(bonusHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(6, 6, 6)
-                        .addGroup(itemTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(itemTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeText)
                             .addComponent(bonusText))
                         .addGap(18, 18, 18)
@@ -210,147 +190,108 @@ public class EncyclopediaPane extends JPanel
                         .addComponent(addEffText)))
                 .addContainerGap())
         );
+	}
 
-        tabbedPane.addTab("Items", itemTab);
+	private void layOutAbilityTab()
+	{
+		// ####################
+		// ### ABILITY PANE ###
+		// ####################
+        aSearchBar.setText("Search");
+        aSearchBar.addActionListener(this);
 
-        jList3.setModel(new AbstractListModel<String>() {
+        abilityDescription.setVerticalAlignment(SwingConstants.TOP);
+        addEffText1.setVerticalAlignment(SwingConstants.TOP);
+		
+		//TODO: populate the list with actual abilities
+        abilityList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList3);
-
-        jTextField3.setText("Search");
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-
-        abilityTitle.setFont(new Font("Tahoma", 1, 18)); // NOI18N
-        abilityTitle.setText("[[ ABILITY TITLE ]]");
-
-        typeHeader1.setFont(headerFont); // NOI18N
-
-        typeText1.setFont(fieldFont); // NOI18N
-
-        bonusHeader1.setFont(headerFont); // NOI18N
-
-        bonusText1.setFont(fieldFont); // NOI18N
-
-        addEffHeader1.setFont(headerFont); // NOI18N
-
-        addEffText1.setFont(fieldFont); // NOI18N
-        addEffText1.setVerticalAlignment(SwingConstants.TOP);
-
-        abilityDescription.setFont(fieldFont); // NOI18N
-        abilityDescription.setVerticalAlignment(SwingConstants.TOP);
-
-        rangeHeader.setFont(headerFont); // NOI18N
-
-        radiusHeader.setFont(headerFont); // NOI18N
-
-        damageHeader.setFont(headerFont); // NOI18N
-
-        rangeText.setFont(fieldFont); // NOI18N
-
-        radiusText.setFont(fieldFont); // NOI18N
-
-        durationHeader.setFont(headerFont); // NOI18N
-
-        damageText.setFont(fieldFont); // NOI18N
-
-        durationText.setFont(fieldFont); // NOI18N
-
-        costHeader.setFont(headerFont); // NOI18N
-
-        reqLevelHeader.setFont(headerFont); // NOI18N
-
-        costText.setFont(fieldFont); // NOI18N
-
-        reqLevelText.setFont(fieldFont); // NOI18N
+        aScrollPane.setViewportView(abilityList);
 
         GroupLayout abilityTabLayout = new GroupLayout(abilityTab);
         abilityTab.setLayout(abilityTabLayout);
         abilityTabLayout.setHorizontalGroup(
-            abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            abilityTabLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(abilityTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jTextField3, GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
+                    .addComponent(aScrollPane)
+                    .addComponent(aSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(abilityDescription, GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(abilityDescription, DEFAULT_SIZE, 366, Short.MAX_VALUE)
                     .addGroup(abilityTabLayout.createSequentialGroup()
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
                             .addComponent(abilityTitle)
-                            .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(addEffText1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addEffHeader1, GroupLayout.Alignment.LEADING))
+                            .addGroup(abilityTabLayout.createParallelGroup(Alignment.TRAILING, false)
+                                .addComponent(addEffText1, Alignment.LEADING, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addEffHeader1, Alignment.LEADING))
                             .addGroup(abilityTabLayout.createSequentialGroup()
-                                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(typeText1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(typeHeader1, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-                                    .addComponent(rangeText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(damageText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(rangeHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(damageHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
+                                    .addComponent(typeText1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(typeHeader1, DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                    .addComponent(rangeText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(damageText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(rangeHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(damageHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(bonusText1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radiusText, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-                                    .addComponent(durationText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(durationHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radiusHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bonusHeader1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
+                                    .addComponent(bonusText1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(radiusText, DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                    .addComponent(durationText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(durationHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(radiusHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bonusHeader1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(costHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(reqLevelText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(reqLevelHeader, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(costText, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
+                                    .addComponent(costHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(reqLevelText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(reqLevelHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(costText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         abilityTabLayout.setVerticalGroup(
-            abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            abilityTabLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(abilityTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(aSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                     .addComponent(abilityTitle))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
+                .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(aScrollPane)
                     .addGroup(abilityTabLayout.createSequentialGroup()
-                        .addComponent(abilityDescription, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(abilityDescription, PREFERRED_SIZE, 60, PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeHeader1)
-                            .addComponent(bonusHeader1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bonusHeader1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(costHeader))
                         .addGap(6, 6, 6)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeText1)
                             .addComponent(bonusText1)
                             .addComponent(costText))
                         .addGap(18, 18, 18)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(rangeHeader)
                             .addComponent(radiusHeader)
                             .addComponent(reqLevelHeader))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(rangeText)
                             .addComponent(radiusText)
                             .addComponent(reqLevelText))
                         .addGap(18, 18, 18)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
                             .addComponent(durationHeader)
                             .addComponent(damageHeader))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(abilityTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(damageText)
                             .addComponent(durationText))
                         .addGap(18, 18, 18)
@@ -361,43 +302,30 @@ public class EncyclopediaPane extends JPanel
                 .addContainerGap())
         );
 
-        tabbedPane.addTab("Abilities", abilityTab);
+	}
 
+	private void layOutNPCTab()
+	{
+		// #################
+		// ### NPC  PANE ###
+		// #################
         GroupLayout npcTabLayout = new GroupLayout(npcTab);
         npcTab.setLayout(npcTabLayout);
         npcTabLayout.setHorizontalGroup(
-            npcTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            npcTabLayout.createParallelGroup(Alignment.LEADING)
             .addGap(0, 545, Short.MAX_VALUE)
         );
         npcTabLayout.setVerticalGroup(
-            npcTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            npcTabLayout.createParallelGroup(Alignment.LEADING)
             .addGap(0, 428, Short.MAX_VALUE)
         );
+	}
 
-        tabbedPane.addTab("NPCs", npcTab);
-
-        GroupLayout layout = new GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-    }// </editor-fold>                        
-
-    private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchBarActionPerformed
-
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
-
-
+	public void actionPerformed(ActionEvent e)
+	{
+		//TODO: implement search features
+		//(this might not be the best way to do that)
+	}
 
     public static void main(String[] args)
     {
