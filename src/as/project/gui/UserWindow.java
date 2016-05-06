@@ -22,9 +22,14 @@ public class UserWindow extends JFrame implements ActionListener
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menuFile = new JMenu("File");
 	private JMenu menuUser = new JMenu("User");
+	private JMenu menuView = new JMenu("View");
 	private JMenuItem fileExit = new JMenuItem("Exit");
 	private JMenuItem userLogIn = new JMenuItem("Log in");
 	private JMenuItem userLogOut = new JMenuItem("Log out");
+	private JMenuItem viewUser = new JMenuItem("Profile View");
+	private JMenuItem viewEnc = new JMenuItem("Encyclopedia View");
+	private UserPane userPane = null;
+	private EncyclopediaPane encPane = new EncyclopediaPane();
 
 	private User user;
 	
@@ -43,6 +48,8 @@ public class UserWindow extends JFrame implements ActionListener
 		fileExit.addActionListener(this);
 		userLogIn.addActionListener(this);
 		userLogOut.addActionListener(this);
+		viewUser.addActionListener(this);
+		viewEnc.addActionListener(this);
 
 		//final housekeeping
 		setSize(new Dimension(800, 600));
@@ -61,12 +68,17 @@ public class UserWindow extends JFrame implements ActionListener
 		this.setJMenuBar(menuBar);
 		menuBar.add(menuFile);
 		menuBar.add(menuUser);
+		menuBar.add(menuView);
 		menuFile.add(fileExit);
 		menuUser.add(userLogIn);
 		menuUser.add(userLogOut);
+		menuView.add(viewUser);
+		menuView.add(viewEnc);
 
 		userLogIn.setEnabled(true);
 		userLogOut.setEnabled(false);
+		viewUser.setEnabled(false);
+		viewEnc.setEnabled(false);
 	}
 
 	private void displayLoginWindow()
@@ -80,6 +92,8 @@ public class UserWindow extends JFrame implements ActionListener
 		user = null;
 		userLogIn.setEnabled(true);
 		userLogOut.setEnabled(false);
+		viewUser.setEnabled(false);
+		viewEnc.setEnabled(false);
 		this.setContentPane(new JPanel());
 		validate();
 		
@@ -91,11 +105,13 @@ public class UserWindow extends JFrame implements ActionListener
 		if (loggedIn != null) 
 		{
 			user = loggedIn;
-			UserPane pane = new UserPane(user);
-			this.setContentPane(pane);
+			userPane = new UserPane(user);
+			this.setContentPane(userPane);
 			validate();
 			userLogIn.setEnabled(false);
 			userLogOut.setEnabled(true);
+			viewUser.setEnabled(true);
+			viewEnc.setEnabled(true);
 			return true;
 		}
 		//if not found
@@ -126,6 +142,15 @@ public class UserWindow extends JFrame implements ActionListener
 		else if (e.getSource() == userLogOut)
 		{
 			logOutUser();
+			System.out.println("womp");
+		}
+		else if(e.getSource() == viewUser){
+			this.setContentPane(userPane);
+			validate();
+		}
+		else if(e.getSource() == viewEnc){
+			this.setContentPane(encPane);
+			validate();
 		}
 	}
 }
