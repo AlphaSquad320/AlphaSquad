@@ -200,6 +200,32 @@ public class AbilityTable extends TableBase{
 		  
 	  }
 	  
+	  public static ArrayList<Ability> getItemsByString(Connection conn, String str){
+		  ArrayList<Ability> result = new ArrayList<Ability>();
+		  
+		  if(str != null){
+			  ArrayList<String> cols = new ArrayList<String>();
+			  ArrayList<String> where = new ArrayList<String>();
+			  StringBuilder queryText = new StringBuilder();
+			  queryText.append("UPPER(").append(DESCRIPTION_COLUMN).append(") LIKE UPPER('%").append(str).append("%')");
+			  where.add(queryText.toString());
+		
+			  ResultSet sqlResults = queryCurrentTable(conn, TABLE_NAME, cols, where, null);
+			  
+			  try{
+					while(sqlResults.next()){
+						result.add(getAbilityFromResultSet(sqlResults));
+					}
+					
+				} catch (Exception e){
+					System.out.println("Could not get abilities by string:" + str);
+					e.printStackTrace();
+				}
+		  }
+		  
+		  return result;
+	  }
+	  
 
 
 		private static Ability getAbilityFromResultSet(ResultSet r) throws SQLException{

@@ -15,7 +15,9 @@ import javax.swing.GroupLayout.Alignment;	//for constants
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import as.project.objects.Ability;
 import as.project.objects.Item;
+import as.project.tables.AbilityTable;
 import as.project.tables.ItemTable;
 
 /**
@@ -55,14 +57,14 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 	//abilities tab
 	private JPanel abilityTab			= new JPanel();
     private JTextField aSearchBar		= new JTextField();
+    private JButton aSearchButton       = new JButton("Search");
     private JScrollPane aScrollPane		= new JScrollPane();
-    private JList<String> abilityList		= new JList<>();
+    private DefaultListModel<Ability> aListModel = new DefaultListModel<>();
+    private JList<Ability> abilityList		= new JList<>(aListModel);
     private JLabel abilityTitle			= createJLabel("ABILITY TITLE",			titleFont);
 	private JLabel abilityDescription	= createJLabel("Description",			fieldFont);
     private JLabel typeHeader1			= createJLabel("Type",					headerFont);
     private JLabel typeText1			= createJLabel("[[type1]]",				fieldFont);
-    private JLabel bonusHeader1			= createJLabel("Bonus",					headerFont);
-    private JLabel bonusText1			= createJLabel("[[bonus1]]",			fieldFont);
     private JLabel costHeader			= createJLabel("Cost",					headerFont);
     private JLabel costText				= createJLabel("[[cost]]",				fieldFont);
     private JLabel rangeHeader			= createJLabel("Range",					headerFont);
@@ -133,6 +135,9 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
         addEffText.setVerticalAlignment(SwingConstants.TOP);
 
         iScrollPane.setViewportView(itemList);
+        Dimension d = iScrollPane.getPreferredSize();
+        d.width = 141;
+        iScrollPane.setPreferredSize(d);
 
         GroupLayout itemTabLayout = new GroupLayout(itemTab);
         itemTab.setLayout(itemTabLayout);
@@ -205,19 +210,18 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 		// ####################
 		// ### ABILITY PANE ###
 		// ####################
-        aSearchBar.setText("Search");
         aSearchBar.addActionListener(this);
+        aSearchButton.addActionListener(this);
+        abilityList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        abilityList.addListSelectionListener(this);
 
         abilityDescription.setVerticalAlignment(SwingConstants.TOP);
         addEffText1.setVerticalAlignment(SwingConstants.TOP);
-		
-		//TODO: populate the list with actual abilities
-        abilityList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         aScrollPane.setViewportView(abilityList);
+        Dimension d = aScrollPane.getPreferredSize();
+        d.width = 141;
+        aScrollPane.setPreferredSize(d);
+
 
         GroupLayout abilityTabLayout = new GroupLayout(abilityTab);
         abilityTab.setLayout(abilityTabLayout);
@@ -227,6 +231,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                 .addContainerGap()
                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
                     .addComponent(aScrollPane)
+                    .addComponent(aSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
                     .addComponent(aSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
@@ -247,18 +252,16 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                                     .addComponent(damageHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
-                                    .addComponent(bonusText1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(costHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(radiusText, DEFAULT_SIZE, 80, Short.MAX_VALUE)
                                     .addComponent(durationText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(durationHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(radiusHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(bonusHeader1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(costText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
-                                    .addComponent(costHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(reqLevelText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(reqLevelHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(costText, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(reqLevelHeader, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -270,6 +273,8 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                     .addComponent(aSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                     .addComponent(abilityTitle))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(aSearchButton, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(aScrollPane)
                     .addGroup(abilityTabLayout.createSequentialGroup()
@@ -277,12 +282,10 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeHeader1)
-                            .addComponent(bonusHeader1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(costHeader))
                         .addGap(6, 6, 6)
                         .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
                             .addComponent(typeText1)
-                            .addComponent(bonusText1)
                             .addComponent(costText))
                         .addGap(18, 18, 18)
                         .addGroup(abilityTabLayout.createParallelGroup(Alignment.BASELINE)
@@ -339,6 +342,21 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			addEffText.setText(i.getEffect());
 		}
 	}
+	
+	private void displayAbility(Ability a){
+		if(a != null)
+		{
+			abilityDescription.setText(a.getDescription());
+			typeText1.setText(a.getType());
+			addEffText1.setText(a.getAdditionalEffects());
+			costText.setText(String.valueOf(a.getCost()));
+			damageText.setText(String.valueOf(a.getBaseDamage()));
+			radiusText.setText(String.valueOf(a.getRadius()));
+			rangeText.setText(String.valueOf(a.getRange()));
+			reqLevelText.setText(String.valueOf(a.getReqLevel()));
+			durationText.setText(String.valueOf(a.getDuration()));
+		}
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -352,6 +370,14 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 				iListModel.addElement(i);
 			}
 		}
+		else if(e.getSource() == aSearchButton){
+			String query = aSearchBar.getText();
+			aListModel.clear();
+			ArrayList<Ability> qResults = AbilityTable.getItemsByString(MainGUI.getConnection(), query);
+			for(Ability i : qResults){
+				aListModel.addElement(i);
+			}
+		}
 	}
 
 	@Override
@@ -359,6 +385,9 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 		if(!e.getValueIsAdjusting()){
 			if(e.getSource() == itemList){
 				displayItem(itemList.getSelectedValue());
+			}
+			else if(e.getSource() == abilityList){
+				displayAbility(abilityList.getSelectedValue());
 			}
 		}
 	}

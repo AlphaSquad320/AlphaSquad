@@ -66,5 +66,6 @@ public class Ability {
 	public String getType() { return type; }
 	public String getDescription() { return description; }
 	public String getAdditionalEffects() { return additionalEffects; }
+	public String toString() { return getDescription(); }
 	
 }
