@@ -61,4 +61,8 @@ public class Item
 
   public String getItemClass(){ return itemClass ; }
   public void setItemClass( String newClass ){ itemClass = newClass ; }
+  
+  public String toString(){
+	  return this.getDescription();
+  }
 }

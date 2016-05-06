@@ -8,14 +8,21 @@ package as.project.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;	//for constants
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import as.project.objects.Item;
+import as.project.tables.ItemTable;
 
 /**
  * This class is the content pane for the encyclopedia view.
  * @author Tommy Bohde
  */
-public class EncyclopediaPane extends JPanel implements ActionListener
+public class EncyclopediaPane extends JPanel implements ActionListener, ListSelectionListener
 {
 	//useful things
 	private int DEFAULT_SIZE = GroupLayout.DEFAULT_SIZE;
@@ -30,8 +37,10 @@ public class EncyclopediaPane extends JPanel implements ActionListener
 	//items tab 
 	private JPanel itemTab				= new JPanel();
     private JTextField iSearchBar		= new JTextField();
+    private JButton iSearchButton       = new JButton("Search");
 	private JScrollPane iScrollPane		= new JScrollPane();
-    private JList<String> itemList		= new JList<>();
+    private DefaultListModel<Item> iListModel = new DefaultListModel<>();
+    private JList<Item> itemList		= new JList<>(iListModel);
     private JLabel itemTitle			= createJLabel("ITEM TITLE",			titleFont);
     private JLabel itemDescription		= createJLabel("Description",			fieldFont);
     private JLabel typeHeader			= createJLabel("Type",					headerFont);
@@ -115,18 +124,14 @@ public class EncyclopediaPane extends JPanel implements ActionListener
 		// #################
 		// ### ITEM PANE ###
 		// #################
-		iSearchBar.setText("Search");
         iSearchBar.addActionListener(this);
+        iSearchButton.addActionListener(this);
+        itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        itemList.addListSelectionListener(this);
 
         itemDescription.setVerticalAlignment(SwingConstants.TOP);
         addEffText.setVerticalAlignment(SwingConstants.TOP);
 
-		//TODO: populate the list with actual items
-        itemList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         iScrollPane.setViewportView(itemList);
 
         GroupLayout itemTabLayout = new GroupLayout(itemTab);
@@ -137,6 +142,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener
                 .addContainerGap()
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING, false)
                     .addComponent(iScrollPane)
+                    .addComponent(iSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
                     .addComponent(iSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
@@ -167,6 +173,8 @@ public class EncyclopediaPane extends JPanel implements ActionListener
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(iSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                     .addComponent(itemTitle))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(iSearchButton, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(iScrollPane)
@@ -320,21 +328,38 @@ public class EncyclopediaPane extends JPanel implements ActionListener
             .addGap(0, 428, Short.MAX_VALUE)
         );
 	}
+	
+	private void displayItem(Item i){
+		if(i != null)
+		{
+			itemDescription.setText(i.getDescription());
+			typeText.setText(i.getType());
+			bonusText.setText(String.valueOf(i.getBonus()));
+			consumableText.setText(String.valueOf(i.isConsumable()));
+			addEffText.setText(i.getEffect());
+		}
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		//TODO: implement search features
-		//(this might not be the best way to do that)
+		
+		if(e.getSource() == iSearchButton){
+			String query = iSearchBar.getText();
+			iListModel.clear();
+			ArrayList<Item> qResults = ItemTable.getItemsByString(MainGUI.getConnection(), query);
+			for(Item i : qResults){
+				iListModel.addElement(i);
+			}
+		}
 	}
 
-    public static void main(String[] args)
-    {
-        JFrame testFrame = new JFrame("Encyclopedia");
-        EncyclopediaPane ep = new EncyclopediaPane();
-        testFrame.setMinimumSize(new Dimension(550, 400));
-        testFrame.setContentPane(ep);
-        testFrame.pack();
-        testFrame.setVisible(true);
-		testFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    }
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if(!e.getValueIsAdjusting()){
+			if(e.getSource() == itemList){
+				displayItem(itemList.getSelectedValue());
+			}
+		}
+	}
 }

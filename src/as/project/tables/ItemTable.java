@@ -175,6 +175,32 @@ public class ItemTable extends TableBase
 	  
   }
   
+  public static ArrayList<Item> getItemsByString(Connection conn, String str){
+	  ArrayList<Item> result = new ArrayList<Item>();
+	  
+	  if(str != null){
+		  ArrayList<String> cols = new ArrayList<String>();
+		  ArrayList<String> where = new ArrayList<String>();
+		  StringBuilder queryText = new StringBuilder();
+		  queryText.append("UPPER(").append(DESCRIPTION_COLUMN).append(") LIKE UPPER('%").append(str).append("%')");
+		  where.add(queryText.toString());
+	
+		  ResultSet sqlResults = queryCurrentTable(conn, TABLE_NAME, cols, where, null);
+		  
+		  try{
+				while(sqlResults.next()){
+					result.add(getItemFromResultSet(sqlResults));
+				}
+				
+			} catch (Exception e){
+				System.out.println("Could not get items by string:" + str);
+				e.printStackTrace();
+			}
+	  }
+	  
+	  return result;
+  }
+  
 
 
 	private static Item getItemFromResultSet(ResultSet r) throws SQLException{
