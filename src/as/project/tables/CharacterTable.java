@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import as.project.Main;
 import as.project.objects.ChatHistory;
 import as.project.objects.GameCharacter;
 
@@ -107,7 +108,6 @@ public class CharacterTable extends TableBase {
 				                    MONEY_COLUMN, HP_COLUMN, MP_COLUMN, CUR_HP_COLUMN, CUR_MP_COLUMN, LEVEL_COLUMN, CUR_XP_COLUMN, CLASS_COLUMN, ALIGNMENT_COLUMN, CHARACTER_NAME_COLUMN, RACE_COLUMN,
 				                   	characterId, userId, str, dex, chr, intel, wis, con, 
 				                   	money, hp, mp, curHp, curMp, level, curXp, cClass, alignment, cName, race);
-		System.out.println("test:: "+query);
 		try {
 			/**
 			 * create and execute the query
@@ -230,26 +230,7 @@ public class CharacterTable extends TableBase {
 
 		try{
 			while(query.next()){
-				GameCharacter ch = new GameCharacter(query.getInt(CHARACTER_ID_COLUMN),
-						query.getInt(USER_ID_COLUMN),
-						query.getInt(STR_COLUMN),
-						query.getInt(DEX_COLUMN),
-						query.getInt(CHR_COLUMN),
-						query.getInt(INT_COLUMN),
-						query.getInt(WIS_COLUMN),
-						query.getInt(CON_COLUMN),
-						query.getInt(MONEY_COLUMN),
-						query.getInt(HP_COLUMN),
-						query.getInt(MP_COLUMN),
-						query.getInt(CUR_HP_COLUMN),
-						query.getInt(CUR_MP_COLUMN),
-						query.getInt(LEVEL_COLUMN),
-						query.getInt(CUR_XP_COLUMN),
-						query.getString(CLASS_COLUMN),
-						query.getString(ALIGNMENT_COLUMN),
-						query.getString(CHARACTER_NAME_COLUMN),
-						query.getString(RACE_COLUMN));
-				result.add(ch);
+				result.add(getGameCharacterFromResultSet(query));
 			}
 		}
 		catch (Exception e){
@@ -259,6 +240,57 @@ public class CharacterTable extends TableBase {
 		
 		
 		return result;
+	}
+	
+	public static ArrayList<GameCharacter> geNPCCharactersByString(Connection conn, String str){
+		ArrayList<GameCharacter> result = new ArrayList<GameCharacter>();
+		
+		ArrayList<String> cols = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		where.add(USER_ID_COLUMN + "=" + UserTable.NPC_USER_ID);
+		StringBuilder subQuery = new StringBuilder();
+		subQuery.append("(SELECT ").append(NPCTable.CHAR_ID_COLUMN).append(" FROM ").append(NPCTable.TABLE_NAME).append(" WHERE UPPER(").append(NPCTable.DESCRIPTION_COLUMN).append(") like UPPER('%").append(str).append("%'))");
+		StringBuilder orQuery = new StringBuilder();
+		orQuery.append("(UPPER(").append(CHARACTER_NAME_COLUMN).append(") like UPPER('%").append(str).append("%')").append(" OR ");
+		orQuery.append(USER_ID_COLUMN).append(" in ").append(subQuery.toString()).append(")");
+		where.add(orQuery.toString());
+		
+		ResultSet query = queryCharacterTable(conn, cols, where, null);
+		
+		try{
+			while(query.next()){
+				result.add(getGameCharacterFromResultSet(query));
+			}
+		}
+		catch (Exception e){
+			System.out.print("Could not get npc characters for string:" + str);
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+	
+	private static GameCharacter getGameCharacterFromResultSet(ResultSet r) throws SQLException{
+		return new GameCharacter(r.getInt(CHARACTER_ID_COLUMN),
+				r.getInt(USER_ID_COLUMN),
+				r.getInt(STR_COLUMN),
+				r.getInt(DEX_COLUMN),
+				r.getInt(CHR_COLUMN),
+				r.getInt(INT_COLUMN),
+				r.getInt(WIS_COLUMN),
+				r.getInt(CON_COLUMN),
+				r.getInt(MONEY_COLUMN),
+				r.getInt(HP_COLUMN),
+				r.getInt(MP_COLUMN),
+				r.getInt(CUR_HP_COLUMN),
+				r.getInt(CUR_MP_COLUMN),
+				r.getInt(LEVEL_COLUMN),
+				r.getInt(CUR_XP_COLUMN),
+				r.getString(CLASS_COLUMN),
+				r.getString(ALIGNMENT_COLUMN),
+				r.getString(CHARACTER_NAME_COLUMN),
+				r.getString(RACE_COLUMN));
 	}
 	
 	

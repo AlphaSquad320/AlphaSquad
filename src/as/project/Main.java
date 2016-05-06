@@ -13,6 +13,7 @@ import as.project.objects.Ability;
 import as.project.objects.ChatHistory;
 import as.project.objects.Friends;
 import as.project.objects.Item ;
+import as.project.objects.NPC;
 import as.project.tables.AbilityTable;
 import as.project.tables.CharacterTable;
 import as.project.tables.CharacterAbilityTable;
@@ -20,6 +21,7 @@ import as.project.tables.ChatHistoryTable;
 import as.project.tables.FriendsTable;
 import as.project.tables.UserTable;
 import as.project.tables.ItemTable ;
+import as.project.tables.NPCTable;
 import as.project.tables.CharacterItemTable ;
 
 
@@ -93,11 +95,13 @@ public class Main {
 			AbilityTable.createAbilityTable(conn);
 			CharacterTable.createCharacterTable(conn);
 			CharacterAbilityTable.createCharacterAbilityTable(conn);
-			ItemTable.createItemTable( conn ) ;
-  			CharacterItemTable.createCharacterItemTable( conn ) ;
+			ItemTable.createItemTable( conn );
+  			CharacterItemTable.createCharacterItemTable( conn );
+  			NPCTable.createNPCTable(conn);
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
+			User NPC_OWNER = new User(UserTable.NPC_USER_ID, "NPC", "OWNER", "NPCOWNER", "none@example.com", "npc");
 			Friends f = new Friends(1, 2);
 			Friends f2 = new Friends(2, 1);
 			ChatHistory ch = new ChatHistory(1,2, new Timestamp(123456789), "Hello professor");
@@ -112,6 +116,10 @@ public class Main {
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
 			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
+			GameCharacter joker = new GameCharacter(3,UserTable.NPC_USER_ID, 6,9,4,8,1,9, 951753, 80, 40, 70, 30, 12, 900, "Assassin", "Chaotic-Evila", "Joker", "human");
+			NPC jNPC = new NPC(1, 3, "", true, "We kill the Batman", "A crazed madman");
+			GameCharacter oracle = new GameCharacter(4,UserTable.NPC_USER_ID, 2,2,2,9,8,5, 60000, 20, 100, 20, 80, 5, 200, "Technomancer", "Lawful-Good", "Oracle", "human");
+			NPC oNPC = new NPC(2, 4, "", true, "Research new technology", "A brilliant computer-wiz");
 			Item i = new Item( 1, "Null", "Broadsword", false, "weapon", 10, "Fighter" );
 			Item i2 = new Item( 2, "Null", "Batarang", false, "weapon", 1, "Fighter" );
 			Item i3 = new Item( 3, "Null", "Utility Belt", false, "accessory", 0, "Fighter" );
@@ -126,6 +134,7 @@ public class Main {
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
+			UserTable.addUser(conn, NPC_OWNER);
 			FriendsTable.addFriends(conn, f);
 			FriendsTable.addFriends(conn, f2);
 			ChatHistoryTable.addChatHistory(conn, ch);
@@ -136,9 +145,15 @@ public class Main {
 			AbilityTable.addAbility(conn, a2);
 			CharacterTable.addCharacter(conn, batman);
 			CharacterTable.addCharacter(conn, robin);
+			CharacterTable.addCharacter(conn, joker);
+			CharacterTable.addCharacter(conn, oracle);
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a1);
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a2);
 			CharacterAbilityTable.addCharacterAbility(conn, robin, a2);
+			CharacterAbilityTable.addCharacterAbility(conn, joker, a2);
+			CharacterAbilityTable.addCharacterAbility(conn, oracle, a1);
+			NPCTable.addNPC(conn, jNPC);
+			NPCTable.addNPC(conn, oNPC);
 			ItemTable.addItem(conn, i);
 			ItemTable.addItem(conn, i2);
 			ItemTable.addItem(conn, i3);
@@ -161,6 +176,8 @@ public class Main {
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i9.getID());
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i10.getID());
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i11.getID());
+			CharacterItemTable.giveItem(conn, joker.getCharacterId(), i10.getID());
+			CharacterItemTable.giveItem(conn, oracle.getCharacterId(), i11.getID());
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e);

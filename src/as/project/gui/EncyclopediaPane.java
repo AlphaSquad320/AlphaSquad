@@ -16,8 +16,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import as.project.objects.Ability;
+import as.project.objects.GameCharacter;
 import as.project.objects.Item;
+import as.project.objects.NPC;
 import as.project.tables.AbilityTable;
+import as.project.tables.CharacterTable;
 import as.project.tables.ItemTable;
 
 /**
@@ -82,6 +85,13 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
     
     //NPCs tab
 	private JPanel npcTab				= new JPanel();
+	private JGameCharacterPanel npcData = new JGameCharacterPanel();
+    private JTextField nSearchBar		= new JTextField();
+    private JButton nSearchButton       = new JButton("Search");
+    private JScrollPane nScrollPane		= new JScrollPane();
+    private DefaultListModel<GameCharacter> nListModel = new DefaultListModel<>();
+    private JList<GameCharacter> npcList= new JList<>(nListModel);
+	
 
 	/**
      * Creates new form EncyclopediaPane
@@ -320,16 +330,42 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 		// #################
 		// ### NPC  PANE ###
 		// #################
+        nSearchBar.addActionListener(this);
+        nSearchButton.addActionListener(this);
+        npcList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        npcList.addListSelectionListener(this);
+
+        nScrollPane.setViewportView(npcList);
+        Dimension d = nScrollPane.getPreferredSize();
+        d.width = 141;
+        nScrollPane.setPreferredSize(d);
+        
+        
         GroupLayout npcTabLayout = new GroupLayout(npcTab);
         npcTab.setLayout(npcTabLayout);
         npcTabLayout.setHorizontalGroup(
-            npcTabLayout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 545, Short.MAX_VALUE)
-        );
+        	npcTabLayout.createSequentialGroup()
+            	.addContainerGap()
+        		.addGroup(npcTabLayout.createParallelGroup(Alignment.LEADING, false)
+        			.addComponent(nSearchBar, PREFERRED_SIZE, 141, Short.MAX_VALUE)
+        			.addComponent(nSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
+        			.addComponent(nScrollPane))
+                .addGap(18, 18, 18)
+        		.addComponent(npcData));
+        
         npcTabLayout.setVerticalGroup(
-            npcTabLayout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 428, Short.MAX_VALUE)
-        );
+        	npcTabLayout.createSequentialGroup()
+        		.addContainerGap()
+        		.addGroup(npcTabLayout.createParallelGroup(Alignment.LEADING)
+	            	.addGroup(npcTabLayout.createSequentialGroup()
+	            		.addComponent(nSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+	            		.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+	            		.addComponent(nSearchButton)
+	            		.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+	            		.addComponent(nScrollPane))
+	                .addGap(18, 18, 18)
+	            	.addComponent(npcData))
+        		.addContainerGap());
 	}
 	
 	private void displayItem(Item i){
@@ -357,6 +393,12 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			durationText.setText(String.valueOf(a.getDuration()));
 		}
 	}
+	
+	private void displayNPC(GameCharacter gc){
+		if(gc != null){
+			npcData.setCharacter(gc);
+		}
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -378,6 +420,14 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 				aListModel.addElement(i);
 			}
 		}
+		else if(e.getSource() == nSearchButton){
+			String query = nSearchBar.getText();
+			nListModel.clear();
+			ArrayList<GameCharacter> qResults = CharacterTable.geNPCCharactersByString(MainGUI.getConnection(), query);
+			for(GameCharacter i : qResults){
+				nListModel.addElement(i);
+			}
+		}
 	}
 
 	@Override
@@ -388,6 +438,9 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			}
 			else if(e.getSource() == abilityList){
 				displayAbility(abilityList.getSelectedValue());
+			}
+			else if(e.getSource() == npcList){
+				displayNPC(npcList.getSelectedValue());
 			}
 		}
 	}

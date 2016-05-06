@@ -19,6 +19,8 @@ public class UserTable extends TableBase {
 	public static final String PASSWORD_COLUMN = "PASSWORD";
 	
 	public static final String TABLE_NAME = "user";
+
+	public static int NPC_USER_ID = Integer.MAX_VALUE;
 	
 	
 	/**

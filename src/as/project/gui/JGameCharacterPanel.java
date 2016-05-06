@@ -16,12 +16,15 @@ import javax.swing.LayoutStyle;
 import as.project.objects.Ability;
 import as.project.objects.GameCharacter;
 import as.project.objects.Item;
+import as.project.objects.NPC;
 import as.project.tables.AbilityTable;
 import as.project.tables.ItemTable;
+import as.project.tables.NPCTable;
 
 public class JGameCharacterPanel extends JScrollPane {
 	
 	private GameCharacter gc;
+	private NPC npc;
 	private ArrayList<Item> itemList;
 	private ArrayList<Ability> abilityList;
 	
@@ -69,6 +72,16 @@ public class JGameCharacterPanel extends JScrollPane {
     private JLabel itemText = createJLabel("[[Items]]", fieldFont);
     private JLabel abilityText = createJLabel("[[Abilities]]", fieldFont);
     
+    //NPC only fields
+    private JLabel hostileHeader = createJLabel("Is Hostile?", headerFont);
+    private JLabel questHeader = createJLabel("Quest", headerFont);
+    private JLabel descHeader = createJLabel("Description", headerFont);
+
+    private JLabel hostileText = createJLabel("[[isHostile]]", fieldFont);
+    private JLabel questText = createJLabel("[[Quest]]", fieldFont);
+    private JLabel descText = createJLabel("[[Description]]", fieldFont);
+    
+    
 
 	public JGameCharacterPanel() {
 		super();
@@ -91,6 +104,24 @@ public class JGameCharacterPanel extends JScrollPane {
 		JLabel label = new JLabel(text);
 		label.setFont(font);
 		return label;
+	}
+	
+	private void enableNPCFields(){
+		hostileHeader.setVisible(true);
+		questHeader.setVisible(true);
+		descHeader.setVisible(true);
+		hostileText.setVisible(true);
+		questText.setVisible(true);
+		descText.setVisible(true);
+	}
+	
+	private void disableNPCFields(){
+		hostileHeader.setVisible(false);
+		questHeader.setVisible(false);
+		descHeader.setVisible(false);
+		hostileText.setVisible(false);
+		questText.setVisible(false);
+		descText.setVisible(false);
 	}
 	
 	private void layOutComponents()
@@ -135,7 +166,15 @@ public class JGameCharacterPanel extends JScrollPane {
 							.addComponent(chrHeader)
 							.addComponent(chrText)
 							.addComponent(classHeader)
-							.addComponent(classText)))
+							.addComponent(classText))
+						.addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(descHeader)
+							.addComponent(descText)
+							.addComponent(hostileHeader)
+							.addComponent(hostileText)
+							.addComponent(questHeader)
+							.addComponent(questText)))
 					.addComponent(itemHeader)
 					.addComponent(itemText)
 					.addComponent(abilityHeader)
@@ -146,29 +185,35 @@ public class JGameCharacterPanel extends JScrollPane {
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(nameHeader)
 						.addComponent(moneyHeader)
-						.addComponent(levelHeader))
+						.addComponent(levelHeader)
+						.addComponent(descHeader))
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(nameText)
 						.addComponent(moneyText)
-						.addComponent(levelText))
+						.addComponent(levelText)
+						.addComponent(descText))
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(hpHeader)
 						.addComponent(mpHeader)
-						.addComponent(xpHeader))
+						.addComponent(xpHeader)
+						.addComponent(hostileHeader))
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(hpText)
 						.addComponent(mpText)
-						.addComponent(xpText))
+						.addComponent(xpText)
+						.addComponent(hostileText))
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(strHeader)
 						.addComponent(dexHeader)
-						.addComponent(conHeader))
+						.addComponent(conHeader)
+						.addComponent(questHeader))
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(strText)
 						.addComponent(dexText)
-						.addComponent(conText))
+						.addComponent(conText)
+						.addComponent(questText))
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(intHeader)
@@ -194,6 +239,7 @@ public class JGameCharacterPanel extends JScrollPane {
 					.addComponent(abilityHeader)
 					.addComponent(abilityText));
 		
+		disableNPCFields();
 	}
 	
 	public GameCharacter getCharacter() {
@@ -202,6 +248,7 @@ public class JGameCharacterPanel extends JScrollPane {
 	
 	public void setCharacter(GameCharacter gc){
 		this.gc = gc;
+		this.npc = NPCTable.getNPCbyCharacterID(MainGUI.getConnection(), gc.getCharacterId());
 		this.itemList = ItemTable.getItemsByCharacter(MainGUI.getConnection(), gc.getCharacterId());
 		this.abilityList = AbilityTable.getAbilitiesByCharacter(MainGUI.getConnection(), gc.getCharacterId());
 		displayCharacter();
@@ -247,6 +294,15 @@ public class JGameCharacterPanel extends JScrollPane {
 			}
 			abilities.append("</html>");
 			abilityText.setText(abilities.toString());
+		}
+		
+		if(npc != null){
+			enableNPCFields();
+			descText.setText(npc.getDescription());
+			questText.setText(npc.getAssocQuest());
+			hostileText.setText(String.valueOf(npc.isHostile()));
+		} else {
+			disableNPCFields();
 		}
 	}
 	

@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import as.project.objects.NPC;
+import as.project.objects.User;
 
 /**
  * @author Colin Thompson
@@ -27,23 +28,19 @@ public class NPCTable extends TableBase {
 	 * SQL statemtent to create a table named npc if one does not already exist
 	 * @param conn - the connection to the database
 	 */
-	public static void createNPCTable(Connection conn){
-		try{
-			String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +"("
-						 + NPC_ID_COLUMN + " INT PRIMARY KEY,"
-						 + CHAR_ID_COLUMN + " INT,"
-						 + NAME_COLUMN +" VARCHAR(30),"
-						 + ISHOSTILE_COLUMN + " BOOLEAN,"
-						 + QUEST_COLUMN + " VARCHAR(30),"
-						 + DESCRIPTION_COLUMN + " VARCHAR(255),"
-						 + "FOREIGN KEY(" + CHAR_ID_COLUMN + ") REFERENCES " + CharacterTable.TABLE_NAME + "(" + CharacterTable.CHARACTER_ID_COLUMN + "),"
-						 +");";
-			
-			Statement stmt = conn.createStatement();
-			stmt.executeQuery(query);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
+	public static void createNPCTable(Connection conn) throws SQLException {
+		String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +"("
+					 + NPC_ID_COLUMN + " INT PRIMARY KEY,"
+					 + CHAR_ID_COLUMN + " INT,"
+					 + NAME_COLUMN +" VARCHAR(30),"
+					 + ISHOSTILE_COLUMN + " BOOLEAN,"
+					 + QUEST_COLUMN + " VARCHAR(30),"
+					 + DESCRIPTION_COLUMN + " VARCHAR(255),"
+					 + "FOREIGN KEY(" + CHAR_ID_COLUMN + ") REFERENCES " + CharacterTable.TABLE_NAME + "(" + CharacterTable.CHARACTER_ID_COLUMN + "),"
+					 +");";
+		
+		Statement stmt = conn.createStatement();
+		stmt.execute(query);
 	}
 	
 	/**
@@ -63,10 +60,14 @@ public class NPCTable extends TableBase {
 								   npcID, charID, name, isHostile, quest, desc);
 		try{
 			Statement stmt = conn.createStatement();
-			stmt.executeQuery(query);
+			stmt.execute(query);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
+	}
+	
+	public static void addNPC(Connection conn, NPC npcData){
+		addNPC(conn, npcData.getNpcID(), npcData.getCharacterID(), npcData.getName(), npcData.isHostile(), npcData.getAssocQuest(), npcData.getDescription());
 	}
 	
 	/**
@@ -104,46 +105,9 @@ public class NPCTable extends TableBase {
 	 */
 	public static ResultSet queryNPCTable(Connection conn,
             							  ArrayList<String> columns,
-            							  ArrayList<String> whereClauses){
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("SELECT ");
-
-		if(columns.isEmpty()){
-			sb.append("* ");
-		}else{
-			for(int i = 0; i < columns.size(); i++){
-				if(i != columns.size() - 1){
-					sb.append(columns.get(i) + ", ");
-				}else{
-					sb.append(columns.get(i) + " ");
-				}
-			}
-		}
-		
-		sb.append("FROM person ");
-
-		if(!whereClauses.isEmpty()){
-			sb.append("WHERE ");
-			for(int i = 0; i < whereClauses.size(); i++){
-				if(i != whereClauses.size() -1){
-					sb.append(whereClauses.get(i) + " AND ");
-				}else{
-					sb.append(whereClauses.get(i));
-				}
-			}
-		}
-
-		sb.append(";");
-
-		System.out.println("Query: " + sb.toString());
-		try {
-			Statement stmt = conn.createStatement();
-			return stmt.executeQuery(sb.toString());
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+            							  ArrayList<String> whereClauses,
+            							  String orderBy){
+		return queryCurrentTable(conn, TABLE_NAME, columns, whereClauses, orderBy);
 	}
 	
 	/**
@@ -170,4 +134,38 @@ public class NPCTable extends TableBase {
 		}
 		
 	}
+	
+
+	
+	public static NPC getNPCbyCharacterID(Connection conn, int cid){
+		NPC result = null;
+		
+		ArrayList<String> whereClauses = new ArrayList<String>();
+		whereClauses.add(CHAR_ID_COLUMN + "=" + cid + "");
+
+		ResultSet sqlResults = queryNPCTable(conn, new ArrayList<String>(), whereClauses, null);
+		try{
+			if(sqlResults.next()){
+				result = getNPCFromResultSet(sqlResults);
+			}
+			
+		} catch (Exception e){
+			System.out.println("Could not get NPC by character id:" + cid);
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+
+
+	private static NPC getNPCFromResultSet(ResultSet r) throws SQLException{
+		return new NPC(r.getInt(NPC_ID_COLUMN),
+					r.getInt(CHAR_ID_COLUMN),
+					r.getString(NAME_COLUMN),
+					r.getBoolean(ISHOSTILE_COLUMN),
+					r.getString(QUEST_COLUMN),
+					r.getString(DESCRIPTION_COLUMN));
+	}
+	
 }

@@ -196,5 +196,8 @@ public class GameCharacter {
 		this.race = race;
 	}
 	
+	public String toString(){
+		return this.getCharacterName();
+	}
 
 }
