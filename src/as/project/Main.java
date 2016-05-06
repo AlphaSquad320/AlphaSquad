@@ -101,13 +101,20 @@ public class Main {
 			
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
+			User third = new User(3, "THIRD", "USER", "THIRD_USER", "THIRD_USER@rit.edu", "THIRD");
 			User NPC_OWNER = new User(UserTable.NPC_USER_ID, "NPC", "OWNER", "NPCOWNER", "none@example.com", "npc");
 			Friends f = new Friends(1, 2);
 			Friends f2 = new Friends(2, 1);
+			Friends f3 = new Friends(1, 3);
+			Friends f4 = new Friends(3, 1);
 			ChatHistory ch = new ChatHistory(1,2, new Timestamp(123456789), "Hello professor");
 			ChatHistory ch2 = new ChatHistory(2,1, new Timestamp(124456789), "Hello Lukas");
 			ChatHistory ch4 = new ChatHistory(2,1, new Timestamp(126456789), "so many messages");
 			ChatHistory ch3 = new ChatHistory(1,2, new Timestamp(125456789), "one more message");
+			ChatHistory ch5 = new ChatHistory(1,3, new Timestamp(123456789), "MESSAGES");
+			ChatHistory ch6 = new ChatHistory(1,3, new Timestamp(124456789), "CAPS LOCK");
+			ChatHistory ch7 = new ChatHistory(1,3, new Timestamp(126456789), "CRUISE CONTROL");
+			ChatHistory ch8 = new ChatHistory(3,1, new Timestamp(125456789), "FOR COOL");
 			Ability a1 = new Ability(1, 8, 10, 150, 10.0f, 5.0f, 7.0f,
 					"Fire", "Fireball: Deals damage to a group of enemies.",
 					"Burn: 30%.");
@@ -134,13 +141,20 @@ public class Main {
 			
 			UserTable.addUser(conn, lh);
 			UserTable.addUser(conn, sj);
+			UserTable.addUser(conn, third);
 			UserTable.addUser(conn, NPC_OWNER);
 			FriendsTable.addFriends(conn, f);
 			FriendsTable.addFriends(conn, f2);
+			FriendsTable.addFriends(conn, f3);
+			FriendsTable.addFriends(conn, f4);
 			ChatHistoryTable.addChatHistory(conn, ch);
 			ChatHistoryTable.addChatHistory(conn, ch2);
 			ChatHistoryTable.addChatHistory(conn, ch4);
 			ChatHistoryTable.addChatHistory(conn, ch3);
+			ChatHistoryTable.addChatHistory(conn, ch5);
+			ChatHistoryTable.addChatHistory(conn, ch6);
+			ChatHistoryTable.addChatHistory(conn, ch7);
+			ChatHistoryTable.addChatHistory(conn, ch8);
 			AbilityTable.addAbility(conn, a1);
 			AbilityTable.addAbility(conn, a2);
 			CharacterTable.addCharacter(conn, batman);

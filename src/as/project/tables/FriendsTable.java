@@ -27,7 +27,6 @@ public class FriendsTable extends TableBase {
 		String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
 				     + SENDER_COLUMN + " INT,"
 				     + RECEIVER_COLUMN + " INT,"
-				     + "PRIMARY KEY(" + SENDER_COLUMN +", " + RECEIVER_COLUMN + "),"
 				     + "FOREIGN KEY(" + SENDER_COLUMN + ") REFERENCES " + UserTable.TABLE_NAME + "(" + UserTable.USER_ID_COLUMN + "),"
 				     + "FOREIGN KEY(" + RECEIVER_COLUMN + ") REFERENCES " + UserTable.TABLE_NAME + "(" + UserTable.USER_ID_COLUMN + ")"
 				     + ");" ;

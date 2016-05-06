@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import as.project.Main;
 import as.project.objects.ChatHistory;
 import as.project.objects.GameCharacter;
 

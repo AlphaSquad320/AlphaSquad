@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import as.project.objects.*;
 import as.project.tables.CharacterTable;
@@ -21,13 +23,16 @@ import as.project.tables.FriendsTable;
  * successful login.
  * @author Tommy Bohde
  */
-public class UserPane extends JPanel
+public class UserPane extends JPanel implements ListSelectionListener
 {
     private JLabel friendsLabel = new JLabel();
     private JLabel welcomeLabel = new JLabel();
-    private JList<User> friendsList = new JList<>();
+    private DefaultListModel<User> fListModel = new DefaultListModel<>();
+    private JList<User> friendsList = new JList<>(fListModel);
     private JScrollPane scrollPane = new JScrollPane();
     private JTabbedPane characterPanes = new JTabbedPane();
+    private ChatWindow chatWindow = null;
+    private String chatWindowTabTitle = "";
     private Border border = BorderFactory.createLineBorder(new Color(0,0,0));
 	
 	private User user;
@@ -39,7 +44,7 @@ public class UserPane extends JPanel
 
 		//load user info from database
 		this.user = user;
-		//TODO: load users info
+		chatWindow = new ChatWindow(user);
 
 		//set up all components
         layOutComponents();
@@ -61,11 +66,13 @@ public class UserPane extends JPanel
 		//set up friends list
         friendsList.setBorder(border);
         friendsList.setFont(new Font("Tahoma", 0, 14)); 
-	    friendsList.setModel(new AbstractListModel<User>() {
-            User[] users = FriendsTable.getFriendsOfUser(MainGUI.getConnection(),user.getUserId()).toArray(new User[0]);
-            public int getSize() { return users.length; }
-            public User getElementAt(int i) { return users[i]; }
-        });
+        
+	    ArrayList<User> friends = FriendsTable.getFriendsOfUser(MainGUI.getConnection(),user.getUserId());
+	    for(User f: friends){
+	    	fListModel.addElement(f);
+	    }
+	    
+	    friendsList.addListSelectionListener(this);
         scrollPane.setViewportView(friendsList);
 
 		//set up character panes
@@ -115,4 +122,21 @@ public class UserPane extends JPanel
                 .addContainerGap())
         );
     }
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if(!e.getValueIsAdjusting()){
+			if(e.getSource() == friendsList){
+				User f = friendsList.getSelectedValue();
+				if(f != null){
+					chatWindow.setFriend(f);
+					chatWindowTabTitle = "Chat: " + f;
+					characterPanes.addTab(chatWindowTabTitle, chatWindow);
+				}
+				else{
+					characterPanes.removeTabAt(characterPanes.indexOfTab(chatWindowTabTitle));
+				}
+			}
+		}
+	}
 }

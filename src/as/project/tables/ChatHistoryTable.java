@@ -16,6 +16,7 @@ public class ChatHistoryTable extends TableBase {
 	public static final String RECEIVER_COLUMN = "RECEIVER";
 	public static final String TIMESTAMP_COLUMN = "TIMESTAMP";
 	public static final String MESSAGE_COLUMN = "MESSAGE";
+	public static final String ID_COLUMN = "ID";
 	
 	public static final String TABLE_NAME = "chat_history";
 	
@@ -27,11 +28,11 @@ public class ChatHistoryTable extends TableBase {
 	 */
 	public static void createChatHistoryTable(Connection conn) throws SQLException {
 		String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
+					 + ID_COLUMN + " INT PRIMARY KEY,"
 				     + SENDER_COLUMN + " INT,"
 				     + RECEIVER_COLUMN + " INT,"
 				     + TIMESTAMP_COLUMN + " TIMESTAMP,"
 				     + MESSAGE_COLUMN + " VARCHAR(255),"
-				     + "PRIMARY KEY(" + SENDER_COLUMN +", " + RECEIVER_COLUMN + ", " + TIMESTAMP_COLUMN + "),"
 				     + "FOREIGN KEY(" + SENDER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.SENDER_COLUMN + "),"
 				     + "FOREIGN KEY(" + RECEIVER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.RECEIVER_COLUMN + ")"
 				     + ");" ;
@@ -54,12 +55,12 @@ public class ChatHistoryTable extends TableBase {
 	 * @param email emailAddress
 	 * @param pw password
 	 */
-	public static void addChatHistory(Connection conn, int senderId, int receiverId, Timestamp timestamp, String message){
+	public static void addChatHistory(Connection conn, int chatId, int senderId, int receiverId, Timestamp timestamp, String message){
 		
 		/**
 		 * SQL insert statement
 		 */
-		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,\'%s\',\'%s\');",senderId, receiverId, timestamp.toString(), message);
+		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,%d,\'%s\',\'%s\');",chatId, senderId, receiverId, timestamp.toString(), message);
 		try {
 			/**
 			 * create and execute the query
@@ -67,7 +68,7 @@ public class ChatHistoryTable extends TableBase {
 			Statement stmt = conn.createStatement();
 			stmt.execute(query);
 		} catch (SQLException e) {
-			System.out.println("Issue adding friends: " + e);
+			System.out.println("Issue adding chat history: " + e);
 			e.printStackTrace();
 		}
 	}
@@ -78,7 +79,7 @@ public class ChatHistoryTable extends TableBase {
 	 * @param user user to add
 	 */
 	public static void addChatHistory(Connection conn, ChatHistory chat){
-		addChatHistory(conn, chat.getSenderId(), chat.getReceiverId(), chat.getTimestamp(), chat.getMessage());
+		addChatHistory(conn, chat.getChatHistoryId(), chat.getSenderId(), chat.getReceiverId(), chat.getTimestamp(), chat.getMessage());
 	}
 	
 	/**
@@ -148,7 +149,8 @@ public class ChatHistoryTable extends TableBase {
 		
 		try{
 			while(query.next()){
-				ChatHistory ch = new ChatHistory(query.getInt(SENDER_COLUMN),
+				ChatHistory ch = new ChatHistory(query.getInt(ID_COLUMN),
+						query.getInt(SENDER_COLUMN),
 						query.getInt(RECEIVER_COLUMN),
 						query.getTimestamp(TIMESTAMP_COLUMN),
 						query.getString(MESSAGE_COLUMN));
