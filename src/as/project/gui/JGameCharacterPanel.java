@@ -6,8 +6,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle;
 
 import as.project.objects.Ability;
 import as.project.objects.GameCharacter;
@@ -15,105 +19,235 @@ import as.project.objects.Item;
 import as.project.tables.AbilityTable;
 import as.project.tables.ItemTable;
 
-public class JGameCharacterPanel extends JPanel {
+public class JGameCharacterPanel extends JScrollPane {
 	
-	GameCharacter gc;
-	ArrayList<Item> itemList;
-	ArrayList<Ability> abilityList;
-	JLabel info;
-	JLabel items;
-	JLabel abilities;
-	Font font;
+	private GameCharacter gc;
+	private ArrayList<Item> itemList;
+	private ArrayList<Ability> abilityList;
+	
+	private JPanel panel = new JPanel();
+	
+	private static String ITEM_HEADER_BASE = "Items(%1$d):";
+	private static String ABILITY_HEADER_BASE = "Abilities(%1$d):";
+	
+    private Font headerFont = new Font("Tahoma", 1, 16);
+    private Font fieldFont = new Font("Tahoma", 0, 14);
+    
+    private JLabel nameHeader = createJLabel("Name", headerFont);
+    private JLabel moneyHeader = createJLabel("Money", headerFont);
+    private JLabel levelHeader = createJLabel("Level", headerFont);
+    private JLabel hpHeader = createJLabel("HP", headerFont);
+    private JLabel mpHeader = createJLabel("MP", headerFont);
+    private JLabel xpHeader = createJLabel("XP", headerFont);
+    private JLabel strHeader = createJLabel("STR", headerFont);
+    private JLabel dexHeader = createJLabel("DEX", headerFont);
+    private JLabel conHeader = createJLabel("CON", headerFont);
+    private JLabel intHeader = createJLabel("INT", headerFont);
+    private JLabel wisHeader = createJLabel("WIS", headerFont);
+    private JLabel chrHeader = createJLabel("CHR", headerFont);
+    private JLabel alignHeader = createJLabel("Alignment", headerFont);
+    private JLabel raceHeader = createJLabel("Race", headerFont);
+    private JLabel classHeader = createJLabel("Class", headerFont);
+    private JLabel itemHeader = createJLabel(String.format(ITEM_HEADER_BASE, 0), headerFont);
+    private JLabel abilityHeader = createJLabel(String.format(ABILITY_HEADER_BASE, 0), headerFont);
+    
+    private JLabel nameText = createJLabel("[[Name]]", fieldFont);
+    private JLabel moneyText = createJLabel("[[Money]]", fieldFont);
+    private JLabel levelText = createJLabel("[Level]]", fieldFont);
+    private JLabel hpText = createJLabel("[[HP]]", fieldFont);
+    private JLabel mpText = createJLabel("[[MP]]", fieldFont);
+    private JLabel xpText = createJLabel("[[XP]]", fieldFont);
+    private JLabel strText = createJLabel("[[STR]]", fieldFont);
+    private JLabel dexText = createJLabel("[[DEX]]", fieldFont);
+    private JLabel conText = createJLabel("[[CON]]", fieldFont);
+    private JLabel intText = createJLabel("[[INT]]", fieldFont);
+    private JLabel wisText = createJLabel("[[WIS]]", fieldFont);
+    private JLabel chrText = createJLabel("[[CHR]]", fieldFont);
+    private JLabel alignText = createJLabel("[[Alignment]]", fieldFont);
+    private JLabel raceText = createJLabel("[[Race]]", fieldFont);
+    private JLabel classText = createJLabel("[[Class]]", fieldFont);
+    private JLabel itemText = createJLabel("[[Items]]", fieldFont);
+    private JLabel abilityText = createJLabel("[[Abilities]]", fieldFont);
+    
 
-	public GameCharacter getCharacter() {
-		return gc;
+	public JGameCharacterPanel() {
+		super();
+		layOutComponents();
 	}
-
 	public JGameCharacterPanel(GameCharacter gc) {
 		super();
-		font = new Font("Courier New", Font.PLAIN, 12);
-		this.gc = gc;
-		this.itemList = ItemTable.getItemsByCharacter(MainGUI.getConnection(), gc.getCharacterId());
-		this.abilityList = AbilityTable.getAbilitiesByCharacter(MainGUI.getConnection(), gc.getCharacterId());
-				
-		StringBuilder sbInfo = new StringBuilder();
-		sbInfo.append("<html>");
-		sbInfo.append("<p>").append(gc.getCharacterName()).append(", Level: ").append(gc.getLevel()).append("<br />");
-		sbInfo.append("HP: ").append(gc.getCurHp()).append("/").append(gc.getHp()).append("<br />");
-		sbInfo.append("MP: ").append(gc.getCurMp()).append("/").append(gc.getMp()).append("<br />");
-		sbInfo.append("XP: ").append(gc.getCurXp()).append("<br />");
-		sbInfo.append(gc.getMoney()).append(" rupees");
-		sbInfo.append("</p>").append("<br />");
-		
-		sbInfo.append("<p>");
-		sbInfo.append("STR: ").append(gc.getStr()).append("<br />");
-		sbInfo.append("DEX: ").append(gc.getDex()).append("<br />");
-		sbInfo.append("CON: ").append(gc.getCon()).append("<br />");
-		sbInfo.append("INT: ").append(gc.getIntel()).append("<br />");
-		sbInfo.append("WIS: ").append(gc.getWis()).append("<br />");
-		sbInfo.append("CHR: ").append(gc.getChr()).append("<br />");
-		sbInfo.append("</p>").append("<br />");
-		
-		sbInfo.append("<p>");
-		sbInfo.append("Alignment: ").append(gc.getAlignment()).append("<br />");
-		sbInfo.append("Class: ").append(gc.getCharacterClass()).append("<br />");
-		sbInfo.append("Race: ").append(gc.getRace()).append("<br />");
-		sbInfo.append("</p>");
-		
-		sbInfo.append("</html>");
-		
-		info = new JLabel(sbInfo.toString());
-		info.setFont(font);
-		
-		StringBuilder sbItems = new StringBuilder();
-		sbItems.append("<html>");
-		sbItems.append("<p>Items(").append(itemList.size()).append("):<br />");
-		for(Item i: itemList){
-			sbItems.append(i.getDescription()).append("<br />");
-		}
-		
-		sbItems.append("</p>").append("</html>");
-		items = new JLabel(sbItems.toString());
-		items.setFont(font);
-		
-		StringBuilder sbAbilities = new StringBuilder();
-		sbAbilities.append("<html>");
-		sbAbilities.append("<p>Abilities(").append(abilityList.size()).append("):<br />");
-		for(Ability a: abilityList){
-			sbAbilities.append(a.getDescription()).append("<br />");
-		}
-		
-		sbAbilities.append("</p>").append("</html>");
-		abilities = new JLabel(sbAbilities.toString());
-		abilities.setFont(font);
-		
-		
 		layOutComponents();
+		setCharacter(gc);
+	}
+
+	/**
+	 * function to create a JLabel with provided text and font
+	 * @param text the desired text
+	 * @param font the desired font
+	 * @return a JLabel object with the text and font provided
+	 */
+	private JLabel createJLabel(String text, Font font)
+	{
+		JLabel label = new JLabel(text);
+		label.setFont(font);
+		return label;
 	}
 	
 	private void layOutComponents()
 	{
-		//gridbaglayout tutorial: https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.NONE;
-		c.gridwidth = 3;
-		c.gridx = 1;
-		c.gridy = 0;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.weighty = 1;
-		c.weightx = 1;
-		c.insets = new Insets(0, 0, 20, 0); //bottom padding
-		this.add(info, c);
-		c.gridy = 1;
-		c.anchor = GridBagConstraints.WEST;
-		this.add(abilities, c);
-		c.gridy = 2;
-		c.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
-		c.insets = new Insets(0, 0, 0, 0);
-		this.add(items, c);
+		this.setViewportView(panel);
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(nameHeader)
+							.addComponent(nameText)
+							.addComponent(hpHeader)
+							.addComponent(hpText)
+							.addComponent(strHeader)
+							.addComponent(strText)
+							.addComponent(intHeader)
+							.addComponent(intText)
+							.addComponent(alignHeader)
+							.addComponent(alignText))
+						.addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(moneyHeader)
+							.addComponent(moneyText)
+							.addComponent(mpHeader)
+							.addComponent(mpText)
+							.addComponent(dexHeader)
+							.addComponent(dexText)
+							.addComponent(wisHeader)
+							.addComponent(wisText)
+							.addComponent(raceHeader)
+							.addComponent(raceText))
+						.addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addComponent(levelHeader)
+							.addComponent(levelText)
+							.addComponent(xpHeader)
+							.addComponent(xpText)
+							.addComponent(conHeader)
+							.addComponent(conText)
+							.addComponent(chrHeader)
+							.addComponent(chrText)
+							.addComponent(classHeader)
+							.addComponent(classText)))
+					.addComponent(itemHeader)
+					.addComponent(itemText)
+					.addComponent(abilityHeader)
+					.addComponent(abilityText));
 		
+		layout.setVerticalGroup(
+				layout.createSequentialGroup()
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(nameHeader)
+						.addComponent(moneyHeader)
+						.addComponent(levelHeader))
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(nameText)
+						.addComponent(moneyText)
+						.addComponent(levelText))
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(hpHeader)
+						.addComponent(mpHeader)
+						.addComponent(xpHeader))
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(hpText)
+						.addComponent(mpText)
+						.addComponent(xpText))
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(strHeader)
+						.addComponent(dexHeader)
+						.addComponent(conHeader))
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(strText)
+						.addComponent(dexText)
+						.addComponent(conText))
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(intHeader)
+						.addComponent(wisHeader)
+						.addComponent(chrHeader))
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(intText)
+						.addComponent(wisText)
+						.addComponent(chrText))
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(alignHeader)
+						.addComponent(raceHeader)
+						.addComponent(classHeader))
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(alignText)
+						.addComponent(raceText)
+						.addComponent(classText))
+					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+					.addComponent(itemHeader)
+					.addComponent(itemText)
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addComponent(abilityHeader)
+					.addComponent(abilityText));
 		
+	}
+	
+	public GameCharacter getCharacter() {
+		return gc;
+	}
+	
+	public void setCharacter(GameCharacter gc){
+		this.gc = gc;
+		this.itemList = ItemTable.getItemsByCharacter(MainGUI.getConnection(), gc.getCharacterId());
+		this.abilityList = AbilityTable.getAbilitiesByCharacter(MainGUI.getConnection(), gc.getCharacterId());
+		displayCharacter();
+	}
+	
+	private void displayCharacter(){
+		if(gc != null){
+			nameText.setText(gc.getCharacterName());
+			moneyText.setText(String.valueOf(gc.getMoney()));
+			xpText.setText(String.valueOf(gc.getCurXp()));
+			hpText.setText(gc.getCurHp() + "/" + gc.getHp());
+			mpText.setText(gc.getCurMp() + "/" + gc.getMp());
+			levelText.setText(String.valueOf(gc.getLevel()));
+			strText.setText(String.valueOf(gc.getStr()));
+			dexText.setText(String.valueOf(gc.getDex()));
+			conText.setText(String.valueOf(gc.getCon()));
+			intText.setText(String.valueOf(gc.getIntel()));
+			wisText.setText(String.valueOf(gc.getWis()));
+			chrText.setText(String.valueOf(gc.getChr()));
+			alignText.setText(gc.getAlignment());
+			raceText.setText(gc.getRace());
+			classText.setText(gc.getCharacterClass());
+			itemHeader.setText(String.format(ITEM_HEADER_BASE, itemList.size()));
+			StringBuilder items = new StringBuilder();
+			items.append("<html>");
+			for(int i = 0; i < itemList.size(); i++){
+				items.append(itemList.get(i));
+				if(i != itemList.size() - 1){
+					items.append("<br />");
+				}
+			}
+			items.append("</html>");
+			itemText.setText(items.toString());
+				
+			abilityHeader.setText(String.format(ABILITY_HEADER_BASE, abilityList.size()));
+			StringBuilder abilities = new StringBuilder();
+			abilities.append("<html>");
+			for(int i = 0; i < abilityList.size(); i++){
+				abilities.append(abilityList.get(i));
+				if(i != abilityList.size() - 1){
+					abilities.append("<br />");
+				}
+			}
+			abilities.append("</html>");
+			abilityText.setText(abilities.toString());
+		}
 	}
 	
 
