@@ -32,7 +32,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
     private DefaultListModel<User> fListModel = new DefaultListModel<>();
     private JList<User> friendsList = new JList<>(fListModel);
 	private JButton removeButton = new JButton("Remove Friend");
-	private JButton friendCharsButton = new JButton("Friend's Characters");
+	private JButton friendCharsButton = new JButton("Their Characters");
 	private boolean areUsersCharsShowing = true;
     private JScrollPane scrollPane = new JScrollPane();
     private JTabbedPane characterPanes = new JTabbedPane();
@@ -54,7 +54,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 		//set up all components
         layOutComponents();
     
-		
+
 	}
 
     private void layOutComponents() 
@@ -84,6 +84,9 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 
 		//set up character panes
         characterPanes.setBorder(border);
+        Dimension cd = characterPanes.getPreferredSize();
+        cd.setSize(288, 496);
+        characterPanes.setPreferredSize(cd);
         showCharacterTabs(user);
         
 		//lay it all out
@@ -100,8 +103,8 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
                     .addComponent(friendsLabel) 
 					//, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                     .addComponent(scrollPane)
-                    .addComponent(friendCharsButton)
-                	.addComponent(removeButton))
+                    .addComponent(friendCharsButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                	.addComponent(removeButton, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(characterPanes)
@@ -212,7 +215,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 				//show your characters
 				removeCharacterTabs();
 				showCharacterTabs(user);
-				friendCharsButton.setText("Friend's Characters");
+				friendCharsButton.setText("Their Characters");
 				areUsersCharsShowing = !areUsersCharsShowing;
 			}
 		}

@@ -74,16 +74,16 @@ public class ChatWindow extends JPanel implements ActionListener{
     }
     
     private void loadMessages(){
-    	messages.setText(null);
+    	StringBuilder log = new StringBuilder();
+    	log.append("Chat History:\n");
     	if(friend != null){
 	    	ArrayList<ChatHistory> chList = ChatHistoryTable.getConversation(MainGUI.getConnection(), curUser.getUserId(), friend.getUserId());
-	    	StringBuilder log = new StringBuilder();
 	    	for(ChatHistory ch : chList){
 	    		log.append(getFormattedMessage(ch));
 	    		log.append("\n");
 	    	}
-	    	messages.setText(log.toString());
     	}
+    	messages.setText(log.toString());
     }
     
     private void sendMessage(String message){

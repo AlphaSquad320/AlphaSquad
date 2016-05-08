@@ -30,7 +30,7 @@ public class MainGUI
     private static final String DEFAULT_PASSWORD = "admin";
     private static final String IF_EXISTS_LOCATION = ";ifexists=true";
     
-    public static final Integer SIDEBAR_WIDTH = 141;
+    public static final Integer SIDEBAR_WIDTH = 155;
 
 
     

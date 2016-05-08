@@ -454,6 +454,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                         .addComponent(emailHeader)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emailText)))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING)
                         .addComponent(addFriend)
                         .addComponent(addFriendText))
