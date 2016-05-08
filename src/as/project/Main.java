@@ -123,7 +123,8 @@ public class Main {
 					"Thunder", "Thunderwave", "Casts an electryfing blast.",
 					"Shock: 30%.");
 			GameCharacter batman = new GameCharacter(1,1, 9,7,3,6,3,9, 1000000000, 100, 40, 80, 30, 11, 544, "Knight", "Lawful-Good", "Batman", "human");
-			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rouge", "Neutral-Good", "Robin", "human");
+			GameCharacter robin = new GameCharacter(2,1, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rogue", "Neutral-Good", "Robin", "human");
+			GameCharacter batgirl = new GameCharacter(5,3, 6,9,6,4,2,6, 1000, 70, 60, 50, 50, 7, 376, "Rogue", "Chaotic-Good", "Batgirl", "human");
 			GameCharacter joker = new GameCharacter(3,UserTable.NPC_USER_ID, 6,9,4,8,1,9, 951753, 80, 40, 70, 30, 12, 900, "Assassin", "Chaotic-Evila", "Joker", "human");
 			NPC jNPC = new NPC(1, 3, true, "We kill the Batman", "A crazed madman");
 			GameCharacter oracle = new GameCharacter(4,UserTable.NPC_USER_ID, 2,2,2,9,8,5, 60000, 20, 100, 20, 80, 5, 200, "Technomancer", "Lawful-Good", "Oracle", "human");
@@ -161,10 +162,12 @@ public class Main {
 			AbilityTable.addAbility(conn, a2, false);
 			CharacterTable.addCharacter(conn, batman, false);
 			CharacterTable.addCharacter(conn, robin, false);
+			CharacterTable.addCharacter(conn, batgirl, false);
 			CharacterTable.addCharacter(conn, joker, false);
 			CharacterTable.addCharacter(conn, oracle, false);
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a1, false);
 			CharacterAbilityTable.addCharacterAbility(conn, batman, a2, false);
+			CharacterAbilityTable.addCharacterAbility(conn, batgirl, a2, false);
 			CharacterAbilityTable.addCharacterAbility(conn, robin, a2, false);
 			CharacterAbilityTable.addCharacterAbility(conn, joker, a2, false);
 			CharacterAbilityTable.addCharacterAbility(conn, oracle, a1, false);
@@ -185,6 +188,8 @@ public class Main {
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i2.getID(), false);
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i3.getID(), false);
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i4.getID(), false);
+			CharacterItemTable.giveItem(conn, batgirl.getCharacterId(), i3.getID(), false);
+			CharacterItemTable.giveItem(conn, batgirl.getCharacterId(), i4.getID(), false);
 			CharacterItemTable.giveItem(conn, robin.getCharacterId(), i5.getID(), false);
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i6.getID(), false);
 			CharacterItemTable.giveItem(conn, batman.getCharacterId(), i7.getID(), false);

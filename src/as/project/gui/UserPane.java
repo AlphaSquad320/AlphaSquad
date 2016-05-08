@@ -32,6 +32,8 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
     private DefaultListModel<User> fListModel = new DefaultListModel<>();
     private JList<User> friendsList = new JList<>(fListModel);
 	private JButton removeButton = new JButton("Remove Friend");
+	private JButton friendCharsButton = new JButton("Friend's Characters");
+	private boolean areUsersCharsShowing = true;
     private JScrollPane scrollPane = new JScrollPane();
     private JTabbedPane characterPanes = new JTabbedPane();
     private ChatWindow chatWindow = null;
@@ -71,6 +73,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
         friendsList.setFont(new Font("Tahoma", 0, 14)); 
         
         removeButton.addActionListener(this);
+        friendCharsButton.addActionListener(this);
 	    
 	    friendsList.addListSelectionListener(this);
         scrollPane.setViewportView(friendsList);
@@ -81,12 +84,8 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 
 		//set up character panes
         characterPanes.setBorder(border);
-        ArrayList<GameCharacter> characterList = CharacterTable.getUserCharacters(MainGUI.getConnection(), user.getUserId());
-        for(GameCharacter gc: characterList){
-        	characterPanes.addTab(gc.getCharacterName(),
-        			new JGameCharacterPanel(gc));
-        }
-
+        showCharacterTabs(user);
+        
 		//lay it all out
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
@@ -101,6 +100,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
                     .addComponent(friendsLabel) 
 					//, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                     .addComponent(scrollPane)
+                    .addComponent(friendCharsButton)
                 	.addComponent(removeButton))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -124,6 +124,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
                     .addComponent(characterPanes)
                     .addGroup(layout.createSequentialGroup()
                 		.addComponent(scrollPane)
+                		.addComponent(friendCharsButton)
                     	.addComponent(removeButton)))
 					//, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
                 .addContainerGap())
@@ -143,6 +144,25 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 		if(index != -1){
 			characterPanes.removeTabAt(index);
 		}
+    }
+    
+    private void removeCharacterTabs(){
+    	int chatIndex = characterPanes.indexOfTab(chatWindowTabTitle);
+		for(int i = 0; i < characterPanes.getTabCount(); i++){
+			if(i != chatIndex){
+				characterPanes.removeTabAt(i);
+				chatIndex = characterPanes.indexOfTab(chatWindowTabTitle);
+				i--;
+			}
+		}
+    }
+    
+    private void showCharacterTabs(User u){
+        ArrayList<GameCharacter> characterList = CharacterTable.getUserCharacters(MainGUI.getConnection(), u.getUserId());
+        for(GameCharacter gc: characterList){
+        	characterPanes.addTab(gc.getCharacterName(),
+        			new JGameCharacterPanel(gc));
+        }
     }
 
 	@Override
@@ -175,6 +195,25 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 				FriendsTable.removeFriends(MainGUI.getConnection(), f, true);
 				removeChatTab();
 				reloadFriendsList();
+			}
+		}
+		else if(e.getSource() == friendCharsButton){
+			if(areUsersCharsShowing){
+				User f = friendsList.getSelectedValue();
+				if(f != null)
+				{
+					//show friends characters
+					removeCharacterTabs();
+					showCharacterTabs(f);
+					friendCharsButton.setText("Your Characters");
+					areUsersCharsShowing = !areUsersCharsShowing;
+				}
+			} else {
+				//show your characters
+				removeCharacterTabs();
+				showCharacterTabs(user);
+				friendCharsButton.setText("Friend's Characters");
+				areUsersCharsShowing = !areUsersCharsShowing;
 			}
 		}
 	}
