@@ -3,8 +3,6 @@ package as.project.objects;
 import java.sql.Timestamp;
 
 public class ChatHistory {
-	
-	private static int LATEST_ID = 0;
 
 	private int chatHistoryId;
 	private int senderId;
@@ -21,16 +19,11 @@ public class ChatHistory {
 	}
 	
 	public ChatHistory(int senderId, int receiverId, Timestamp timestamp, String message) {
-		this.chatHistoryId = getLatestID();
+		this.chatHistoryId = -1;
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.timestamp = timestamp;
 		this.message = message;
-	}
-	
-	public static int getLatestID(){
-		LATEST_ID += 1;
-		return LATEST_ID;
 	}
 	
 	public int getChatHistoryId() {

@@ -29,7 +29,7 @@ public class ChatHistoryTable extends TableBase {
 	 */
 	public static void createChatHistoryTable(Connection conn) throws SQLException {
 		String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
-					 + ID_COLUMN + " INT PRIMARY KEY,"
+					 + ID_COLUMN + " INT PRIMARY KEY AUTO_INCREMENT,"
 				     + SENDER_COLUMN + " INT,"
 				     + RECEIVER_COLUMN + " INT,"
 				     + TIMESTAMP_COLUMN + " TIMESTAMP,"
@@ -56,7 +56,7 @@ public class ChatHistoryTable extends TableBase {
 		/**
 		 * SQL insert statement
 		 */
-		String query = String.format("INSERT INTO " + TABLE_NAME + " VALUES(%d,%d,%d,\'%s\',\'%s\');",chatId, senderId, receiverId, timestamp.toString(), message);
+		String query = String.format("INSERT INTO %s (%s,%s,%s,%s) VALUES(%d,%d,\'%s\',\'%s\');", TABLE_NAME, SENDER_COLUMN, RECEIVER_COLUMN, TIMESTAMP_COLUMN, MESSAGE_COLUMN, senderId, receiverId, timestamp.toString(), message);
 		executeGeneralQuery(conn, query, doLog);
 	}
 	
