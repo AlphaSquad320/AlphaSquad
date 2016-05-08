@@ -6,6 +6,8 @@
 package as.project.gui;
 
 import javax.swing.*;
+
+import java.awt.Dimension;
 import java.awt.event.*;
 
 /**
@@ -21,6 +23,7 @@ public class LoginWindow extends JDialog implements ActionListener
 	private JLabel password = new JLabel("Password:");
 	private JPasswordField passwordField = new JPasswordField(16);
 	private JButton login = new JButton("Login");
+	private JLabel errorText = new JLabel("Invalid Login");
 
 	private UserWindow parent;
 
@@ -39,6 +42,7 @@ public class LoginWindow extends JDialog implements ActionListener
 		layout = new GroupLayout(this.getContentPane());
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
+		errorText.setVisible(false);
 		setLayout(layout);
 
 		//make things look pretty
@@ -70,34 +74,28 @@ public class LoginWindow extends JDialog implements ActionListener
 	private void layOutComponents()
 	{
 		//set up the horizontal layout
-		layout.setHorizontalGroup(
-			layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(
-								GroupLayout.Alignment.TRAILING)
-						.addComponent(username)
-						.addComponent(password))
-					.addGroup(layout.createParallelGroup(
-								GroupLayout.Alignment.LEADING)
-						.addComponent(usernameField)
-						.addComponent(passwordField)))
-					.addComponent(login)
-		);
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+				.addComponent(username)
+				.addComponent(password)
+				.addComponent(login))
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(usernameField)
+				.addComponent(passwordField)
+				.addComponent(errorText)));
 
 		//set up the vertical layout
 		layout.setVerticalGroup(
 			layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(
-							GroupLayout.Alignment.CENTER)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 					.addComponent(username)
 					.addComponent(usernameField))
-				.addGroup(layout.createParallelGroup(
-							GroupLayout.Alignment.CENTER)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 					.addComponent(password)
 					.addComponent(passwordField))
-				.addComponent(login)
-		);
-
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(login)
+						.addComponent(errorText)));
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -108,7 +106,8 @@ public class LoginWindow extends JDialog implements ActionListener
 			passwordValue = new String(passwordField.getPassword());
 			if (!parent.authenticateUser(usernameValue, passwordValue))
 			{
-				//TODO: invalid username/password!
+				errorText.setVisible(true);
+				passwordField.setText(null);
 			}
 			else
 				this.dispose();
