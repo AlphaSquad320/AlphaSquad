@@ -95,6 +95,7 @@ public class UserWindow extends JFrame implements ActionListener
 		viewUser.setEnabled(false);
 		viewEnc.setEnabled(false);
 		this.setContentPane(new JPanel());
+		encPane.setCurrentUser(null);
 		validate();
 		
 	}
@@ -112,6 +113,7 @@ public class UserWindow extends JFrame implements ActionListener
 			userLogOut.setEnabled(true);
 			viewUser.setEnabled(true);
 			viewEnc.setEnabled(true);
+			encPane.setCurrentUser(loggedIn);
 			return true;
 		}
 		//if not found
@@ -146,6 +148,7 @@ public class UserWindow extends JFrame implements ActionListener
 		}
 		else if(e.getSource() == viewUser){
 			this.setContentPane(userPane);
+			userPane.reloadFriendsList();
 			validate();
 		}
 		else if(e.getSource() == viewEnc){

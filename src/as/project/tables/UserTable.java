@@ -176,6 +176,27 @@ public class UserTable extends TableBase {
 		
 		return result;
 	}
+	
+	public static ArrayList<User> getUsersByString(Connection conn, String str){
+		ArrayList<User> result = new ArrayList<User>();
+
+		ArrayList<String> whereClauses = new ArrayList<String>();
+		whereClauses.add("UPPER(" + DISPLAY_NAME_COLUMN + ") like UPPER('%" + str + "%')");
+		whereClauses.add(USER_ID_COLUMN + "<>" + NPC_USER_ID);
+
+		ResultSet sqlResults = queryUserTable(conn, new ArrayList<String>(), whereClauses, null);
+		try{
+			while(sqlResults.next()){
+				result.add(getUserFromResultSet(sqlResults));
+			}
+			
+		} catch (Exception e){
+			System.out.println("Could not get user by string:" + str);
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
 	private static User getUserFromResultSet(ResultSet r) throws SQLException{
 		return new User(r.getInt(USER_ID_COLUMN),

@@ -130,7 +130,7 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
         );
     }
     
-    private void reloadFriendsList(){
+    public void reloadFriendsList(){
     	fListModel.clear();
 	    ArrayList<User> friends = FriendsTable.getFriendsOfUser(MainGUI.getConnection(),user.getUserId());
 	    for(User f: friends){

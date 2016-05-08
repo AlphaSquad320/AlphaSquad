@@ -102,6 +102,7 @@ public class Main {
 			User lh = new User(1, "Lukas", "Hillmer", "lhillmer", "leh5618@rit.edu", "test123");
 			User sj = new User(2, "Scott", "Johnson", "sjohnson", "sxj@cs.rit.edu", "test456");
 			User third = new User(3, "THIRD", "USER", "THIRD_USER", "THIRD_USER@rit.edu", "THIRD");
+			User fourth = new User(4, "FOURTH", "USER", "FOURTH_USER", "FOURTH_USER@rit.edu", "FOURTH");
 			User NPC_OWNER = new User(UserTable.NPC_USER_ID, "NPC", "OWNER", "NPCOWNER", "none@example.com", "npc");
 			Friends f = new Friends(1, 2);
 			Friends f2 = new Friends(2, 1);
@@ -142,6 +143,7 @@ public class Main {
 			UserTable.addUser(conn, lh, false);
 			UserTable.addUser(conn, sj, false);
 			UserTable.addUser(conn, third, false);
+			UserTable.addUser(conn, fourth, false);
 			UserTable.addUser(conn, NPC_OWNER, false);
 			FriendsTable.addFriends(conn, f, false);
 			FriendsTable.addFriends(conn, f2, false);

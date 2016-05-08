@@ -16,12 +16,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import as.project.objects.Ability;
+import as.project.objects.Friends;
 import as.project.objects.GameCharacter;
 import as.project.objects.Item;
 import as.project.objects.NPC;
+import as.project.objects.User;
 import as.project.tables.AbilityTable;
 import as.project.tables.CharacterTable;
+import as.project.tables.FriendsTable;
 import as.project.tables.ItemTable;
+import as.project.tables.UserTable;
 
 /**
  * This class is the content pane for the encyclopedia view.
@@ -91,6 +95,25 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
     private JScrollPane nScrollPane		= new JScrollPane();
     private DefaultListModel<GameCharacter> nListModel = new DefaultListModel<>();
     private JList<GameCharacter> npcList= new JList<>(nListModel);
+    
+    //Users tab
+    private JPanel userTab              = new JPanel();
+    private JTextField uSearchBar		= new JTextField();
+    private JButton uSearchButton       = new JButton("Search");
+    private JScrollPane uScrollPane		= new JScrollPane();
+    private DefaultListModel<User>uListModel = new DefaultListModel<>();
+    private JList<User> userList		= new JList<>(uListModel);
+    private JButton addFriend          = new JButton("Add Friend");
+    private JLabel displayName          = createJLabel("[[display name]]", titleFont);
+    private JLabel emailHeader          = createJLabel("Email:", headerFont);
+    private JLabel emailText            = createJLabel("[[email]]", fieldFont);
+    private JLabel firstNameHeader      = createJLabel("First Name:", headerFont);
+    private JLabel firstNameText        = createJLabel("[[first name]]", fieldFont);
+    private JLabel addFriendText   = createJLabel("[[error text]]", fieldFont);
+    
+    private User curUser;
+    
+    
 	
 
 	/**
@@ -99,6 +122,10 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
     public EncyclopediaPane() 
 	{
         layOutComponents();
+    }
+    
+    public void setCurrentUser(User u){
+    	curUser = u;
     }
 
 	/**
@@ -121,6 +148,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
         tabbedPane.addTab("Items", itemTab);
         tabbedPane.addTab("Abilities", abilityTab);
         tabbedPane.addTab("NPCs", npcTab);
+        tabbedPane.addTab("Users", userTab);
         
 		this.setLayout(new GridLayout(1, 1));
 		this.add(tabbedPane);
@@ -128,7 +156,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 		layOutItemTab();
 		layOutAbilityTab();
 		layOutNPCTab();
-
+		layOutUserTab();
     }
 
 	private void layOutItemTab()
@@ -368,6 +396,71 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
         		.addContainerGap());
 	}
 	
+	private void layOutUserTab()
+	{
+		// #################
+		// ### USer PANE ###
+		// #################
+        uSearchBar.addActionListener(this);
+        uSearchButton.addActionListener(this);
+        addFriend.addActionListener(this);
+        userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        userList.addListSelectionListener(this);
+        addFriendText.setVisible(false);
+
+        uScrollPane.setViewportView(userList);
+        Dimension d = uScrollPane.getPreferredSize();
+        d.width = MainGUI.SIDEBAR_WIDTH;
+        uScrollPane.setPreferredSize(d);
+
+        GroupLayout userTabLayout = new GroupLayout(userTab);
+        userTab.setLayout(userTabLayout);
+        userTabLayout.setHorizontalGroup(
+            userTabLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(userTabLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING, false)
+                    .addComponent(uScrollPane)
+                    .addComponent(uSearchButton, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
+                    .addComponent(uSearchBar, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
+                    .addComponent(addFriend, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(displayName)
+                    .addComponent(firstNameHeader)
+                    .addComponent(firstNameText)
+                    .addComponent(emailHeader)
+                    .addComponent(emailText)
+                    .addComponent(addFriendText))
+                .addContainerGap())
+        );
+        userTabLayout.setVerticalGroup(
+            userTabLayout.createParallelGroup(Alignment.LEADING)
+            .addGroup(userTabLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(uSearchBar, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+                    .addComponent(displayName))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(uSearchButton, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(uScrollPane)
+                    .addGroup(userTabLayout.createSequentialGroup()
+                        .addComponent(firstNameHeader)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(firstNameText)
+                        .addGap(18, 18, 18)
+                        .addComponent(emailHeader)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailText)))
+                .addGroup(userTabLayout.createParallelGroup(Alignment.LEADING)
+                        .addComponent(addFriend)
+                        .addComponent(addFriendText))
+                .addContainerGap())
+        );
+	}
+	
 	private void displayItem(Item i){
 		if(i != null)
 		{
@@ -401,11 +494,23 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			npcData.setCharacter(gc);
 		}
 	}
+	
+	private void displayUser(User u){
+		if(u != null){
+			displayName.setText(u.getDisplayName());
+			firstNameText.setText(u.getFirstName());
+			emailText.setText(u.getEmail());
+			addFriendText.setVisible(false);
+		}
+	}
+	
+	private void displayAddFriendText(String error){
+		addFriendText.setVisible(true);
+		addFriendText.setText(error);
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		//TODO: implement search features
-		
 		if(e.getSource() == iSearchButton){
 			String query = iSearchBar.getText();
 			iListModel.clear();
@@ -430,6 +535,32 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 				nListModel.addElement(i);
 			}
 		}
+		else if(e.getSource() == uSearchButton){
+			String query = uSearchBar.getText();
+			uListModel.clear();
+			ArrayList<User> qResults = UserTable.getUsersByString(MainGUI.getConnection(), query);
+			for(User u : qResults){
+				uListModel.addElement(u);
+			}
+		}
+		else if(e.getSource() == addFriend){
+			User u = userList.getSelectedValue();
+			if(u != null && curUser != null){
+				if(u.getUserId() == curUser.getUserId()){
+					displayAddFriendText("Cannot friend yourself!");
+				}
+				else{
+					Friends f = new Friends(curUser.getUserId(), u.getUserId());
+					if(FriendsTable.areUsersFriends(MainGUI.getConnection(), f)){
+						displayAddFriendText("You are already friends with that user!");
+					}
+					else{
+						FriendsTable.addFriends(MainGUI.getConnection(), f, true);
+						displayAddFriendText("Friend added!");
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -443,6 +574,9 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			}
 			else if(e.getSource() == npcList){
 				displayNPC(npcList.getSelectedValue());
+			}
+			else if(e.getSource() == userList){
+				displayUser(userList.getSelectedValue());
 			}
 		}
 	}

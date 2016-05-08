@@ -139,5 +139,27 @@ public class FriendsTable extends TableBase {
 		}
 		return resultList;
 	}
+	
+	public static boolean areUsersFriends(Connection conn, int senderId, int receiverId){
+		boolean result = false;
+		ArrayList<String> where = new ArrayList<String>();
+		where.add(SENDER_COLUMN + "=" + senderId);
+		where.add(RECEIVER_COLUMN + "=" + receiverId);
+		ResultSet query = queryFriendsTable(conn, new ArrayList<String>(), where ,null);
+		try{
+			result = query.next();
+		}
+		catch (Exception e){
+			System.out.println("failed checking for friendship of (" + senderId + ", " + receiverId + ")");
+			e.printStackTrace();
+			
+		}
+		return result;
+	}
+	
+
+	public static boolean areUsersFriends(Connection conn, Friends f){
+		return areUsersFriends(conn, f.getSenderId(), f.getReceiverId());
+	}
 
 }
