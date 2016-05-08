@@ -210,7 +210,8 @@ public class AbilityTable extends TableBase{
 			  ArrayList<String> cols = new ArrayList<String>();
 			  ArrayList<String> where = new ArrayList<String>();
 			  StringBuilder queryText = new StringBuilder();
-			  queryText.append("UPPER(").append(DESCRIPTION_COLUMN).append(") LIKE UPPER('%").append(str).append("%')");
+			  queryText.append("(UPPER(").append(DESCRIPTION_COLUMN).append(") LIKE UPPER('%").append(str).append("%') OR ");
+			  queryText.append("UPPER(").append(NAME_COLUMN).append(") LIKE UPPER('%").append(str).append("%'))");
 			  where.add(queryText.toString());
 		
 			  ResultSet sqlResults = queryCurrentTable(conn, TABLE_NAME, cols, where, null);

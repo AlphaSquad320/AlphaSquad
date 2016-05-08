@@ -376,12 +376,14 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 			bonusText.setText(String.valueOf(i.getBonus()));
 			consumableText.setText(String.valueOf(i.isConsumable()));
 			addEffText.setText(i.getEffect());
+			itemTitle.setText(i.getName());
 		}
 	}
 	
 	private void displayAbility(Ability a){
 		if(a != null)
 		{
+			abilityTitle.setText(a.getName());
 			abilityDescription.setText(a.getDescription());
 			typeText1.setText(a.getType());
 			addEffText1.setText(a.getAdditionalEffects());
