@@ -25,6 +25,7 @@ public class AbilityTable extends TableBase{
 	public static final String RADIUS_COLUMN = "radius";
 	public static final String DURATION_COLUMN = "duration";
 	public static final String TYPE_COLUMN = "type";
+	public static final String NAME_COLUMN = "name";
 	public static final String DESCRIPTION_COLUMN = "description";
 	public static final String ADDITIONAL_EFFECTS_COLUMN = "additionalEffects";
 	
@@ -45,6 +46,7 @@ public class AbilityTable extends TableBase{
 			+ RADIUS_COLUMN + " NUMERIC(8,2),"
 			+ DURATION_COLUMN + " NUMERIC(8,2),"
 			+ TYPE_COLUMN + " VARCHAR(40),"
+			+ NAME_COLUMN + " VARCHAR(40),"
 			+ DESCRIPTION_COLUMN + " VARCHAR(120),"
 			+ ADDITIONAL_EFFECTS_COLUMN + " VARCHAR(255),"
 			+ "PRIMARY KEY( " + ABILITY_ID_COLUMN + " )," 
@@ -83,26 +85,25 @@ public class AbilityTable extends TableBase{
 			float radius,
 			float duration,
 			String type,
+			String name,
 			String description,
-			String additionalEffects) {
+			String additionalEffects,
+			boolean doLog) {
+
+		String query = String.format("INSERT INTO " + TABLE_NAME + " VALUES(%d,%d,%d,%d,%f,%f,%f,\'%s\',\'%s\',\'%s\',\'%s\');"
+				,abilityID
+				,reqLevel
+				,cost
+				,baseDamage
+				,range
+				,radius
+				,duration
+				,type
+				,name
+				,description
+				,additionalEffects);
 		
-		try {
-			PreparedStatement pStmt = conn.prepareStatement(
-					"INSERT INTO " + TABLE_NAME + " VALUES(?,?,?,?,?,?,?,?,?,?);");
-			pStmt.setInt(1, abilityID);
-			pStmt.setInt(2, reqLevel);
-			pStmt.setInt(3, cost);
-			pStmt.setInt(4, baseDamage);
-			pStmt.setFloat(5, range);
-			pStmt.setFloat(6, radius);
-			pStmt.setFloat(7, duration);
-			pStmt.setString(8, type);
-			pStmt.setString(9, description);
-			pStmt.setString(10, additionalEffects);
-			pStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		executeGeneralQuery(conn, query, doLog);
 	}
 
 	/**
@@ -110,9 +111,9 @@ public class AbilityTable extends TableBase{
 	 * @param conn
 	 * @param abilities
 	 */
-	public static void addAbilities( Connection conn, List<Ability> abilities ) {
+	public static void addAbilities( Connection conn, List<Ability> abilities, boolean doLog ) {
 		for (Ability a : abilities) {
-			addAbility( conn, a );
+			addAbility( conn, a, doLog );
 		}
 	}
 	
@@ -121,7 +122,7 @@ public class AbilityTable extends TableBase{
 	 * @param conn
 	 * @param a - Ability instance
 	 */
-	public static void addAbility( Connection conn, Ability a) {
+	public static void addAbility( Connection conn, Ability a, boolean doLog) {
 		addAbility( conn,
 				a.getID(),
 				a.getReqLevel(),
@@ -131,8 +132,10 @@ public class AbilityTable extends TableBase{
 				a.getRadius(),
 				a.getDuration(),
 				a.getType(),
+				a.getName(),
 				a.getDescription(),
-				a.getAdditionalEffects());
+				a.getAdditionalEffects(),
+				doLog);
 	}
 	
 	public static void printAbilityTable(Connection conn) {
@@ -237,6 +240,7 @@ public class AbilityTable extends TableBase{
 						r.getFloat(RADIUS_COLUMN),
 						r.getFloat(DURATION_COLUMN),
 						r.getString(TYPE_COLUMN),
+						r.getString(NAME_COLUMN),
 						r.getString(DESCRIPTION_COLUMN),
 						r.getString(ADDITIONAL_EFFECTS_COLUMN));
 		}

@@ -8,7 +8,6 @@ package as.project.objects;
 public class NPC {
 	private int npcID;
 	private int characterID;
-	private String name;
 	private boolean isHostile;
 	private String assocQuest;
 	private String description;
@@ -22,10 +21,9 @@ public class NPC {
 	 * @param quest		- the quest associated with the NPC
 	 * @param desc		- the description of the NPC
 	 */
-	public NPC (int id, int charID, String name, boolean hostile, String quest, String desc){
+	public NPC (int id, int charID, boolean hostile, String quest, String desc){
 		npcID = id;
 		characterID = charID;
-		this.name = name;
 		isHostile = hostile;
 		assocQuest = quest;
 		description = desc;
@@ -43,13 +41,6 @@ public class NPC {
 	 */
 	public void setCharacterID(int characterID) {
 		this.characterID = characterID;
-	}
-
-	/**
-	 * @param name - the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -85,13 +76,6 @@ public class NPC {
 	 */
 	public int getCharacterID() {
 		return characterID;
-	}
-
-	/**
-	 * @return the NPC's name
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**

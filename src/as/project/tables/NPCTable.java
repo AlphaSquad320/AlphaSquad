@@ -17,7 +17,6 @@ public class NPCTable extends TableBase {
 	
 	public static final String NPC_ID_COLUMN = "NPC_ID";
 	public static final String CHAR_ID_COLUMN = "CHARACTER_ID";
-	public static final String NAME_COLUMN = "NAME";
 	public static final String ISHOSTILE_COLUMN = "IS_HOSTILE";
 	public static final String QUEST_COLUMN = "ASSOCIATED_QUEST";
 	public static final String DESCRIPTION_COLUMN = "DESCRIPTION";
@@ -32,7 +31,6 @@ public class NPCTable extends TableBase {
 		String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +"("
 					 + NPC_ID_COLUMN + " INT PRIMARY KEY,"
 					 + CHAR_ID_COLUMN + " INT,"
-					 + NAME_COLUMN +" VARCHAR(30),"
 					 + ISHOSTILE_COLUMN + " BOOLEAN,"
 					 + QUEST_COLUMN + " VARCHAR(30),"
 					 + DESCRIPTION_COLUMN + " VARCHAR(255),"
@@ -53,21 +51,16 @@ public class NPCTable extends TableBase {
 	 * @param quest - the quest associated with the npc
 	 * @param desc - the description of the npc
 	 */
-	public static void addNPC(Connection conn, int npcID, int charID, String name,
-							  boolean isHostile, String quest, String desc){
+	public static void addNPC(Connection conn, int npcID, int charID,
+							  boolean isHostile, String quest, String desc, boolean doLog){
 		String query = String.format("INSERT INTO " + TABLE_NAME + " "
-								   + "VALUES (%d,%d,\'%s\',%b,\'%s\',\'%s\');",
-								   npcID, charID, name, isHostile, quest, desc);
-		try{
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
+								   + "VALUES (%d,%d,%b,\'%s\',\'%s\');",
+								   npcID, charID, isHostile, quest, desc);
+		executeGeneralQuery(conn, query, doLog);
 	}
 	
-	public static void addNPC(Connection conn, NPC npcData){
-		addNPC(conn, npcData.getNpcID(), npcData.getCharacterID(), npcData.getName(), npcData.isHostile(), npcData.getAssocQuest(), npcData.getDescription());
+	public static void addNPC(Connection conn, NPC npcData, boolean doLog){
+		addNPC(conn, npcData.getNpcID(), npcData.getCharacterID(), npcData.isHostile(), npcData.getAssocQuest(), npcData.getDescription(), doLog);
 	}
 	
 	/**
@@ -80,12 +73,12 @@ public class NPCTable extends TableBase {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("INSERT INTO " + TABLE_NAME +" (" + NPC_ID_COLUMN + "," 
-				+ CHAR_ID_COLUMN + "," + NAME_COLUMN + "," + ISHOSTILE_COLUMN + ","
+				+ CHAR_ID_COLUMN + "," + ISHOSTILE_COLUMN + ","
 				+ QUEST_COLUMN + "," + DESCRIPTION_COLUMN + ") VALUES ");
 		for(int i = 0; i < npcs.size(); i++){
 			NPC n = npcs.get(i);
-			sb.append(String.format("(%d,%d,\'%s\',%b,\'%s\',\'%s\')",
-					   n.getNpcID(), n.getCharacterID(), n.getName(),
+			sb.append(String.format("(%d,%d,%b,\'%s\',\'%s\')",
+					   n.getNpcID(), n.getCharacterID(),
 					   n.isHostile(), n.getAssocQuest(), n.getDescription()));
 			if(i != npcs.size()-1){
 				sb.append(",");
@@ -115,10 +108,8 @@ public class NPCTable extends TableBase {
 	 * @param conn - the connection to the database
 	 */
 	public static void printNPCTable(Connection conn){
-		String query = "SELECT * FROM npc;";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(query);
+			ResultSet result = queryCurrentTable(conn, TABLE_NAME, null, null, null);
 			
 			while(result.next()){
 				System.out.printf("NPC %d: %d %s %b %s %s\n",
@@ -162,7 +153,6 @@ public class NPCTable extends TableBase {
 	private static NPC getNPCFromResultSet(ResultSet r) throws SQLException{
 		return new NPC(r.getInt(NPC_ID_COLUMN),
 					r.getInt(CHAR_ID_COLUMN),
-					r.getString(NAME_COLUMN),
 					r.getBoolean(ISHOSTILE_COLUMN),
 					r.getString(QUEST_COLUMN),
 					r.getString(DESCRIPTION_COLUMN));

@@ -18,6 +18,7 @@ public class ItemTable extends TableBase
 {
 	public static final String TABLE_NAME = "item";
 	public static final String ID_COLUMN = "ITEM_ID";
+	public static final String NAME_COLUMN = "NAME";
 	public static final String EFFECTS_COLUMN = "ADD_EFF";
 	public static final String DESCRIPTION_COLUMN = "DESC";
 	public static final String CONSUMABLE_COLUMN = "CONS";
@@ -35,6 +36,7 @@ public class ItemTable extends TableBase
   {
     String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
       + ID_COLUMN + " INT PRIMARY KEY,"
+      + NAME_COLUMN + " VARCHAR(255),"
       + EFFECTS_COLUMN + " VARCHAR(255),"
       + DESCRIPTION_COLUMN + " VARCHAR(255),"
       + CONSUMABLE_COLUMN + " BOOLEAN,"
@@ -63,37 +65,22 @@ public class ItemTable extends TableBase
   public static void addItem(
     Connection conn,
     int itemID,
+    String name,
     String addEff,
     String desc,
     boolean cons,
     String type,
     int bonus,
-    String itemClass)
+    String itemClass,
+    boolean doLog)
   {
     type = type.toLowerCase() ;
 
     String query = String.format( "INSERT INTO item "
-      + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\');",
-        itemID, addEff, desc, cons, type, bonus, itemClass ) ;
+      + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\');",
+        itemID, name, addEff, desc, cons, type, bonus, itemClass ) ;
 
-    runStatement( conn, query ) ;
-  }
-
-  /**
-   * runStatement method
-   * runs the given statement
-   *
-   * @param conn - database connection
-   * @param query - statement to be run
-  **/
-  public static void runStatement( Connection conn, String query )
-  {
-    try
-    {
-      Statement state = conn.createStatement() ;
-      state.execute( query ) ;
-    }
-    catch( SQLException e ){ e.printStackTrace() ; }
+    executeGeneralQuery( conn, query, doLog ) ;
   }
 
   /**
@@ -103,17 +90,19 @@ public class ItemTable extends TableBase
    * @param conn - database connection
    * @param item - item to be added
   **/
-  public static void addItem( Connection conn, Item item )
+  public static void addItem( Connection conn, Item item, boolean doLog )
   {
     addItem(
       conn,
       item.getID(),
+      item.getName(),
       item.getEffect(),
       item.getDescription(),
       item.isConsumable(),
       item.getType(),
       item.getBonus(),
-      item.getItemClass() ) ;
+      item.getItemClass(),
+      doLog) ;
   }
 
   /**
@@ -123,11 +112,11 @@ public class ItemTable extends TableBase
    * @param conn - database connection
    * @param itemList - list of items to be added
   **/
-  public static void addItemList( Connection conn, List<Item> itemList )
+  public static void addItemList( Connection conn, List<Item> itemList, boolean doLog )
   {
     for( int i = 0 ; i < itemList.size() ; i++ )
     {
-      addItem( conn, itemList.get( i ) ) ;
+      addItem( conn, itemList.get( i ), doLog ) ;
     }
   }
 
@@ -145,7 +134,7 @@ public class ItemTable extends TableBase
       + "FROM item"
       + "WHERE TYPE=\'%s\'", type ) ;
 
-    runStatement( conn, query ) ;
+    executeGeneralQuery( conn, query ) ;
   }
   
   public static ArrayList<Item> getItemsByCharacter(Connection conn, int characterId){
@@ -205,6 +194,7 @@ public class ItemTable extends TableBase
 
 	private static Item getItemFromResultSet(ResultSet r) throws SQLException{
 		return new Item(r.getInt(ID_COLUMN),
+					r.getString(NAME_COLUMN),
 					r.getString(EFFECTS_COLUMN),
 					r.getString(DESCRIPTION_COLUMN),
 					r.getBoolean(CONSUMABLE_COLUMN),

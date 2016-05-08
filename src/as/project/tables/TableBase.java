@@ -1,6 +1,7 @@
 package as.project.tables;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -81,7 +82,7 @@ public class TableBase {
 		sb.append(";");
 		
 		//Print it out to verify it made it right
-		System.out.println("Query: " + sb.toString());
+		System.out.println("Query(Results): " + sb.toString());
 		try {
 			/**
 			 * Execute the query and return the result set
@@ -92,6 +93,33 @@ public class TableBase {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Runs a query that does not return any output
+	 * used for creates/updates/alters/drops/etc
+	 * 
+	 * @param conn
+	 * @param query statement to execute
+	 */
+	protected static void executeGeneralQuery(Connection conn, String command){
+		executeGeneralQuery(conn, command, true);
+	}
+	
+	protected static void executeGeneralQuery(Connection conn, String command, boolean doLog){
+		//Print it out to verify it made it right
+		if(doLog){
+			System.out.println("Query(General): " + command);
+		}
+		try {
+			/**
+			 * Execute the query
+			 */
+			Statement stmt = conn.createStatement();
+			stmt.execute(command);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 

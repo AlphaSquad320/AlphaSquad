@@ -63,11 +63,7 @@ public class CharacterTable extends TableBase {
 				     + RACE_COLUMN + " VARCHAR(255),"
 				     + ");" ;
 		
-		/**
-		 * Create a query and execute
-		 */
-		Statement stmt = conn.createStatement();
-		stmt.execute(query);
+		executeGeneralQuery(conn, query);
 	}
 	
 	/**
@@ -95,7 +91,8 @@ public class CharacterTable extends TableBase {
 			                     String cClass,
 			                     String alignment,
 			                     String cName,
-			                     String race){
+			                     String race,
+			                     boolean doLog){
 		
 		/**
 		 * SQL insert statement
@@ -107,16 +104,7 @@ public class CharacterTable extends TableBase {
 				                    MONEY_COLUMN, HP_COLUMN, MP_COLUMN, CUR_HP_COLUMN, CUR_MP_COLUMN, LEVEL_COLUMN, CUR_XP_COLUMN, CLASS_COLUMN, ALIGNMENT_COLUMN, CHARACTER_NAME_COLUMN, RACE_COLUMN,
 				                   	characterId, userId, str, dex, chr, intel, wis, con, 
 				                   	money, hp, mp, curHp, curMp, level, curXp, cClass, alignment, cName, race);
-		try {
-			/**
-			 * create and execute the query
-			 */
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-		} catch (SQLException e) {
-			System.out.println("Issue adding character: " + e);
-			e.printStackTrace();
-		}
+		executeGeneralQuery(conn, query, doLog);
 	}
 	
 	/**
@@ -124,11 +112,9 @@ public class CharacterTable extends TableBase {
 	 * @param conn connection string
 	 * @param user user to add
 	 */
-	public static void addCharacter(Connection conn, GameCharacter character){
-		System.out.println(""+character.getCharacterId() + character.getUserId() + character.getStr() + character.getDex() + character.getChr() + character.getIntel() + character.getWis() + character.getCon() + 
-               	character.getMoney() + character.getHp() + character.getMp() + character.getCurHp() + character.getCurMp() + character.getLevel() + character.getCurXp() + character.getCharacterClass() + character.getAlignment() + character.getCharacterName() + character.getRace());
+	public static void addCharacter(Connection conn, GameCharacter character, boolean doLog){
 		addCharacter(conn, character.getCharacterId(), character.getUserId(), character.getStr(), character.getDex(), character.getChr(), character.getIntel(), character.getWis(), character.getCon(), 
-               	character.getMoney(), character.getHp(), character.getMp(), character.getCurHp(), character.getCurMp(), character.getLevel(), character.getCurXp(), character.getCharacterClass(), character.getAlignment(), character.getCharacterName(), character.getRace());
+               	character.getMoney(), character.getHp(), character.getMp(), character.getCurHp(), character.getCurMp(), character.getLevel(), character.getCurXp(), character.getCharacterClass(), character.getAlignment(), character.getCharacterName(), character.getRace(), doLog);
 	}
 	
 	/**
@@ -136,9 +122,9 @@ public class CharacterTable extends TableBase {
 	 * @param conn connection string
 	 * @param user list of users to add
 	 */
-	public static void addCharacterList(Connection conn, List<GameCharacter> characterList){
+	public static void addCharacterList(Connection conn, List<GameCharacter> characterList, boolean doLog){
 		for(int i = 0; i < characterList.size(); i++){
-			addCharacter(conn, characterList.get(i));
+			addCharacter(conn, characterList.get(i), doLog);
 		}
 	}
 	
@@ -165,10 +151,8 @@ public class CharacterTable extends TableBase {
 	 * @param conn
 	 */
 	public static void printCharacterTable(Connection conn){
-		String query = "SELECT * FROM " + TABLE_NAME + ";";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(query);
+			ResultSet result = queryCharacterTable(conn, null, null, null);
 			
 			while(result.next()){
 				System.out.printf("%s %d: \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %d \n%s %s \n%s %s \n%s %s \n%s %s\n\n",

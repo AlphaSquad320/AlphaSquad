@@ -30,12 +30,7 @@ public class FriendsTable extends TableBase {
 				     + "FOREIGN KEY(" + SENDER_COLUMN + ") REFERENCES " + UserTable.TABLE_NAME + "(" + UserTable.USER_ID_COLUMN + "),"
 				     + "FOREIGN KEY(" + RECEIVER_COLUMN + ") REFERENCES " + UserTable.TABLE_NAME + "(" + UserTable.USER_ID_COLUMN + ")"
 				     + ");" ;
-		
-		/**
-		 * Create a query and execute
-		 */
-		Statement stmt = conn.createStatement();
-		stmt.execute(query);
+		executeGeneralQuery(conn, query);
 	}
 	
 	/**
@@ -51,22 +46,11 @@ public class FriendsTable extends TableBase {
 	 */
 	public static void addFriends(Connection conn,
 			                     int senderId,
-			                     int receiverId){
+			                     int receiverId,
+			                     boolean doLog){
 		
-		/**
-		 * SQL insert statement
-		 */
 		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d);",senderId, receiverId);
-		try {
-			/**
-			 * create and execute the query
-			 */
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-		} catch (SQLException e) {
-			System.out.println("Issue adding friends: " + e);
-			e.printStackTrace();
-		}
+		executeGeneralQuery(conn, query, doLog);
 	}
 	
 	/**
@@ -74,8 +58,8 @@ public class FriendsTable extends TableBase {
 	 * @param conn connection string
 	 * @param user user to add
 	 */
-	public static void addFriends(Connection conn, Friends friends){
-		addFriends(conn, friends.getSenderId(), friends.getReceiverId());
+	public static void addFriends(Connection conn, Friends friends, boolean doLog){
+		addFriends(conn, friends.getSenderId(), friends.getReceiverId(), doLog);
 	}
 	
 	/**
@@ -83,9 +67,9 @@ public class FriendsTable extends TableBase {
 	 * @param conn connection string
 	 * @param user list of users to add
 	 */
-	public static void addFriendsList(Connection conn, List<Friends> friendsList){
+	public static void addFriendsList(Connection conn, List<Friends> friendsList, boolean doLog){
 		for(int i = 0; i < friendsList.size(); i++){
-			addFriends(conn, friendsList.get(i));
+			addFriends(conn, friendsList.get(i), doLog);
 		}
 	}
 	
@@ -112,10 +96,8 @@ public class FriendsTable extends TableBase {
 	 * @param conn
 	 */
 	public static void printFriendsTable(Connection conn){
-		String query = "SELECT * FROM " + TABLE_NAME + ";";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(query);
+			ResultSet result = queryCurrentTable(conn, TABLE_NAME, null, null, null);
 			
 			while(result.next()){
 				System.out.printf("Friends %d is friends with %d\n",

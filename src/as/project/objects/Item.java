@@ -3,6 +3,7 @@ package as.project.objects ;
 public class Item
 {
   private int itemID ;
+  private String name;
   private String addEff ; //Additional Effects
   private String desc ;   //Description
   private boolean cons ;  //Consumable
@@ -23,6 +24,7 @@ public class Item
   **/
   public Item(
     int ItemID, 
+    String name,
     String AddEff,
     String Desc,
     boolean Cons,
@@ -30,6 +32,7 @@ public class Item
     int Bonus,
     String ItemClass )
   {
+	this.name = name;
     itemID = ItemID ;
     addEff = AddEff ;
     desc = Desc ;
@@ -38,6 +41,16 @@ public class Item
     bonus = Bonus ;
     itemClass = ItemClass ;
   }
+
+
+  	public String getName() {
+	  	return name;
+  	}
+
+  	public void setName(String name) {
+		this.name = name;
+	}
+
 
   public int getID(){ return itemID ; }
   public void setID( int newID ){ itemID = newID ; }
@@ -63,6 +76,6 @@ public class Item
   public void setItemClass( String newClass ){ itemClass = newClass ; }
   
   public String toString(){
-	  return this.getDescription();
+	  return this.getName();
   }
 }

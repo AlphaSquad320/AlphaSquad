@@ -89,7 +89,7 @@ public class ChatWindow extends JPanel implements ActionListener{
     private void sendMessage(String message){
     	if(friend != null){
 	    	ChatHistory ch = new ChatHistory(curUser.getUserId(), friend.getUserId(), Timestamp.from(Instant.now()), message);
-	    	ChatHistoryTable.addChatHistory(MainGUI.getConnection(), ch);
+	    	ChatHistoryTable.addChatHistory(MainGUI.getConnection(), ch, true);
 	    	messages.setText(messages.getText() + getFormattedMessage(ch) + "\n");
     	}
     }

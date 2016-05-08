@@ -37,11 +37,7 @@ public class ChatHistoryTable extends TableBase {
 				     + "FOREIGN KEY(" + RECEIVER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.RECEIVER_COLUMN + ")"
 				     + ");" ;
 		
-		/**
-		 * Create a query and execute
-		 */
-		Statement stmt = conn.createStatement();
-		stmt.execute(query);
+		executeGeneralQuery(conn, query);
 	}
 	
 	/**
@@ -55,22 +51,13 @@ public class ChatHistoryTable extends TableBase {
 	 * @param email emailAddress
 	 * @param pw password
 	 */
-	public static void addChatHistory(Connection conn, int chatId, int senderId, int receiverId, Timestamp timestamp, String message){
+	public static void addChatHistory(Connection conn, int chatId, int senderId, int receiverId, Timestamp timestamp, String message, boolean doLog){
 		
 		/**
 		 * SQL insert statement
 		 */
 		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,%d,\'%s\',\'%s\');",chatId, senderId, receiverId, timestamp.toString(), message);
-		try {
-			/**
-			 * create and execute the query
-			 */
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-		} catch (SQLException e) {
-			System.out.println("Issue adding chat history: " + e);
-			e.printStackTrace();
-		}
+		executeGeneralQuery(conn, query, doLog);
 	}
 	
 	/**
@@ -78,8 +65,8 @@ public class ChatHistoryTable extends TableBase {
 	 * @param conn connection string
 	 * @param user user to add
 	 */
-	public static void addChatHistory(Connection conn, ChatHistory chat){
-		addChatHistory(conn, chat.getChatHistoryId(), chat.getSenderId(), chat.getReceiverId(), chat.getTimestamp(), chat.getMessage());
+	public static void addChatHistory(Connection conn, ChatHistory chat, boolean doLog){
+		addChatHistory(conn, chat.getChatHistoryId(), chat.getSenderId(), chat.getReceiverId(), chat.getTimestamp(), chat.getMessage(), doLog);
 	}
 	
 	/**
@@ -87,9 +74,9 @@ public class ChatHistoryTable extends TableBase {
 	 * @param conn connection string
 	 * @param user list of users to add
 	 */
-	public static void addChatHistoryList(Connection conn, List<ChatHistory> chatList){
+	public static void addChatHistoryList(Connection conn, List<ChatHistory> chatList, boolean doLog){
 		for(int i = 0; i < chatList.size(); i++){
-			addChatHistory(conn, chatList.get(i));
+			addChatHistory(conn, chatList.get(i), doLog);
 		}
 	}
 	

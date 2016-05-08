@@ -16,6 +16,7 @@ public class Ability {
 	private float radius;
 	private float duration;
 	private String type;
+	private String name;
 	private String description;
 	private String additionalEffects;
 
@@ -41,6 +42,7 @@ public class Ability {
 			float radius,
 			float duration,
 			String type,
+			String name,
 			String description,
 			String additionalEffects) {
 		this.abilityID = abilityID;
@@ -51,6 +53,7 @@ public class Ability {
 		this.radius = radius;
 		this.duration = duration;
 		this.type = type;
+		this.name = name;
 		this.description = description;
 		this.additionalEffects = additionalEffects;
 	}
@@ -64,8 +67,9 @@ public class Ability {
 	public float getRadius() { return radius; }
 	public float getDuration() { return duration; }
 	public String getType() { return type; }
+	public String getName() { return name; }
 	public String getDescription() { return description; }
 	public String getAdditionalEffects() { return additionalEffects; }
-	public String toString() { return getDescription(); }
+	public String toString() { return getName(); }
 	
 }

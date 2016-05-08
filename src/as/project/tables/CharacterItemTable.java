@@ -34,9 +34,7 @@ public class CharacterItemTable extends TableBase
       + "FOREIGN KEY (" + CHARACTER_ID_COLUMN +") REFERENCES " + CharacterTable.TABLE_NAME + " (" + CharacterTable.CHARACTER_ID_COLUMN + "),"
       + "FOREIGN KEY (" + ITEM_ID_COLUMN +") REFERENCES " + ItemTable.TABLE_NAME + " (" + ItemTable.ID_COLUMN + ")"
       + ");" ;
-
-    Statement state = conn.createStatement() ;
-    state.execute( query ) ;
+	executeGeneralQuery(conn, query);
   }
 
   /**
@@ -47,11 +45,10 @@ public class CharacterItemTable extends TableBase
    * @param charID - ID of the target character
    * @param itemID - ID of the target item
   **/
-  public static void giveItem( Connection conn, int charID, int itemID )
+  public static void giveItem( Connection conn, int charID, int itemID, boolean doLog )
   {
     String query = String.format("INSERT INTO " + TABLE_NAME + " VALUES(%d, %d);", charID, itemID ) ;
-
-    runStatement( conn, query ) ;
+    executeGeneralQuery(conn, query, doLog);
   }
 
   /**
@@ -62,11 +59,11 @@ public class CharacterItemTable extends TableBase
    * @param charID - ID of target character
    * @param itemIDs - list of target item IDs
   **/
-  public static void giveItemList( Connection conn, int charID, List<Integer> itemIDs )
+  public static void giveItemList( Connection conn, int charID, List<Integer> itemIDs, boolean doLog )
   {
     for( int i = 0 ; i < itemIDs.size() ; i++ )
     {
-      giveItem( conn, charID, itemIDs.get( i ) ) ;
+      giveItem( conn, charID, itemIDs.get( i ), doLog ) ;
     }
   }
 
@@ -78,14 +75,13 @@ public class CharacterItemTable extends TableBase
    * @param charID - ID of target character
    * @param itemID - ID of target item
   **/
-  public static void takeItem( Connection conn, int charID, int itemID )
+  public static void takeItem( Connection conn, int charID, int itemID, boolean doLog )
   {
-    String query = String.format("DELETE FROM characterItem"
-      + " WHERE CHARACTER_ID = %d"
-      + " AND ITEM_ID = %d ;",
+    String query = String.format("DELETE FROM " + TABLE_NAME
+      + " WHERE " + CHARACTER_ID_COLUMN + " = %d"
+      + " AND " + ITEM_ID_COLUMN + " = %d ;",
       + charID, itemID ) ;
-
-    runStatement( conn, query ) ;
+    executeGeneralQuery(conn, query, doLog);
   }
 
   /**
@@ -99,46 +95,12 @@ public class CharacterItemTable extends TableBase
   public static void takeItemList(
   Connection conn, 
   int charID, 
-  List<Integer> itemIDs )
+  List<Integer> itemIDs,
+  boolean doLog)
   {
     for( int i = 0 ; i < itemIDs.size() ; i++ )
     {
-      takeItem( conn, charID, itemIDs.get( i ) ) ; 
+      takeItem( conn, charID, itemIDs.get( i ), doLog ) ; 
     }
-  }
-
-  /**
-   * getInventory method
-   * returns all items belonging to the specified character
-   *
-   * @param conn - database connection
-   * @param charID - ID of target character
-  **/
-  public static void getInventory( Connection conn, int charID )
-  {
-    String query = String.format("SELECT * FROM item"
-      + " WHERE ITEM_ID IN"
-      + " SELECT ITEM_ID FROM characterItem"
-      + " WHERE CHARACTER_ID = %d ;",
-      + charID ) ;
-
-    runStatement( conn, query ) ;
-  }
-
-  /**
-   * runStatement method
-   * runs the given statement
-   *
-   * @param conn - database connection
-   * @param query - statement to be run
-  **/
-  public static void runStatement( Connection conn, String query )
-  {
-    try
-    {
-      Statement state = conn.createStatement() ;
-      state.execute( query ) ;
-    }
-    catch( SQLException e ){ e.printStackTrace() ; }
   }
 }

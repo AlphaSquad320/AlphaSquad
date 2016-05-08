@@ -37,12 +37,7 @@ public class UserTable extends TableBase {
 				     + EMAIL_ADDRESS_COLUMN + " VARCHAR(255),"
 				     + PASSWORD_COLUMN + " VARCHAR(255),"
 				     + ");" ;
-		
-		/**
-		 * Create a query and execute
-		 */
-		Statement stmt = conn.createStatement();
-		stmt.execute(query);
+		executeGeneralQuery(conn, query);
 	}
 	
 	/**
@@ -62,7 +57,8 @@ public class UserTable extends TableBase {
 			                     String lName,
 			                     String dName,
 			                     String email,
-			                     String pw){
+			                     String pw,
+			                     boolean doLog){
 		
 		/**
 		 * SQL insert statement
@@ -70,16 +66,7 @@ public class UserTable extends TableBase {
 		String query = String.format("INSERT INTO " + TABLE_NAME + " "
 				                   + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');",
 				                     id, fName, lName, dName, email, pw);
-		try {
-			/**
-			 * create and execute the query
-			 */
-			Statement stmt = conn.createStatement();
-			stmt.execute(query);
-		} catch (SQLException e) {
-			System.out.println("Issue adding user: " + e);
-			e.printStackTrace();
-		}
+		executeGeneralQuery(conn, query, doLog);
 	}
 	
 	/**
@@ -87,8 +74,8 @@ public class UserTable extends TableBase {
 	 * @param conn connection string
 	 * @param user user to add
 	 */
-	public static void addUser(Connection conn, User user){
-		addUser(conn, user.getUserId(), user.getFirstName(), user.getLastName(), user.getDisplayName(), user.getEmail(), user.getPassword());
+	public static void addUser(Connection conn, User user, boolean doLog){
+		addUser(conn, user.getUserId(), user.getFirstName(), user.getLastName(), user.getDisplayName(), user.getEmail(), user.getPassword(), doLog);
 	}
 	
 	/**
@@ -96,9 +83,9 @@ public class UserTable extends TableBase {
 	 * @param conn connection string
 	 * @param user list of users to add
 	 */
-	public static void addUserList(Connection conn, List<User> userList){
+	public static void addUserList(Connection conn, List<User> userList, boolean doLog){
 		for(int i = 0; i < userList.size(); i++){
-			addUser(conn, userList.get(i));
+			addUser(conn, userList.get(i), doLog);
 		}
 	}
 	
@@ -125,11 +112,9 @@ public class UserTable extends TableBase {
 	 * @param conn
 	 */
 	public static void printUserTable(Connection conn){
-		String query = "SELECT * FROM " + TABLE_NAME + ";";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery(query);
-			
+			ResultSet result = queryCurrentTable(conn, TABLE_NAME, null, null, null); 
+					
 			while(result.next()){
 				System.out.printf("User %d: %s %s %s %s %s\n",
 						          result.getInt(1),
