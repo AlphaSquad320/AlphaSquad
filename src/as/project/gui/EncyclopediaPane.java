@@ -146,7 +146,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 
         iScrollPane.setViewportView(itemList);
         Dimension d = iScrollPane.getPreferredSize();
-        d.width = 141;
+        d.width = MainGUI.SIDEBAR_WIDTH;
         iScrollPane.setPreferredSize(d);
 
         GroupLayout itemTabLayout = new GroupLayout(itemTab);
@@ -157,8 +157,8 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                 .addContainerGap()
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING, false)
                     .addComponent(iScrollPane)
-                    .addComponent(iSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                    .addComponent(iSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                    .addComponent(iSearchButton, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
+                    .addComponent(iSearchBar, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(itemTabLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(itemDescription, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -229,7 +229,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
         addEffText1.setVerticalAlignment(SwingConstants.TOP);
         aScrollPane.setViewportView(abilityList);
         Dimension d = aScrollPane.getPreferredSize();
-        d.width = 141;
+        d.width = MainGUI.SIDEBAR_WIDTH;
         aScrollPane.setPreferredSize(d);
 
 
@@ -241,8 +241,8 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
                 .addContainerGap()
                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING, false)
                     .addComponent(aScrollPane)
-                    .addComponent(aSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                    .addComponent(aSearchBar, DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                    .addComponent(aSearchButton, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
+                    .addComponent(aSearchBar, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(abilityTabLayout.createParallelGroup(Alignment.LEADING)
                     .addComponent(abilityDescription, DEFAULT_SIZE, 366, Short.MAX_VALUE)
@@ -337,7 +337,7 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
 
         nScrollPane.setViewportView(npcList);
         Dimension d = nScrollPane.getPreferredSize();
-        d.width = 141;
+        d.width = MainGUI.SIDEBAR_WIDTH;
         nScrollPane.setPreferredSize(d);
         
         
@@ -347,8 +347,8 @@ public class EncyclopediaPane extends JPanel implements ActionListener, ListSele
         	npcTabLayout.createSequentialGroup()
             	.addContainerGap()
         		.addGroup(npcTabLayout.createParallelGroup(Alignment.LEADING, false)
-        			.addComponent(nSearchBar, PREFERRED_SIZE, 141, Short.MAX_VALUE)
-        			.addComponent(nSearchButton, DEFAULT_SIZE, 141, Short.MAX_VALUE)
+        			.addComponent(nSearchBar, PREFERRED_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
+        			.addComponent(nSearchButton, DEFAULT_SIZE, MainGUI.SIDEBAR_WIDTH, Short.MAX_VALUE)
         			.addComponent(nScrollPane))
                 .addGap(18, 18, 18)
         		.addComponent(npcData));

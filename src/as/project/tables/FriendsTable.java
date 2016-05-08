@@ -73,6 +73,16 @@ public class FriendsTable extends TableBase {
 		}
 	}
 	
+	public static void removeFriends(Connection conn, int senderId, int receiverId, boolean doLog){
+		ChatHistoryTable.removeChatHistoryByFriends(conn, senderId, receiverId, doLog);
+		String query = String.format("DELETE FROM " + TABLE_NAME + " WHERE " + SENDER_COLUMN + "=%d AND " + RECEIVER_COLUMN + " =%d;",senderId, receiverId);
+		executeGeneralQuery(conn, query, doLog);
+	}
+	
+	public static void removeFriends(Connection conn, Friends friends, boolean doLog){
+		removeFriends(conn, friends.getSenderId(), friends.getReceiverId(), doLog);
+	}
+	
 	/**
 	 * Makes a query to the person table 
 	 * with given columns and conditions

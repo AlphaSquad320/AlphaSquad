@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import as.project.objects.ChatHistory;
+import as.project.objects.Friends;
 
 public class ChatHistoryTable extends TableBase {
 	
@@ -33,8 +34,7 @@ public class ChatHistoryTable extends TableBase {
 				     + RECEIVER_COLUMN + " INT,"
 				     + TIMESTAMP_COLUMN + " TIMESTAMP,"
 				     + MESSAGE_COLUMN + " VARCHAR(255),"
-				     + "FOREIGN KEY(" + SENDER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.SENDER_COLUMN + "),"
-				     + "FOREIGN KEY(" + RECEIVER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.RECEIVER_COLUMN + ")"
+				     + "FOREIGN KEY(" + SENDER_COLUMN + ", " + RECEIVER_COLUMN + ") REFERENCES " + FriendsTable.TABLE_NAME + "(" + FriendsTable.SENDER_COLUMN + ", " + FriendsTable.RECEIVER_COLUMN + ")"
 				     + ");" ;
 		
 		executeGeneralQuery(conn, query);
@@ -56,7 +56,7 @@ public class ChatHistoryTable extends TableBase {
 		/**
 		 * SQL insert statement
 		 */
-		String query = String.format("INSERT INTO " + TABLE_NAME + " " + "VALUES(%d,%d,%d,\'%s\',\'%s\');",chatId, senderId, receiverId, timestamp.toString(), message);
+		String query = String.format("INSERT INTO " + TABLE_NAME + " VALUES(%d,%d,%d,\'%s\',\'%s\');",chatId, senderId, receiverId, timestamp.toString(), message);
 		executeGeneralQuery(conn, query, doLog);
 	}
 	
@@ -78,6 +78,16 @@ public class ChatHistoryTable extends TableBase {
 		for(int i = 0; i < chatList.size(); i++){
 			addChatHistory(conn, chatList.get(i), doLog);
 		}
+	}
+	
+	public static void removeChatHistoryByFriends(Connection conn, int senderId, int receiverId, boolean doLog){
+
+		String query = String.format("DELETE FROM " + TABLE_NAME + " WHERE " + SENDER_COLUMN +"=%d AND " + RECEIVER_COLUMN + "=%d", senderId, receiverId);
+		executeGeneralQuery(conn, query, doLog);
+	}
+	
+	public static void removeChatHistoryByFriends(Connection conn, Friends f, boolean doLog){
+		removeChatHistoryByFriends(conn, f.getSenderId(), f.getReceiverId(), doLog);
 	}
 	
 	/**
