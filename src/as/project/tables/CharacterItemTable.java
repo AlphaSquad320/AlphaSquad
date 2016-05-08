@@ -66,6 +66,13 @@ public class CharacterItemTable extends TableBase
       giveItem( conn, charID, itemIDs.get( i ), doLog ) ;
     }
   }
+  
+  public static void takeCharactersItems(Connection conn, int charID, boolean doLog){
+    String query = String.format("DELETE FROM " + TABLE_NAME
+      + " WHERE " + CHARACTER_ID_COLUMN + " = %d;",
+      + charID ) ;
+    executeGeneralQuery(conn, query, doLog);
+  }
 
   /**
    * takeItem method

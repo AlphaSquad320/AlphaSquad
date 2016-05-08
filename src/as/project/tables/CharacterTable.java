@@ -9,6 +9,7 @@ import java.util.List;
 
 import as.project.objects.ChatHistory;
 import as.project.objects.GameCharacter;
+import as.project.objects.User;
 
 public class CharacterTable extends TableBase {
 
@@ -126,6 +127,38 @@ public class CharacterTable extends TableBase {
 		for(int i = 0; i < characterList.size(); i++){
 			addCharacter(conn, characterList.get(i), doLog);
 		}
+	}
+	
+	public static void removeCharacterSafe(Connection conn, int cId, int uId, boolean doLog ){
+		int validId = -1;
+		//first, ensure that the user is removing their own character
+		ArrayList<String> cols = new ArrayList<String>();
+		cols.add(CHARACTER_ID_COLUMN);
+		ArrayList<String> where = new ArrayList<String>();
+		where.add(USER_ID_COLUMN + "=" + uId);
+		where.add(CHARACTER_ID_COLUMN + "=" + cId);
+		ResultSet check = queryCharacterTable(conn, cols, where, null);
+		try{
+			if(check.next()){
+				validId = check.getInt(CHARACTER_ID_COLUMN);
+			}
+		}catch (Exception e){
+			System.out.println("Could not check character:" + cId + " for user:" + uId);
+			e.printStackTrace();
+		}
+		
+		//given that the user is actually the owner, remove the character (and other related values
+		if(validId != -1){
+			CharacterItemTable.takeCharactersItems(conn, cId, doLog);
+			CharacterAbilityTable.removeCharactersAbilities(conn, cId, doLog);
+		    String query = String.format("DELETE FROM %s WHERE %s = %d;",TABLE_NAME , CHARACTER_ID_COLUMN, cId ) ;
+		    executeGeneralQuery(conn, query, doLog);
+		}
+		
+	}
+	
+	public static void removeCharacterSafe(Connection conn, GameCharacter c, User u, boolean doLog){
+		removeCharacterSafe(conn, c.getCharacterId(), u.getUserId(), doLog);
 	}
 	
 	/**

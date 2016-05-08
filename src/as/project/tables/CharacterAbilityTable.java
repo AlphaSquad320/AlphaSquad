@@ -57,6 +57,16 @@ public class CharacterAbilityTable extends TableBase {
 		addCharacterAbility( conn, gc.getCharacterId(), a.getID(), logQueries );
 	}
 	
+	public static void removeCharactersAbilities(Connection conn, int cId, boolean doLog){
+		String query = String.format("DELETE FROM %s WHERE %s=%d;", TABLE_NAME, CHARACTER_ID_COLUMN, cId);
+		executeGeneralQuery(conn, query, doLog);
+	}
+	
+	public static void removeAbility(Connection conn, int cId, int aId, boolean doLog){
+		String query = String.format("DELETE FROM %s WHERE %s=%d AND %s=%d;", TABLE_NAME, CHARACTER_ID_COLUMN, cId, ABILITY_ID_COLUMN,  aId);
+		executeGeneralQuery(conn, query, doLog);
+	}
+	
 	/**
 	 * Prints the table. Just prints the PK.
 	 * @param conn

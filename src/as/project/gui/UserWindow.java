@@ -28,8 +28,10 @@ public class UserWindow extends JFrame implements ActionListener
 	private JMenuItem userLogOut = new JMenuItem("Log out");
 	private JMenuItem viewUser = new JMenuItem("Profile View");
 	private JMenuItem viewEnc = new JMenuItem("Encyclopedia View");
+	private JMenuItem viewEdit = new JMenuItem("Edit Characters");
 	private UserPane userPane = null;
 	private EncyclopediaPane encPane = new EncyclopediaPane();
+	private EditCharactersPane editPane = new EditCharactersPane();
 
 	private User user;
 	
@@ -50,6 +52,7 @@ public class UserWindow extends JFrame implements ActionListener
 		userLogOut.addActionListener(this);
 		viewUser.addActionListener(this);
 		viewEnc.addActionListener(this);
+		viewEdit.addActionListener(this);
 
 		//final housekeeping
 		setSize(new Dimension(800, 600));
@@ -74,11 +77,13 @@ public class UserWindow extends JFrame implements ActionListener
 		menuUser.add(userLogOut);
 		menuView.add(viewUser);
 		menuView.add(viewEnc);
+		menuView.add(viewEdit);
 
 		userLogIn.setEnabled(true);
 		userLogOut.setEnabled(false);
 		viewUser.setEnabled(false);
 		viewEnc.setEnabled(false);
+		viewEdit.setEnabled(false);
 	}
 
 	private void displayLoginWindow()
@@ -94,6 +99,7 @@ public class UserWindow extends JFrame implements ActionListener
 		userLogOut.setEnabled(false);
 		viewUser.setEnabled(false);
 		viewEnc.setEnabled(false);
+		viewEdit.setEnabled(false);
 		this.setContentPane(new JPanel());
 		encPane.setCurrentUser(null);
 		validate();
@@ -113,7 +119,9 @@ public class UserWindow extends JFrame implements ActionListener
 			userLogOut.setEnabled(true);
 			viewUser.setEnabled(true);
 			viewEnc.setEnabled(true);
+			viewEdit.setEnabled(true);
 			encPane.setCurrentUser(loggedIn);
+			editPane.setUser(user);
 			return true;
 		}
 		//if not found
@@ -144,7 +152,6 @@ public class UserWindow extends JFrame implements ActionListener
 		else if (e.getSource() == userLogOut)
 		{
 			logOutUser();
-			System.out.println("womp");
 		}
 		else if(e.getSource() == viewUser){
 			this.setContentPane(userPane);
@@ -153,6 +160,11 @@ public class UserWindow extends JFrame implements ActionListener
 		}
 		else if(e.getSource() == viewEnc){
 			this.setContentPane(encPane);
+			validate();
+		}
+		else if(e.getSource() == viewEdit){
+			this.setContentPane(editPane);
+			editPane.reloadCharacterList();
 			validate();
 		}
 	}

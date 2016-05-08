@@ -181,6 +181,10 @@ public class UserPane extends JPanel implements ListSelectionListener, ActionLis
 					if(index != -1){
 						characterPanes.setSelectedIndex(index);
 					}
+					if(!areUsersCharsShowing){
+						removeCharacterTabs();
+						showCharacterTabs(f);
+					}
 				}
 				else{
 					removeChatTab();
