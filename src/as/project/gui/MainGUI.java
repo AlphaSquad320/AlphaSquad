@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import as.project.Main;
+import as.project.tables.LoadData;
 
 /**
  * This class is the main class of the GUI package. Instantiates a UserWindow
@@ -29,6 +29,8 @@ public class MainGUI
     private static final String DEFAULT_USER = "admin";
     private static final String DEFAULT_PASSWORD = "admin";
     private static final String IF_EXISTS_LOCATION = ";ifexists=true";
+    
+    private static final String CSV_LOCATION = "data.csv";
     
     public static final Integer SIDEBAR_WIDTH = 155;
 
@@ -78,7 +80,8 @@ public class MainGUI
         //create the connection
         createConnection(DEFAULT_LOCATION, DEFAULT_USER, DEFAULT_PASSWORD, true);
         if(!isDatabaseInitialized){
-            Main.createDatabase(getConnection());
+        	LoadData.createTables(conn);
+            LoadData.loadData(getConnection(), CSV_LOCATION);
         }
 
         //TODO: if the connection is null, then we should display an error on the UserWindow, instead of the login view

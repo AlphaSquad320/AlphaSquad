@@ -20,7 +20,7 @@ public class UserTable extends TableBase {
 	
 	public static final String TABLE_NAME = "user";
 
-	public static int NPC_USER_ID = Integer.MAX_VALUE;
+	public static int NPC_USER_ID = 999999;
 	
 	
 	/**

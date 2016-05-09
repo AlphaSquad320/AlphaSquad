@@ -13,27 +13,27 @@ import as.project.objects.User;
 
 public class CharacterTable extends TableBase {
 
-	public static String CHARACTER_ID_COLUMN = "CHARACTER_ID";
-	public static String USER_ID_COLUMN = "USER_ID";
-	public static String STR_COLUMN = "STR";
-	public static String DEX_COLUMN = "DEX";
-	public static String CHR_COLUMN = "CHR";
-	public static String INT_COLUMN = "INTEL";
-	public static String WIS_COLUMN = "WIS";
-	public static String CON_COLUMN = "CON";
-	public static String MONEY_COLUMN = "MONEY";
-	public static String HP_COLUMN = "HP";
-	public static String MP_COLUMN = "MP";
-	public static String CUR_HP_COLUMN = "CUR_HP";
-	public static String CUR_MP_COLUMN = "CUR_MP";
-	public static String LEVEL_COLUMN = "LEVEL";
-	public static String CUR_XP_COLUMN = "CUR_XP";
-	public static String CLASS_COLUMN = "CLASS";
-	public static String ALIGNMENT_COLUMN = "ALIGNMENT";
-	public static String CHARACTER_NAME_COLUMN = "CHARACTER_NAME";
-	public static String RACE_COLUMN = "RACE";
+	public static final String CHARACTER_ID_COLUMN = "CHARACTER_ID";
+	public static final String USER_ID_COLUMN = "USER_ID";
+	public static final String STR_COLUMN = "STR";
+	public static final String DEX_COLUMN = "DEX";
+	public static final String CHR_COLUMN = "CHR";
+	public static final String INT_COLUMN = "INTEL";
+	public static final String WIS_COLUMN = "WIS";
+	public static final String CON_COLUMN = "CON";
+	public static final String MONEY_COLUMN = "MONEY";
+	public static final String HP_COLUMN = "HP";
+	public static final String MP_COLUMN = "MP";
+	public static final String CUR_HP_COLUMN = "CUR_HP";
+	public static final String CUR_MP_COLUMN = "CUR_MP";
+	public static final String LEVEL_COLUMN = "LEVEL";
+	public static final String CUR_XP_COLUMN = "CUR_XP";
+	public static final String CLASS_COLUMN = "CLASS";
+	public static final String ALIGNMENT_COLUMN = "ALIGNMENT";
+	public static final String CHARACTER_NAME_COLUMN = "CHARACTER_NAME";
+	public static final String RACE_COLUMN = "RACE";
 	
-	public static String TABLE_NAME = "character";
+	public static final String TABLE_NAME = "character";
 	
 	
 	/**

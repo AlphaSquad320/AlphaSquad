@@ -63,6 +63,12 @@ public class NPCTable extends TableBase {
 		addNPC(conn, npcData.getNpcID(), npcData.getCharacterID(), npcData.isHostile(), npcData.getAssocQuest(), npcData.getDescription(), doLog);
 	}
 	
+	public static void addNPCList(Connection conn, ArrayList<NPC> npcData, boolean doLog){
+		for(NPC n: npcData){
+			addNPC(conn, n, doLog);
+		}
+	}
+	
 	/**
 	 * adds tuples to the npc table based on a list of NPC objects
 	 * @param conn - the connection to the database
