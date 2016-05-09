@@ -123,7 +123,7 @@ public class LoadData {
 							split[5].trim()));
 				}
 			}
-			UserTable.addUserList(conn, users, true);
+			UserTable.addUserList(conn, users, false);
 		} catch (Exception e) {
 			System.out.println("Error creating users ");
 			e.printStackTrace();
@@ -146,7 +146,7 @@ public class LoadData {
 							split[4].trim()));
 				}
 			}
-			NPCTable.addNPCList(conn, npcs, true);
+			NPCTable.addNPCList(conn, npcs, false);
 		} catch (Exception e) {
 			System.out.println("Error creating npcs ");
 			e.printStackTrace();
@@ -172,7 +172,7 @@ public class LoadData {
 							split[7].trim()));
 				}
 			}
-			ItemTable.addItemList(conn, items, true);
+			ItemTable.addItemList(conn, items, false);
 		} catch (Exception e) {
 			System.out.println("Error creating items ");
 			e.printStackTrace();
@@ -201,7 +201,7 @@ public class LoadData {
 							split[10].trim()));
 				}
 			}
-			AbilityTable.addAbilities(conn, abs, true);
+			AbilityTable.addAbilities(conn, abs, false);
 		} catch (Exception e) {
 			System.out.println("Error creating friends ");
 			e.printStackTrace();
@@ -221,7 +221,7 @@ public class LoadData {
 							getInt(split[1])));
 				}
 			}
-			FriendsTable.addFriendsList(conn, friends, true);
+			FriendsTable.addFriendsList(conn, friends, false);
 		} catch (Exception e) {
 			System.out.println("Error creating friends ");
 			e.printStackTrace();
@@ -243,7 +243,7 @@ public class LoadData {
 							split[3].trim()));
 				}
 			}
-			ChatHistoryTable.addChatHistoryList(conn, chat, true);
+			ChatHistoryTable.addChatHistoryList(conn, chat, false);
 		} catch (Exception e) {
 			System.out.println("Error creating chat history ");
 			e.printStackTrace();
@@ -280,7 +280,7 @@ public class LoadData {
 							split[18].trim()));
 				}
 			}
-			CharacterTable.addCharacterList(conn, gc, true);
+			CharacterTable.addCharacterList(conn, gc, false);
 		} catch (Exception e) {
 			System.out.println("Error creating characters ");
 			e.printStackTrace();
