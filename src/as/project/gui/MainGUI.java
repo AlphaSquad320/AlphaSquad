@@ -80,8 +80,11 @@ public class MainGUI
         //create the connection
         createConnection(DEFAULT_LOCATION, DEFAULT_USER, DEFAULT_PASSWORD, true);
         if(!isDatabaseInitialized){
+        	System.out.println("Creating database tables:");
         	LoadData.createTables(conn);
+        	System.out.println("Filling tables with data");
             LoadData.loadData(getConnection(), CSV_LOCATION);
+            System.out.println("Database initialization complete");
         }
 
         //TODO: if the connection is null, then we should display an error on the UserWindow, instead of the login view
