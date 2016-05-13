@@ -16,15 +16,24 @@ NPC_CHANCE=0.2
 NPC_USER=999999
 CLASSES=["Knight", "Barbarian", "Paladin", "Rogue", "Wizard", "Warlock", "Necromancer", "Conjurer"]
 ALIGNMENTS=["Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "True Neutral", "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"]
-NAMES=["Billy", "Mandy", "Bob", "Joe", "Sue", "Erin", "Frank", "Valencia"]
-LAST_NAMES=["Smith", "Doe", "Miller", "Williams", "Anderson", "Thompson", "Wilson"]
-RACES=["Human", "Dwarf", "Gnome", "Halfling", "Dragon", "Minotaur", "Naga"]
-ITEM_NAMES=["Sword", "Staff", "Leather Armor", "Belt", "Potion", "Missile", "Hat"]
+NAMES=["Billy", "Mandy", "Bob", "Joe", "Sue", "Erin", "Frank", "Valencia", "Abby", "Allie", "Aaron", "Andrea", "Amber", "Alice", "Aurora", "Ana", "Berta",
+       "Bobby", "Beatriz", "Bara", "Bella", "Cindy", "Carol", "Carl", "Cecil", "Cecilia", "Celia", "Carter", "Cody", "Daniel", "Don", "Dona", "Dimitri",
+       "Dennis", "Didi", "Derick", "Dan", "Efrain", "Erinn", "Ella", "Eyra", "Ellie", "Farah", "Felix", "Fedor", "Guy", "Gaylord", "Goliath", "Gigi",
+       "Hector", "Heidi", "Hillary", "Hunter", "Humberto", "Isaac", "Isadora", "Isabelle", "Ivan", "Jacob", "Jora", "Jennifer", "Karla", "Ken", "Kelly",
+       "Kendra", "Kent", "Lenny", "Lin", "Lua", "Martin", "Mary", "Mirna", "Nana", "Natalie", "Nate", "Nelly", "Oswin", "Owain", "Oprah", "Quentin",
+       "Randy", "Ray", "Reina", "Rick", "Rory", "Serra", "Selena", "Simon", "Sansa", "Soren", "Terry", "Tommy", "Tina", "Usha", "Victor", "Vecky", "Zara"]
+LAST_NAMES=["Smith", "Doe", "Miller", "Williams", "Anderson", "Thompson", "Wilson", "Anderson", "Andrews", "Bohr", "Camels", "Dennis", "Edwards", "Lewis",
+            "Einstein", "Burnstein", "Baker", "Green", "Black", "Tailor", "Tanner", "Vincenti", "Barnes", "Burlington", "Wegmans", "McDonalds"]
+RACES=["Human", "Dwarf", "Gnome", "Halfling", "Dragon", "Minotaur", "Naga", "Elf"]
+ITEM_NAMES=["Sword", "Staff", "Leather Armor", "Belt", "Potion", "Missile", "Hat", "Knife", "Hammer", "Longsword", "Shortsword", "Great Sword",
+            "Bow", "Shortbow", "Longbow", "Heavy Armor", "Medium Armor", "Wizard Hat", "Fire Sword", "Ice Sword", "Mega Potion", "Super Potion"]
 ITEM_DESCRIPTIONS=["A sword for cutting things", "A staff for smacking things or channelling", "Provides protection", "Keeps your pants up. Stylish", "Drinkable to give some effect", "A nuke. Used for nuking", "Put it on your head"]
 EFFECTS=["Explodes for large AOE damage", "Poisons the target", "Heals the target for a small amount", "Buffs the targets constitution", "Gives protection to enemy attacks", "N/A"]
 ITEM_TYPES=["Weapon", "Armor", "Combat Item", "Accessory"]
 MESSAGES=["Hello", "How are you?", "This is a message", "Databases are great", "This game is amazing", "Im having fun playing this game"]
-ABILITY_NAMES=["Fireball", "Thundershock", "Vampiric Touch", "Magic Dart", "Heroism", "Glaciate", "Dragon Form"]
+ABILITY_NAMES=["Fireball", "Thundershock", "Vampiric Touch", "Magic Dart", "Heroism", "Glaciate", "Dragon Form", "Fire Storm", "Fire Blast", "Hellfire",
+               "Solarfire", "Thunderstorms", "Thunder", "Ice", "Freeze", "Acid Spray", "Magic Sword", "Magic Armor", "Explosion", "Drain", "Shadow",
+               "Light", "Heal", "Recover", "Ember", "Mega Heal"]
 ABILITY_DESCRIPTIONS=["A blast of fire", "A small burst of lightning", "Drain health from the target", "A weak but accurate attack", "Buff yourself and allies with bravery of heroes", "A huge wave of ice", "Take the form of a dragon"]
 ABILITY_TYPES=["Fire", "Ice", "Force", "Necrotic", "Lightning","Buff","Transmutation"]
 QUESTS=["Defeate 10 slimes", "Research new tech", "Slay the dragon", "Free my family","Pay off my debts", "Collect 10 pelts"]
